@@ -16,20 +16,60 @@
 </head>
 <body>
     <!-- Header -->
-    <header></header>
+    <header>
+        <div class=title_div>
+            <div class=main_title>Travel Through Time</div>
+            <div class=secondary_title>The History ...</div>
+        </div>
+        <button class=go_to_my_itinerary>GO TO MY ITINERARY</button>
+        <button class=settings>*</button>
+
+    </header>
 
     <!-- Main Body Content -->
-    <main></main>
+    <main>
+        <div class=left_column_div>
+            <div class=where_are_you_going_div>
+                where are you going ?
+                <div class=where_are_you_going_sub_div>
+                    <p>City</p>
+                    <textarea id=city_textarea></textarea>
+                    <p>State/Province</p>
+                    <textarea id=state_textarea></textarea>
+                    <p>Country</p>
+                    <textarea id=country_textarea></textarea>
+                </div>
+            </div>
+            <div class=what_will_you_explore_div>
+                what will you explore ?
+              <div class=where_are_you_going_sub_div>
+                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
+                <label for="Historical sites"> Historical Sites </label><br>
+
+                <textarea id=search_for_something_else>Search for something else</textarea>
+
+
+              </div>  
+            </div>
+        </div>
+        <div class=map_div>
+            <p class=map_text>Begin your journey</p>
+            <p class=map_text>       by typing your location on the left</p>
+            <img class=map src="assets/images/world-map[1].png">
+            <button class=explore>Explore</button>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer></footer>
 
-    <!-- Foundation Framework Script -->
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></sript>
     <!-- jQuery & jQuery UI Scripts -->
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></sript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   <!-- Foundation Framework Script -->
+   <script src = "Foundation-Sites-CSS/js/vendor/foundation.min.js"></script>
+
     <!-- Custom Scripting -->
-    <script src="./assets/js/script.js"></script>
+    <script src = "./assets/js/script.js"></script>
 </body>
 </html>

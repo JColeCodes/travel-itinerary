@@ -7,3 +7,89 @@
     padding: 0;
     box-sizing: border-box;
 }
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+
+header {
+    border-style: solid;
+    text-align: center;
+    color: white;
+    height: 10%;
+    background: linear-gradient(to right, blue, red);
+  }
+
+main {  
+    border-style: solid;
+    text-align: center;
+    height: 500px;
+}
+
+.left_column_div {
+    border-style: solid;
+    width: 35%; 
+    padding: 0px;
+    float:left;
+}
+   
+.where_are_you_going_div {
+    border-style: solid;
+    width: 100%; 
+    padding: 0px;
+    text-align: left;
+}
+
+.where_are_you_going_sub_div {
+    border-style: solid;
+    width: 100%; 
+    padding: 10px;
+    background-color: lightgrey;
+    text-align: left;
+}
+
+.what_will_you_explore_div {
+    border-style: solid;
+    width: 100%; 
+    padding: 0px;
+    text-align: left;
+  }
+
+  .what_will_you_explore_sub_div {
+    border-style: solid;
+    width: 100%; 
+    padding: 10px;
+    background-color: lightgrey;
+    text-align: left; 
+    }
+
+.map_div {
+    border-style: solid;
+    width: 65%; 
+    height: 100%;
+    padding: 0px;
+    float:left;
+  }
+
+  .map{
+    width: 80%;
+  }
+
+
+  textarea{
+      width:90%;
+  }
+        /*Hex Codes:
+        #f9f8f5 - Light cream
+        #edece9 - Cream
+        #dbdad7 - Border
+        #2a506e - Blue
+        #363c42 - Darker text
+        #595958 - Medium text
+
+        Font Used on mockup:
+        https://fonts.google.com/specimen/Lato?query=lato
+        I used light, regular, regular italic, bold
+        Feel free to use a different font from google fonts if you find it fits better!*/
