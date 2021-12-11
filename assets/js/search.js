@@ -1,4 +1,5 @@
 var contentSpace = $("#display-content");
+var searchButton = $(".explore");
 
 var showResultNumber = function(number, city) {
     var searchResultNum = $("<h2>")
@@ -34,13 +35,15 @@ var getImages = function(phrase, city, web, phone, address) {
             }
 
             var searchResult = $("<div>")
-                .attr("style", "display: flex; padding: 20px; margin: 0 auto;");
+                .addClass("search-result");
                 // Just for now, proper CSS later
-            var resultImageDiv = $("<div>");
+            var resultImageDiv = $("<div>")
+                .addClass("search-image");
             var resultImage = $("<img>")
                 .attr("src", image)
                 .attr("width", "300px");
-            var resultText = $("<div>");
+            var resultText = $("<div>")
+                .addClass("search-text");
             var resultTitle = $("<h2>")
                 .text(phrase);
             var addressEl = $("<p>")
@@ -63,9 +66,6 @@ var getImages = function(phrase, city, web, phone, address) {
                     .text("Visit the website");
                 resultText.append(webEl);
             }
-
-            var hr = $("<hr>");
-            resultText.append(hr);
 
             searchResult
                 .append(resultImageDiv)
@@ -121,4 +121,44 @@ var latLon = function(city, activity) {
         });
 }
 
-latLon("Istanbul", "museum");
+//latLon("Istanbul", "museum");
+
+var getSearchInfo = function() {
+    // Grab repo name from url query string
+    var queryString = document.location.search;
+
+    if (queryString) {
+        var citySearch = queryString.split("=")[1];
+        citySearch = citySearch.split("&")[0];
+        citySearch.replace("%20", " ");
+        var searchType = queryString.split("=")[2];
+        // Display repo name on the page
+        latLon(citySearch, searchType);
+    } else {
+        // If no repo was given, redirect to the homepage
+        //document.location.replace("./index.html");
+        console.log("No search");
+        var noSearch = $("<h2>")
+            .text("This is not a search.");
+        contentSpace.append(noSearch);
+    }
+}
+getSearchInfo();
+
+// Search button
+if (searchButton.length) {
+    console.log("search button exists");
+    searchButton.on("click", function(event) {
+        // Prevent default refresh
+        event.preventDefault();
+        console.log("button click works");
+        // Get value
+        var selectedCity = $("input[name='city']").val();
+        var searchType = $("input[name='Historical sites']").val();
+        console.log(selectedCity);
+        console.log(searchType);
+
+        window.location.href = "./results.html?city=" + selectedCity + "&type=museum";
+        //latLon(selectedCity, "museum");
+    });
+}
