@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Through Time - The History-Lover's Travel Itinerary</title>
     <!-- Foundation CSS Framework -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
     <!-- jQuery UI Style -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!-- Custom Styling -->
@@ -17,59 +17,60 @@
 <body>
     <!-- Header -->
     <header>
-        <div class=title_div>
-            <div class=main_title>Travel Through Time</div>
-            <div class=secondary_title>The History ...</div>
+        <div class="title_div">
+            <div class="main_title">Travel Through Time</div>
+            <div class="secondary_title">The History ...</div>
         </div>
-        <button class=go_to_my_itinerary>GO TO MY ITINERARY</button>
-        <button class=settings>*</button>
+        <button class="go_to_my_itinerary">GO TO MY ITINERARY</button>
+        <button class="settings">*</button>
 
     </header>
 
     <!-- Main Body Content -->
     <main>
-        <div class=left_column_div>
-            <div class=where_are_you_going_div>
-                where are you going ?
-                <div class=where_are_you_going_sub_div>
+        <div class="left_column_div">
+            <div class="where_are_you_going_div">
+                Where are you going ?
+                <div class="where_are_you_going_sub_div">
                     <p>City</p>
-                    <textarea id=city_textarea></textarea>
+                    <input id="city-input" type="text" name="city" />
                     <p>State/Province</p>
-                    <textarea id=state_textarea></textarea>
+                    <input id="state-input" type="text" name="state" />
                     <p>Country</p>
-                    <textarea id=country_textarea></textarea>
+                    <select id="country-select" name="country"></select>
                 </div>
             </div>
-            <div class=what_will_you_explore_div>
-                what will you explore ?
-              <div class=where_are_you_going_sub_div>
+            <div class="what_will_you_explore_div">
+                What will you explore ?
+              <div class="where_are_you_going_sub_div">
                 <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
                 <label for="Historical sites"> Historical Sites </label><br>
 
-                <textarea id=search_for_something_else>Search for something else</textarea>
+                <input id="search_for_something_else" type="text" name="other-search" placeholder="Search for something else" />
 
 
               </div>  
             </div>
         </div>
-        <div class=map_div>
-            <p class=map_text>Begin your journey</p>
-            <p class=map_text>       by typing your location on the left</p>
-            <img class=map src="assets/images/world-map[1].png">
-            <button class=explore>Explore</button>
+        <div class="map_div">
+            <p class="map_text">Begin your journey</p>
+            <p class="map_text">       by typing your location on the left</p>
+            <img class="map" src="assets/images/world-map[1].png">
+            <button class="explore" type="submit">Explore</button>
         </div>
     </main>
 
     <!-- Footer -->
     <footer></footer>
 
-    <!-- jQuery & jQuery UI Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
    <!-- Foundation Framework Script -->
-   <script src = "Foundation-Sites-CSS/js/vendor/foundation.min.js"></script>
+    <sript src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></sript>
+    <!-- jQuery & jQuery UI Scripts -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <!-- Custom Scripting -->
     <script src = "./assets/js/script.js"></script>
+    <script src = "./assets/js/search.js"></script>
 </body>
 </html>
