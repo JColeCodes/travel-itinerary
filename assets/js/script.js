@@ -11,7 +11,24 @@ function pageReady()
     //var button = document.getElementById("search_button");
     //button.addEventListener("click", SearchCity.bind(null) );
 }
-
-
 window.onload = pageInit;
 jQuery(document).ready(pageReady);
+
+$(".list-group").on("click", "span", function() {
+ 
+    var date = $(this).text().trim();
+  
+    var dateInput = $("<input>").attr("type", "text").addClass("form-control").val(date);
+  
+    $(this).replaceWith(dateInput);
+
+    $("#modalDueDate").datepicker({
+    minDate: 1
+});
+// Jquery code
+$( ".selector" ).datepicker({
+    changeMonth: true
+  });
+
+dateInput.trigger("focus");
+});
