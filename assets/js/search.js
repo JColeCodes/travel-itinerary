@@ -1,6 +1,9 @@
 var contentSpace = $("#display-content");
 var searchButton = $(".explore");
+var countrySelect = $("#country-select");
+var stateInput = $("#state-input");
 
+// Dummy Results for testing purposes
 var dummyResults = [
     {
         title: "Winchester Mystery House",
@@ -29,25 +32,197 @@ var dummyResults = [
     }
 ];
 
-var searchTyped = [
+// What the user is allowed to search for
+var searchType = [
     {
         identifier: "museum",
         apiParam: "entertainment.museum"
+    },
+    {
+        identifier: "culture",
+        apiParam: "entertainment.culture"
+    },
+    {
+        identifier: "heritage",
+        apiParam: "heritage"
+    },
+    {
+        identifier: "manmade",
+        apiParam: "man_made"
+    },
+    {
+        identifier: "natural",
+        apiParam: "natural"
+    },
+    {
+        identifier: "nationalpark",
+        apiParam: "national_park"
+    },
+    {
+        identifier: "sights",
+        apiParam: "tourism.sights"
+    },
+    {
+        identifier: "historic",
+        apiParam: "building.historic"
     }
 ];
 
-var showResultNumber = function(number, city) {
-    var cityName = city;
-    if (city.includes("%20")) {
-        cityName = city.replace("%20", " ");
+// Object storing the info of the current search
+var currentSearch = {
+    city: null,
+    activity: null
+};
+var searchResults = [];
+
+// Gets the information from the paramaters submitted
+function getSearchInfo() {
+    // Grab the paramater string
+    var queryString = document.location.search;
+
+    if (queryString) {
+        var citySearch = queryString.split("=")[1];
+        citySearch = citySearch.split("&")[0];
+        citySearch.replace("%20", " ");
+        var searchType = queryString.split("=")[2];
+        // Search the place using this information
+        currentSearch.city = citySearch;
+        currentSearch.activity = searchType;
+        latLon();
+    } else {
+        // If no parameters, then display that this is not a valid search
+        console.log("No search");
+        var noSearch = $("<h2>")
+            .text("This is not a search.");
+        contentSpace.append(noSearch);
     }
-    var searchResultNum = $("<h2>")
-        .text("There are " + number + " results for " + cityName);
-    contentSpace.append(searchResultNum);
+}
+//getSearchInfo(); // Get parameters on load
+
+// Search for the latitude and longitude of the submitted location
+function latLon() {
+    var geocodeURL = "https://geocode.search.hereapi.com/v1/geocode?q=" + city + "&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
+
+    // Run fetch
+    fetch(geocodeURL)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data.items[0].position.lat);
+            console.log(data.items[0].position.lng);
+            searchResults(data.items[0].position.lat, data.items[0].position.lng);
+        });
+}
+//latLon("Istanbul", "museum");
+
+// Receive search results for locations
+function searchResults(lat, lon) {
+    // TO-DO: Get search to look up searchType's apiParam by the input activity identifier
+    var placesURL = "https://api.geoapify.com/v2/places?categories=" + /*entertainment.museum*/ + "&filter=circle:" + lon + "," + lat + ",5000&limit=20&apiKey=5f64f49cb696477d8dcdf83ec8fc94f2";
+
+    var numberOfResults = 0;
+
+    // Run fetch
+    fetch(placesURL)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(placesURL);
+            console.log(data);
+            // TO-DO: Add each place to the searchResults array as an object
+            /* Object Structure:
+            { place: dataItem.address_line1,
+              address: address,
+              image: url,
+              description: string - empty or filled,
+              web: url } */
+            for (var i = 0; i < data.features.length; i++) {
+                var dataItem = data.features[i].properties;
+                console.log(dataItem.name);
+                var address = dataItem.address_line2;
+                numberOfResults++;
+                // Instead of passing all this stufd through the functions, just save to object array
+                getDescription(dataItem.address_line1, city, address);
+            }
+            showResultNumber(numberOfResults, city);
+        });
 }
 
-// Search, m8
-var displaySearch = function(phrase, city, address, image, web, description) {
+// Get place description, if one can be found
+var getDescription = function(phrase, city, address) {
+    if (phrase) { 
+    var wikipediaURL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + phrase;
+
+    // Run fetch
+    fetch(wikipediaURL)
+        .then(function(response) {
+            console.log(response.status);
+            if (response.ok) {
+                response.json().then(function(data) {
+                    console.log(data);
+                    var description = data.extract;
+                    var image = data.originalimage;
+                    if (image && !image.source.toLowerCase().includes("logo")) {
+                        image = image.source;
+                    } else {
+                        image = "";
+                    }
+                    console.log(description);
+                    console.log(image);
+                    getWebURL(phrase, city, address, image, description);
+                });
+            } else {
+                getWebURL(phrase, city, address, "");
+            }
+        });
+    }
+}
+/*for (var i = 0; i < dummyResults.length; i++) {
+    getDescription(dummyResults[i].title, dummyResults[i].city, dummyResults[i].address);
+}*/
+
+// Find a website URL for the place because it's important to access more information about places when planning a trip
+function getWebURL(phrase, city, address, image, description) {
+    var searchURL = "https://api.qwant.com/v3/search/web?count=10&q=" + phrase + "%20" + city + "&t=web&safesearch=1&locale=en_US&offset=0&device=desktop";
+    fetch(searchURL)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+            var website = data.data.result.items.mainline;
+            var webURL = "";
+            for (var i = 0; i < website.length; i++) {
+                if (website[i].type = "web") {
+                    for (var n = 0; n < website[i].items.length; n++) {
+                        var websiteURL =  website[i].items[n].url;
+                        if (websiteURL) {
+                            if (!websiteURL.includes("wikipedia") && !websiteURL.includes("tripadvisor") && !websiteURL.includes("bing") && !websiteURL.includes("hotel") && !website[i].items[n].media) {
+                                webURL = websiteURL;
+                                break;
+                            }
+                        }
+                        
+                    }
+                }
+                if (webURL != "") {
+                    displaySearch(phrase, city, address, image, webURL, description);
+                    break;
+                }
+            }
+            if (webURL == "") {
+                displaySearch(phrase, city, address, image, "", description);
+            }
+        });
+}
+/*for (var i = 0; i < dummyResults.length; i++) {
+    testSearch(dummyResults[i].title, dummyResults[i].city, dummyResults[i].address);
+}*/
+
+// Display the search results
+function displaySearch(phrase, city, address, image, web, description) {
     if (phrase) { 
         var urlPhrase = phrase;
     if (phrase.includes("&")) {
@@ -122,162 +297,80 @@ var displaySearch = function(phrase, city, address, image, web, description) {
     }
 }
 
-var getWebURL = function(phrase, city, address, image, description) {
-    var searchURL = "https://api.qwant.com/v3/search/web?count=10&q=" + phrase + "%20" + city + "&t=web&safesearch=1&locale=en_US&offset=0&device=desktop";
-    fetch(searchURL)
+// Show how many search results come up
+function showResultNumber(number, city) {
+    var cityName = city;
+    if (city.includes("%20")) {
+        cityName = city.replace("%20", " ");
+    }
+    var searchResultNum = $("<h2>")
+        .text("There are " + number + " results for " + cityName);
+    contentSpace.append(searchResultNum);
+}
+
+// Display a list of countries to select from a dropdown for search
+var availableStates = [];
+var countryIndex = null;
+function listCountries() {
+    var countryListAPI = "https://countriesnow.space/api/v0.1/countries/states";
+
+    // Run fetch
+    fetch(countryListAPI)
         .then(function(response) {
             return response.json();
         })
         .then(function(data) {
-            console.log(data);
-            var website = data.data.result.items.mainline;
-            var webURL = "";
-            for (var i = 0; i < website.length; i++) {
-                if (website[i].type = "web") {
-                    for (var n = 0; n < website[i].items.length; n++) {
-                        var websiteURL =  website[i].items[n].url;
-                        if (websiteURL) {
-                            if (!websiteURL.includes("wikipedia") && !websiteURL.includes("tripadvisor") && !websiteURL.includes("bing") && !websiteURL.includes("hotel") && !website[i].items[n].media) {
-                                webURL = websiteURL;
-                                break;
-                            }
-                        }
-                        
+            // Add list of countries to drop down
+            for (var i = 0; i < data.data.length; i++) {
+                var countryName = data.data[i].name;
+                var option = $("<option>")
+                    .attr("value", countryName)
+                    .text(countryName);
+                countrySelect.append(option);
+            }
+            // Once country is selected , apply autocomplete to the state input
+            $(countrySelect).blur(function(){
+                // Get selected country name and index
+                var selectedCountry = $("select[name='country']").val();
+                for (var i = 0; i < data.data.length; i++) {
+                    if (data.data[i].name == selectedCountry) {
+                        countryIndex = i;
                     }
                 }
-                if (webURL != "") {
-                    displaySearch(phrase, city, address, image, webURL, description);
-                    break;
+                // Loop through states and add them to the autocomplete array
+                for (var i = 0; i < data.data[countryIndex].states.length; i++){
+                    availableStates.push(data.data[countryIndex].states[i].name);
                 }
-            }
-            if (webURL == "") {
-                displaySearch(phrase, city, address, image, "", description);
-            }
-        });
-}
-/*for (var i = 0; i < dummyResults.length; i++) {
-    testSearch(dummyResults[i].title, dummyResults[i].city, dummyResults[i].address);
-}*/
-var getDescription = function(phrase, city, address) {
-    if (phrase) { 
-    var wikipediaURL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + phrase;
-
-    // Run fetch
-    fetch(wikipediaURL)
-        .then(function(response) {
-            console.log(response.status);
-            if (response.ok) {
-                response.json().then(function(data) {
-                    console.log(data);
-                    var description = data.extract;
-                    var image = data.originalimage;
-                    if (image && !image.source.toLowerCase().includes("logo")) {
-                        image = image.source;
-                    } else {
-                        image = "";
-                    }
-                    console.log(description);
-                    console.log(image);
-                    getWebURL(phrase, city, address, image, description);
+                // Functions to run autocomplete
+                var selectIem = function(event, ui) {
+                    stateInput.val(ui.item.value);
+                    return false;
+                }
+                stateInput.autocomplete({
+                    source: availableStates,
+                    select: selectIem
                 });
-            } else {
-                getWebURL(phrase, city, address, "");
-            }
-        });
-    }
-}
-/*for (var i = 0; i < dummyResults.length; i++) {
-    getDescription(dummyResults[i].title, dummyResults[i].city, dummyResults[i].address);
-}*/
-
-var searchResults = function(lat, lon, activity, city) {
-    //var placesURL = "https://discover.search.hereapi.com/v1/discover?in=circle:" + lat + "," + lon + ";r=30000&q=" + activity + "&limit=20&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
-    var placesURL = "https://api.geoapify.com/v2/places?categories=entertainment.museum&filter=circle:" + lon + "," + lat + ",5000&limit=5&apiKey=5f64f49cb696477d8dcdf83ec8fc94f2";
-
-    var numberOfResults = 0;
-
-    // Run fetch
-    fetch(placesURL)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(placesURL);
-            console.log(data);
-            for (var i = 0; i < data.features.length; i++) {
-                var dataItem = data.features[i].properties;
-                console.log(dataItem.name);
-                /*if (dataItem.contacts) {
-                    if (dataItem.contacts[0].www) {
-                        var web = dataItem.contacts[0].www[0].value;
-                    } else { var web = null; }
-                    if (dataItem.contacts[0].phone) {
-                        var phone = dataItem.contacts[0].phone[0].value;
-                    } else { var phone = null; }
-                }
-                var address = dataItem.address.label.split(dataItem.title + ", ");
-                address = address[address.length - 1];*/
-                var address = dataItem.address_line2;
-                numberOfResults++;
-                getDescription(dataItem.address_line1, city, address);
-            }
-            showResultNumber(numberOfResults, city);
+                availableStates = [];
+            });
         });
 }
-
-var latLon = function(city, activity) {
-    var geocodeURL = "https://geocode.search.hereapi.com/v1/geocode?q=" + city + "&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
-
-    // Run fetch
-    fetch(geocodeURL)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(data.items[0].position.lat);
-            console.log(data.items[0].position.lng);
-            searchResults(data.items[0].position.lat, data.items[0].position.lng, activity, city);
-        });
-}
-
-//latLon("Istanbul", "museum");
-
-var getSearchInfo = function() {
-    // Grab repo name from url query string
-    var queryString = document.location.search;
-
-    if (queryString) {
-        var citySearch = queryString.split("=")[1];
-        citySearch = citySearch.split("&")[0];
-        citySearch.replace("%20", " ");
-        var searchType = queryString.split("=")[2];
-        // Display repo name on the page
-        latLon(citySearch, searchType);
-    } else {
-        // If no repo was given, redirect to the homepage
-        //document.location.replace("./index.html");
-        console.log("No search");
-        var noSearch = $("<h2>")
-            .text("This is not a search.");
-        contentSpace.append(noSearch);
-    }
-}
-getSearchInfo();
+listCountries();
 
 // Search button
 if (searchButton.length) {
-    console.log("search button exists");
     searchButton.on("click", function(event) {
         // Prevent default refresh
         event.preventDefault();
-        console.log("button click works");
+
         // Get value
         var selectedCity = $("input[name='city']").val();
         var searchType = $("input[name='Historical sites']").val();
         console.log(selectedCity);
         console.log(searchType);
 
-        window.location.href = "./results.html?city=" + selectedCity + "&type=museum";
+        // Go to results.html
+        //window.location.href = "./results.html?city=" + selectedCity + "&type=museum";
+        // TEMPORARY DISABLE OF RESULTS SO I CAN READ CONSOLE LOG OF SEARCH FUNCTIONS
         //latLon(selectedCity, "museum");
     });
 }

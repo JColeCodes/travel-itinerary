@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Through Time - The History-Lover's Travel Itinerary</title>
     <!-- Foundation CSS Framework -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
     <!-- jQuery UI Style -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!-- Custom Styling -->
@@ -33,11 +33,11 @@
                 Where are you going ?
                 <div class="where_are_you_going_sub_div">
                     <p>City</p>
-                    <input id="city_textarea" type="text" name="city" />
+                    <input id="city-input" type="text" name="city" />
                     <p>State/Province</p>
-                    <input id="state_textarea" type="text" name="state" />
+                    <input id="state-input" type="text" name="state" />
                     <p>Country</p>
-                    <input id="country_textarea" type="text" name="country" />
+                    <select id="country-select" name="country"></select>
                 </div>
             </div>
             <div class="what_will_you_explore_div">
@@ -63,11 +63,11 @@
     <!-- Footer -->
     <footer></footer>
 
+   <!-- Foundation Framework Script -->
+    <sript src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></sript>
     <!-- jQuery & jQuery UI Scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-   <!-- Foundation Framework Script -->
-   <script src = "Foundation-Sites-CSS/js/vendor/foundation.min.js"></script>
 
     <!-- Custom Scripting -->
     <script src = "./assets/js/script.js"></script>
