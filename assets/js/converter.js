@@ -42,3 +42,5 @@ function convert(currency1, currency2, value) {
             result.value = Object.values(val.rates)[0];
         });
     }
+
+    
