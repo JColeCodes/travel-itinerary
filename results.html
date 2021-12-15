@@ -16,19 +16,70 @@
 </head>
 <body>
     <!-- Header -->
-    <header></header>
+     <header>
+        <div class=title_div>
+            <div class=title_text>
+                <div class=main_title>Travel Through Time</div>
+                <div class=secondary_title>The History Lover's Travel Itinerary</div>
+            </div>
+            <div class=title_buttons>
+                <button class=go_to_my_itinerary id=go_to_my_itinerary>GO TO MY ITINERARY</button>
+                <button class=settings>&#9881;</button>
+            </div>
+         </div>
+    </header>
 
     <!-- Main Body Content -->
-    <main></main>
+    <main>
+        <div class=left_column_div>
+            <div class=sort_results_by_div>
+                <div class=sort_results_by_title>Sort Results By: </div>
+                <div class=sort_results_by_sub_div>
+                    <input type="checkbox" id="Most Travelled" name="Most Travelled" value="0">
+                    <label for="Most Travelled"> Most Travelled </label><br>
+                    <input type="checkbox" id="Highest Rated" name="Highest Rated" value="0">
+                    <label for="Highest Rated"> Highest Rated </label><br>
+                    <input type="checkbox" id="Closest In Proximity" name="Closest In Proximity" value="0">
+                    <label for="Closest In Proximity"> Closest In Proximity </label><br>
+
+                    <textarea id=proximity_textarea></textarea>
+                </div>
+            </div>
+            <div class=adjust_search_results_div>
+                <div class=adjust_search_results_title> Adjust Search Results </div>
+              <div class=adjust_search_results_sub_div>
+                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
+                <label for="Historical sites"> Historical Sites </label><br>
+
+                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
+                <label for="Historical sites"> Memorial Sites </label><br>
+
+                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
+                <label for="Historical sites"> Museums </label><br>
+
+                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
+                <label for="Historical sites"> Natural Landmarks </label><br>
+
+                <textarea id=search_for_something_else>Search for something else</textarea>
+
+
+              </div>  
+            </div>
+        </div>
+        <div class=map_div>
+            <p>search panel</p>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer></footer>
 
-    <!-- Foundation Framework Script -->
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></sript>
+    
     <!-- jQuery & jQuery UI Scripts -->
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></sript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Foundation Framework Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
     <!-- Custom Scripting -->
     <script src="./assets/js/script.js"></script>
 </body>
