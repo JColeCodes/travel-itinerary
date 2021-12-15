@@ -13,37 +13,90 @@ body {
     line-height: 1;
   }
 
-
-header {
-    border-style: solid;
-    text-align: center;
+  header {
+    border-style: none;
     color: white;
-    height: 10%;
-    background: linear-gradient(to right, blue, red);
+    height: 80px;
+    text-align:right;
+    width:100%;
+    font-size:20px;
+    margin-top: 10px;
   }
 
-main {  
+  .title_div{
     border-style: solid;
+    height: 20%;
+    width:100%;
+  }
+  .title_text{
+    float:left;
+  }
+  .title_buttons{
+    float:right;
+    vertical-align:bottom;
+    height:50px;
+  }
+
+  .settings{
+    padding-top:0px;
+    padding-bottom:0px;
+    margin-top:0px;
+    margin-bottom:0px;
+    font-size:20px;
+    vertical-align:bottom;
+  }
+
+  .go_to_my_itinerary{
+    padding-top:0px;
+    padding-bottom:0px;
+    margin-top:0px;
+    margin-bottom:0px;
+    vertical-align:bottom;
+  }
+
+  .main_title{
+    font-size:35px;
+    color:#2a506e;
+    text-align:left;
+  }
+
+  .secondary_title{
+    font-size:15px;
+    color:#363c42;
+    text-align:left;
+  }
+
+
+main {  
+    border-style: none;
     text-align: center;
     height: 500px;
 }
 
 .left_column_div {
-    border-style: solid;
+    border-style: none;
     width: 35%; 
     padding: 0px;
     float:left;
 }
    
 .where_are_you_going_div {
-    border-style: solid;
-    width: 100%; 
+    border-style: none;
+    width: 90%;
     padding: 0px;
     text-align: left;
+    margin: 10px;
+}
+
+.where_are_you_going_title{
+    margin-top:10px;
+    margin-bottom: 10px;
+    color: #2a506e;
+    font-weight:bold;
 }
 
 .where_are_you_going_sub_div {
-    border-style: solid;
+    border-style: none;
     width: 100%; 
     padding: 10px;
     background-color: lightgrey;
@@ -51,14 +104,111 @@ main {
 }
 
 .what_will_you_explore_div {
-    border-style: solid;
-    width: 100%; 
+    border-style: none;
+    width: 90%; 
     padding: 0px;
     text-align: left;
+    margin:10px;
   }
 
+  .what_will_you_explore_title{
+    margin-top:10px;
+    margin-bottom:10px;
+    color: #2a506e;
+    font-weight:bold;
+}
   .what_will_you_explore_sub_div {
-    border-style: solid;
+    border-style: none;
+    width: 100%; 
+    padding: 10px;
+    background-color: lightgrey;
+    text-align: left; 
+    }
+
+    .sort_results_by_div {
+      border-style: none;
+      width: 90%;
+      padding: 0px;
+      text-align: left;
+      margin: 10px;
+  }
+  
+  .sort_results_by_title{
+      margin-top:10px;
+      margin-bottom: 10px;
+      color: #2a506e;
+      font-weight:bold;
+  }
+  
+  .sort_results_by_sub_div {
+      border-style: none;
+      width: 100%; 
+      padding: 10px;
+      background-color: lightgrey;
+      text-align: left;
+  }
+
+  .adjust_search_results_div {
+    border-style: none;
+    width: 90%; 
+    padding: 0px;
+    text-align: left;
+    margin:10px;
+  }
+
+  .adjust_search_results_title{
+    margin-top:10px;
+    margin-bottom:10px;
+    color: #2a506e;
+    font-weight:bold;
+}
+  .adjust_search_results_sub_div {
+    border-style: none;
+    width: 100%; 
+    padding: 10px;
+    background-color: lightgrey;
+    text-align: left; 
+    }
+
+    .trip_information_div {
+      border-style: none;
+      width: 90%;
+      padding: 0px;
+      text-align: left;
+      margin: 10px;
+  }
+  
+  .trip_information_title{
+      margin-top:10px;
+      margin-bottom: 10px;
+      color: #2a506e;
+      font-weight:bold;
+  }
+  
+  .trip_information_sub_div {
+      border-style: none;
+      width: 100%; 
+      padding: 10px;
+      background-color: lightgrey;
+      text-align: left;
+  }
+
+  .saved_activities_div {
+    border-style: none;
+    width: 90%; 
+    padding: 0px;
+    text-align: left;
+    margin:10px;
+  }
+
+  .saved_activities_title{
+    margin-top:10px;
+    margin-bottom:10px;
+    color: #2a506e;
+    font-weight:bold;
+}
+  .saved_activities_sub_div {
+    border-style: none;
     width: 100%; 
     padding: 10px;
     background-color: lightgrey;
@@ -66,20 +216,56 @@ main {
     }
 
 .map_div {
-    border-style: solid;
+    border-style: none;
     width: 65%; 
     height: 100%;
     padding: 0px;
     float:left;
   }
+  .map_text_1{
+    text-align:left;
+    color:#2a506e;
+  }
+
+  .map_text_2{
+    text-align:left;
+    color:#2a506e;
+    padding-left:40px;
+  }
 
   .map{
     width: 80%;
+    margin-top:20px;
+    margin-bottom:30px;
+  }
+
+  .explore{
+    margin-right:0px;
   }
 
 
+
+
+
+  input[type="checkbox" i] {
+    margin-bottom:10px;
+  }
+
   textarea{
       width:90%;
+  }
+
+  button{
+    background-color:#2a506e;
+    color:white;
+    min-width:30px;
+    min-height: 30px;
+    font-size:15px;
+    font-weight:bold;
+    border:none;
+    text-align:center;
+    border-radius:5px;
+    padding:5px;
   }
         /*Hex Codes:
         #f9f8f5 - Light cream
