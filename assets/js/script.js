@@ -15,12 +15,12 @@ function pageReady()
         });
     }
 
-    button = document.getElementById("explore");  
+    /*button = document.getElementById("explore");  
     if (button != null){
         button.addEventListener("click", function(){
             window.location = "results.html";
         });
-    }
+    }*/
 
     button = document.getElementById("go_to_search");  
     if (button != null){
