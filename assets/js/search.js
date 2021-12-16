@@ -118,7 +118,7 @@ function latLon() {
         .then(function(data) {
             console.log(data.items[0].position.lat);
             console.log(data.items[0].position.lng);
-            //searchResults(data.items[0].position.lat, data.items[0].position.lng);
+            searchResults(data.items[0].position.lat, data.items[0].position.lng);
         })
         .catch(function(error){
             noSearchResults();
@@ -172,17 +172,17 @@ function searchResults(lat, lon) {
                 //getDescription(dataItem.address_line1, city, address);
             }
             for (var i = 0; i < searchResultArr.length; i++) {
-                //getDescription(i);
+                getDescription(i);
                 console.log(searchResultArr);
             }
-            showResultNumber(numberOfResults, city);
+            showResultNumber(numberOfResults, currentSearch.city);
         });
 }
-
-searchResultArr = dummyResults;
+/*searchResultArr = dummyResults;
 for (var i = 0; i < searchResultArr.length; i++) {
     getDescription(i);
-}
+}*/
+
 // Get place description, if one can be found
 function getDescription(result) {
     var wikipediaURL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchResultArr[result].place;
@@ -353,7 +353,8 @@ function showResultNumber(number, city) {
     if (city.includes("%20")) {
         cityName = city.replace("%20", " ");
     }
-    var searchResultNum = $("<h2>")
+    var searchResultNum = $("<h3>")
+        .addClass("text-left")
         .text("There are " + number + " results for " + cityName);
     contentSpace.append(searchResultNum);
 }
@@ -407,6 +408,14 @@ function listCountries() {
 listCountries();
 
 // Search button
+$("input[name='search-type']").on("click", function(){
+    var searchType = $("input[name='search-type']:checked").attr("id");
+    console.log(searchType);
+    return searchType;
+});
+$("input[name='other-search']").on("click", function(){
+    $("input[name='search-type'][id='other-search']").prop("checked", true);
+});
 if (searchButton.length) {
     searchButton.on("click", function(event) {
         // Prevent default refresh
@@ -414,13 +423,19 @@ if (searchButton.length) {
 
         // Get value
         var selectedCity = $("input[name='city']").val();
-        var searchType = $("input[name='Historical sites']").val();
+        var searchType = $("input[name='search-type']:checked").attr("id");
+
         console.log(selectedCity);
         console.log(searchType);
 
         // Go to results.html
-        window.location.href = "./results.html?city=" + selectedCity + "&type=museum";
+        window.location.href = "./results.html?city=" + selectedCity + "&type=" + searchType;
         // TEMPORARY DISABLE OF RESULTS SO I CAN READ CONSOLE LOG OF SEARCH FUNCTIONS
         //latLon(selectedCity, "museum");
+    });
+} else {
+    $("input[name='search-type']").on("click", function(){
+        var searchType = $("input[name='search-type']:checked").attr("id");
+        window.location.href = "./results.html?city=" + currentSearch.city + "&type=" + searchType;
     });
 }
