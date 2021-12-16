@@ -1,12 +1,9 @@
-/*:root {
-     Custom Colors 
-}*/
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+<<<<<<< HEAD
 body_2 {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -22,55 +19,71 @@ body_2 {
     font-size:20px;
     margin-top: 10px;
   }
+=======
 
-  .title_div{
-    border-style: solid;
-    height: 20%;
-    width:100%;
-  }
-  .title_text{
-    float:left;
-  }
-  .title_buttons{
-    float:right;
-    vertical-align:bottom;
-    height:50px;
-  }
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  background-color: #f9f8f5;
+}
+>>>>>>> 4f7aa6b14ecadd06e8f483654f83cc04cc5c5ec4
 
-  .settings{
-    padding-top:0px;
-    padding-bottom:0px;
-    margin-top:0px;
-    margin-bottom:0px;
-    font-size:20px;
-    vertical-align:bottom;
-  }
+a, a:hover, button, button:hover {
+  transition: all 0.5s ease-in-out;
+}
 
-  .go_to_my_itinerary{
-    padding-top:0px;
-    padding-bottom:0px;
-    margin-top:0px;
-    margin-bottom:0px;
-    vertical-align:bottom;
-  }
+h1, h2, h3, h4, h5, h6, p {
+  font-family: 'Lato', sans-serif;
+}
 
-  .main_title{
-    font-size:35px;
-    color:#2a506e;
-    text-align:left;
-  }
+/* HEADER */
+header {
+  width: 1520px;
+  max-width: 100%;
+  padding: 40px;
+  font-size: 20px;
+  margin: 0 auto;
+}
 
-  .secondary_title{
-    font-size:15px;
-    color:#363c42;
-    text-align:left;
-  }
+.title_div{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
+.settings, .go_to_my_itinerary, .go_to_search {
+  padding: 0 auto;
+  margin: 0 auto;
+  font-size: 20px;
+}
+.settings {
+  font-size: 20px;
+}
 
+.main_title{
+  color:#2a506e;
+  text-align: left;
+  font-weight: 300;
+  line-height: 1;
+  font-size: 3.3rem;
+}
+.secondary_title{
+  font-size: 24px;
+  color:#363c42;
+  text-align:left;
+  line-height: 1;
+  font-style: italic;
+}
+
+/* BODY CONTENT */
 main {  
     border-style: none;
     text-align: center;
-    height: 500px;
+    width: 1520px;
+    max-width: 100%;
+    padding: 0 40px;
+    margin: 0 auto;
 }
 
 .left_column_div {
@@ -95,12 +108,20 @@ main {
     font-weight:bold;
 }
 
-.where_are_you_going_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left;
+.search-params, .trip-info {
+  background-color: #edece9;
+  padding: 20px;
+  border-style: none;
+  width: 100%; 
+  text-align: left; 
+}
+label {
+  font-size: 1rem;
+}
+
+.search-params h4 {
+  color: #595958;
+  line-height: 1;
 }
 
 .what_will_you_explore_div {
@@ -117,14 +138,6 @@ main {
     color: #2a506e;
     font-weight:bold;
 }
-  .what_will_you_explore_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left; 
-    }
-
     .sort_results_by_div {
       border-style: none;
       width: 90%;
@@ -140,14 +153,6 @@ main {
       font-weight:bold;
   }
   
-  .sort_results_by_sub_div {
-      border-style: none;
-      width: 100%; 
-      padding: 10px;
-      background-color: lightgrey;
-      text-align: left;
-  }
-
   .adjust_search_results_div {
     border-style: none;
     width: 90%; 
@@ -162,13 +167,6 @@ main {
     color: #2a506e;
     font-weight:bold;
 }
-  .adjust_search_results_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left; 
-    }
 
     .trip_information_div {
       border-style: none;
@@ -185,14 +183,6 @@ main {
       font-weight:bold;
   }
   
-  .trip_information_sub_div {
-      border-style: none;
-      width: 100%; 
-      padding: 10px;
-      background-color: lightgrey;
-      text-align: left;
-  }
-
   .saved_activities_div {
     border-style: none;
     width: 90%; 
@@ -207,21 +197,21 @@ main {
     color: #2a506e;
     font-weight:bold;
 }
-  .saved_activities_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left; 
-    }
-
-.map_div {
+.map_div, .search-panel {
     border-style: none;
     width: 65%; 
     height: 100%;
     padding: 0px;
     float:left;
   }
+  .map_div .intro-text {
+    margin: 0 auto;
+    display: inline-block;
+  }
+.map_div h2 {
+  font-style: italic;
+  font-weight: 300;
+}
   .map_text_1{
     text-align:left;
     color:#2a506e;
@@ -234,18 +224,10 @@ main {
   }
 
   .map{
-    width: 80%;
+    width: 100%;
     margin-top:20px;
     margin-bottom:30px;
   }
-
-  .explore{
-    margin-right:0px;
-  }
-
-
-
-
 
   input[type="checkbox" i] {
     margin-bottom:10px;
@@ -257,7 +239,7 @@ main {
 
   button{
     background-color:#2a506e;
-    color:white;
+    color:#f9f8f5;
     min-width:30px;
     min-height: 30px;
     font-size:15px;
@@ -265,8 +247,21 @@ main {
     border:none;
     text-align:center;
     border-radius:5px;
-    padding:5px;
+    padding: 10px;
   }
+
+.explore{
+  margin-right:0px;
+  line-height: 1;
+  color: #f9f8f5;
+  border-radius: 10px;
+  padding: 20px;
+  font-style: italic;
+  font-weight: 300;
+  float: right;
+}
+
+
         /*Hex Codes:
         #f9f8f5 - Light cream
         #edece9 - Cream
@@ -279,3 +274,26 @@ main {
         https://fonts.google.com/specimen/Lato?query=lato
         I used light, regular, regular italic, bold
         Feel free to use a different font from google fonts if you find it fits better!*/
+
+button:hover {
+  cursor: pointer;
+}
+
+/* SEARCH RESULTS */
+.search-result {
+  padding: 20px 0;
+}
+.search-image {
+  background-position: center;
+  background-size: cover;
+}
+.search-text {
+  padding-left: 20px;
+}
+.search-text p.h6 {
+  font-size: 0.95em;
+  line-height: 1.1;
+}
+.search-text p.address {
+  font-style: italic;
+}
