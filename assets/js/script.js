@@ -29,10 +29,30 @@ function pageReady()
         });
     }
 }
-
-
 window.onload = pageInit;
 jQuery(document).ready(pageReady);
+
+// calendar 
+$(".list-group").on("click", "span", function() {
+ 
+    var date = $(this).text().trim();
+  
+    var dateInput = $("<input>").attr("type", "text").addClass("form-control").val(date);
+  
+    $(this).replaceWith(dateInput);
+
+    $("#modalDueDate").datepicker({
+    minDate: 1
+});
+// additional Jquery code
+$( ".selector" ).datepicker({
+    changeMonth: true
+  });
+
+dateInput.trigger("focus");
+});
+
+=======
 
 // sortable function
 $( function() {
