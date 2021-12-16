@@ -52,10 +52,20 @@ $( ".selector" ).datepicker({
 dateInput.trigger("focus");
 });
 
-var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
-for (var i=0;i<dummydata.length;i++){
-  var name = dummydata[i];
-  var sortdiv = $("<div>").text(name);
+// Local Storage
+var savedPlaces = [];
+if ("saved-places" in localStorage) {
+  savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
+}
+
+//var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
+for (var i = 0; i < savedPlaces.length; i++) {
+  var dataName = savedPlaces[i].place;
+  var sortdiv = $("<div>").text(dataName).addClass("saved-place");
+
+  var editButton = $("<span>").addClass("edit-place").html("<i class=\"fas fa-pencil-alt\"></i>");
+  
+  sortdiv.append(editButton);
   $(".initial").append(sortdiv);
 }
 
@@ -65,7 +75,7 @@ $(".sortable").sortable({
     connectWith: $(".sortable"),
     scroll: false,
     tolerance: "pointer",
-    helper: "clone",
+    helper: "clone"/*,
     
     update:function() {
       var tempArr = [];
@@ -94,5 +104,5 @@ $(".sortable").sortable({
     },
     stop: function(event) {
       $(this).removeClass("dropover");
-    }
+    }*/
   });

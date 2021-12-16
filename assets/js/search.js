@@ -358,14 +358,17 @@ function displaySearch(result) {
             }
 
             // Create if statement to check if added to itinerary or not
-            /*(for (var i = 0; i < savedPlaces.length; i++) {
-
-            }*/
-
             var buttonText = "+ Add to itinerary"; // - Remove from itinerary
+            for (var i = 0; i < savedPlaces.length; i++) {
+                if (savedPlaces[i].place == searchResultArr[result].place) {
+                    buttonText = "- Remove from itinerary";
+                    break;
+                }
+            }
             var addButton = $("<button>")
                 .text(buttonText)
-                .attr("onClick", "toItinerary(" + searchResultArr[result].place + ", " + searchResultArr[result].web + ")");
+                .addClass("add-button")
+                .attr("onClick", "toItinerary('" + searchResultArr[result].place + "', '" + searchResultArr[result].web + "')");
             resultText.append(addButton);
 
             searchResult
@@ -384,6 +387,11 @@ function getHeight() {
 }
 
 function toItinerary(placeName, webURL) {
+    if ($(".add-button").text().includes("Remove")) {
+        $(".add-button").text("+ Add to itinerary");
+    } else {
+        $(".add-button").text("- Remove from itinerary");
+    }
     var placeObject = {
         place: placeName,
         web: webURL

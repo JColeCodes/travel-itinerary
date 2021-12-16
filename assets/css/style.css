@@ -252,6 +252,20 @@ input.radio-input {
     top: 5px;
 }
 
+/* SORTABLE STUFF */
+.saved-place {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 12px;
+  width: 100%;
+  margin: 2px 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.edit-place {
+  float: right;
+}
+
 
 /* MAP STYLING */
 .map {
