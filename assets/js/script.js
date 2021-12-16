@@ -13,7 +13,7 @@ function pageReady()
 }
 window.onload = pageInit;
 jQuery(document).ready(pageReady);
-
+// calendar 
 $(".list-group").on("click", "span", function() {
  
     var date = $(this).text().trim();
@@ -25,10 +25,11 @@ $(".list-group").on("click", "span", function() {
     $("#modalDueDate").datepicker({
     minDate: 1
 });
-// Jquery code
+// additional Jquery code
 $( ".selector" ).datepicker({
     changeMonth: true
   });
 
 dateInput.trigger("focus");
 });
+
