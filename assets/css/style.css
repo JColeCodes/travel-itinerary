@@ -195,6 +195,10 @@ input.radio-input {
   font-weight: 300;
 }
 
+.error-message {
+  font-size: 2.2rem;
+  color: #2a506e;
+}
 .required {
   color: #9f333d;
   font-style: italic;

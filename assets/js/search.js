@@ -1,5 +1,5 @@
 var contentSpace = $(".search-panel");
-var searchButton = $(".explore");
+var searchButton = $("#explore");
 var countrySelect = $("#country-select");
 var stateInput = $("#state-input");
 var adjustResults = $("#adjust-results");
@@ -69,31 +69,38 @@ function getSearchInfo() {
         var querySplit = queryString.split(/[\s=&]+/);
         console.log(querySplit);
         var citySearch = querySplit[1];
-        citySearch.replace("%20", " ");
-        var searchType = querySplit[querySplit.length - 1];
-        var stateSearch = null;
-        var countrySearch = null;
-        if (querySplit.length == 6) {
-            if (querySplit[2].includes("state")) {
+        console.log(citySearch);
+        if (citySearch == "state" || citySearch == "country" || citySearch == "type" || querySplit[querySplit.length - 1] == "undefined") {
+            noSearchResults();
+        }
+        else {
+            citySearch.replace("%20", " ");
+            var searchType = querySplit[querySplit.length - 1];
+            var stateSearch = null;
+            var countrySearch = null;
+            if (querySplit.length == 6) {
+                if (querySplit[2].includes("state")) {
+                    stateSearch = querySplit[3];
+                } else {
+                    countrySearch = querySplit[3];
+                }
+            } else if (querySplit.length == 8) {
                 stateSearch = querySplit[3];
-            } else {
-                countrySearch = querySplit[3];
+                countrySearch = querySplit[5];
             }
-        } else if (querySplit.length == 8) {
-            stateSearch = querySplit[3];
-            countrySearch = querySplit[5];
+            if (searchType == $("input[name='search-type']:checked").attr("id")) {
+                $("input[name='search-type']:checked").disabled = true;
+            }
+            // Search the place using this information
+            currentSearch.city = citySearch;
+            currentSearch.activity = searchType;
+            currentSearch.state = stateSearch;
+            currentSearch.country = countrySearch;
+            saveLocationInfo();
+            console.log(currentSearch.city, currentSearch.state, currentSearch.country);
+            latLon();
         }
-        if (searchType == $("input[name='search-type']:checked").attr("id")) {
-            $("input[name='search-type']:checked").disabled = true;
-        }
-        // Search the place using this information
-        currentSearch.city = citySearch;
-        currentSearch.activity = searchType;
-        currentSearch.state = stateSearch;
-        currentSearch.country = countrySearch;
-        saveLocationInfo();
-        console.log(currentSearch.city, currentSearch.state, currentSearch.country);
-        latLon();
+        
     } else {
         // If no parameters, then display that this is not a valid search
         noSearchResults();
@@ -104,8 +111,13 @@ getSearchInfo(); // Get parameters on load
 function noSearchResults() {
     console.log("No search");
     var noSearch = $("<h2>")
+        .addClass("error-message")
         .text("This is not a search.");
+    var errorMessage = $("<h3>")
+        .addClass("error-message")
+        .text("Please make sure you are searching for at least a city and a point of interest type.");
     contentSpace.append(noSearch);
+    contentSpace.append(errorMessage);
 }
 
 function saveLocationInfo() {
@@ -397,13 +409,19 @@ function toItinerary(placeName, webURL, dataId) {
 
 // Show how many search results come up
 function showResultNumber(number, city) {
-    var cityName = city;
+    var displayLocation = city;
     if (city.includes("%20")) {
-        cityName = city.replace("%20", " ");
+        displayLocation = city.replace("%20", " ");
+    }
+    if (currentSearch.state) {
+        displayLocation += ", " + currentSearch.state;
+    }
+    if (currentSearch.country) {
+        displayLocation += ", " + currentSearch.country;
     }
     var searchResultNum = $("<h3>")
         .addClass("text-left")
-        .text("There are " + number + " results for " + cityName);
+        .text("Showing " + number + " results for " + displayLocation);
     contentSpace.append(searchResultNum);
 }
 
@@ -437,18 +455,21 @@ function listCountries() {
                     }
                 }
                 // Loop through states and add them to the autocomplete array
-                for (var i = 0; i < data.data[countryIndex].states.length; i++){
-                    availableStates.push(data.data[countryIndex].states[i].name);
+                if (selectedCountry != "blank") {
+                    for (var i = 0; i < data.data[countryIndex].states.length; i++){
+                        availableStates.push(data.data[countryIndex].states[i].name);
+                    }
+                    // Functions to run autocomplete
+                    var selectIem = function(event, ui) {
+                        stateInput.val(ui.item.value);
+                        return false;
+                    }
+                    stateInput.autocomplete({
+                        source: availableStates,
+                        select: selectIem
+                    });
                 }
-                // Functions to run autocomplete
-                var selectIem = function(event, ui) {
-                    stateInput.val(ui.item.value);
-                    return false;
-                }
-                stateInput.autocomplete({
-                    source: availableStates,
-                    select: selectIem
-                });
+                
                 availableStates = [];
             });
         });
@@ -473,15 +494,6 @@ if (searchButton.length) {
         var selectedCity = $("input[name='city']").val();
         var searchType = $("input[name='search-type']:checked").attr("id");
 
-        if ($("input[name='state']").val()) {
-            var selectedState = $("input[name='state']").val();
-            currentSearch.state = selectedState;
-        }
-        if ($("input[name='country']").val()) {
-            var selectedCountry = $("input[name='country']").val();
-            currentSearch.country = selectedCountry;
-        }
-
         console.log(selectedCity);
         console.log(searchType);
 
@@ -489,6 +501,20 @@ if (searchButton.length) {
 
         currentSearch.city = selectedCity;
         currentSearch.activity = searchType;
+
+        var selectedState = $("input[name='state']").val();
+        if (selectedState) {
+            selectedState = selectedState.split(" ").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ");
+            currentSearch.state = selectedState;
+            console.log(selectedState);
+            selectedCity += "&state=" + selectedState;
+        }
+        var selectedCountry = $("select[name='country']").val();
+        if (selectedCountry && selectedCountry != "blank") {
+            currentSearch.country = selectedCountry;
+            console.log(selectedCountry);
+            selectedCity += "&country=" + selectedCountry;
+        }
 
         // Go to results.html
         window.location.href = "./results.html?city=" + selectedCity + "&type=" + searchType;
