@@ -25,6 +25,12 @@ $(".list-group").on("click", "span", function() {
     $("#modalDueDate").datepicker({
     minDate: 1
 });
+dateInput.datepicker({
+    minDate: 1,
+    onClose: function() {
+      $(this).trigger("change");
+    }
+  });  
 // additional Jquery code
 $( ".selector" ).datepicker({
     changeMonth: true
