@@ -4,35 +4,6 @@ var countrySelect = $("#country-select");
 var stateInput = $("#state-input");
 var adjustResults = $("#adjust-results");
 
-// Dummy Results for testing purposes
-var dummyResults = [
-    {
-        place: "Winchester Mystery House",
-        city: "San Jose",
-        address: "Dummy Address, San Jose, CA, USA"
-    }, 
-    {
-        place: "Safdarjung's Tomb",
-        city: "New Delhi",
-        address: "Dummy Address, New Delhi, Delhi, India"
-    }, 
-    {
-        place: "Osaka Castle",
-        city: "Osaka",
-        address: "Dummy Address, Osaka, Japan"
-    }, 
-    {
-        place: "Louvre Abu Dhabi",
-        city: "Abu Dhabi",
-        address: "Dummy Address, Abu Dhabi, UAE"
-    },  
-    {
-        place: "Barangaroo Reserve",
-        city: "Sydney",
-        address: "Dummy Address, Sydney, NSW, Australia"
-    }
-];
-
 // What the user is allowed to search for
 var searchType = [
     {
@@ -85,6 +56,9 @@ var savedPlaces = [];
 if ("saved-places" in localStorage) {
     savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
 }
+if ("saved-location" in localStorage) {
+    currentSearch = JSON.parse(localStorage.getItem("saved-location"));
+}
 
 // Gets the information from the paramaters submitted
 function getSearchInfo() {
@@ -117,6 +91,7 @@ function getSearchInfo() {
         currentSearch.activity = searchType;
         currentSearch.state = stateSearch;
         currentSearch.country = countrySearch;
+        saveLocationInfo();
         console.log(currentSearch.city, currentSearch.state, currentSearch.country);
         latLon();
     } else {
@@ -131,6 +106,10 @@ function noSearchResults() {
     var noSearch = $("<h2>")
         .text("This is not a search.");
     contentSpace.append(noSearch);
+}
+
+function saveLocationInfo() {
+    localStorage.setItem("saved-location", JSON.stringify(currentSearch));
 }
 
 // Search for the latitude and longitude of the submitted location
@@ -151,9 +130,11 @@ function latLon() {
             return response.json();
         })
         .then(function(data) {
+            console.log(data);
             console.log(geocodeURL);
             console.log(data.items[0].position.lat);
             console.log(data.items[0].position.lng);
+
             searchResults(data.items[0].position.lat, data.items[0].position.lng);
         })
         .catch(function(error){
@@ -207,6 +188,11 @@ function searchResults(lat, lon) {
                 // Instead of passing all this stufd through the functions, just save to object array
                 //getDescription(dataItem.address_line1, city, address);
             }
+            
+            currentSearch.state = data.features[0].properties.state;
+            currentSearch.country = data.features[0].properties.country;
+            saveLocationInfo();
+
             for (var i = 0; i < searchResultArr.length; i++) {
                 getDescription(i);
                 console.log(searchResultArr);
@@ -365,10 +351,12 @@ function displaySearch(result) {
                     break;
                 }
             }
+            var dataPlaceName = searchResultArr[result].place.replace(/ /g, "-").toLowerCase();
             var addButton = $("<button>")
                 .text(buttonText)
                 .addClass("add-button")
-                .attr("onClick", "toItinerary('" + searchResultArr[result].place + "', '" + searchResultArr[result].web + "')");
+                .attr("data-place", dataPlaceName)
+                .attr("onClick", "toItinerary('" + searchResultArr[result].place + "', '" + searchResultArr[result].web + "', '" + dataPlaceName + "')");
             resultText.append(addButton);
 
             searchResult
@@ -386,17 +374,24 @@ function getHeight() {
     $(".search-image").height($(".search-image").width());
 }
 
-function toItinerary(placeName, webURL) {
-    if ($(".add-button").text().includes("Remove")) {
-        $(".add-button").text("+ Add to itinerary");
-    } else {
-        $(".add-button").text("- Remove from itinerary");
-    }
+function toItinerary(placeName, webURL, dataId) {
     var placeObject = {
         place: placeName,
-        web: webURL
+        web: webURL,
+        time: null,
+        cost: null
     }
-    savedPlaces.push(placeObject);
+    if ($("button[data-place='" + dataId + "'").text().includes("Remove")) {
+        for (var i = 0; i < savedPlaces.length; i++) {
+            if (savedPlaces[i].place == placeName) {
+                savedPlaces.splice(i, 1);
+            }
+        }
+        $("button[data-place='" + dataId + "'").text("+ Add to itinerary");
+    } else {
+        savedPlaces.push(placeObject);
+        $("button[data-place='" + dataId + "'").text("- Remove from itinerary");
+    }
     localStorage.setItem("saved-places", JSON.stringify(savedPlaces));
 }
 

@@ -265,6 +265,33 @@ input.radio-input {
 .edit-place {
   float: right;
 }
+.itinerary-table {
+  padding: 20px;
+  background-color: #edece9;
+  height: auto;
+}
+.table-titles div {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 10px 50px 10px 10px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 2px;
+}
+
+.trip-info h4 {
+  color: #2a506e;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.trip-info p {
+  color: #363c42;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1;
+}
 
 
 /* MAP STYLING */

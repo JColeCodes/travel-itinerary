@@ -64,7 +64,7 @@ for (var i = 0; i < savedPlaces.length; i++) {
   var sortdiv = $("<div>").text(dataName).addClass("saved-place");
 
   var editButton = $("<span>").addClass("edit-place").html("<i class=\"fas fa-pencil-alt\"></i>");
-  
+
   sortdiv.append(editButton);
   $(".initial").append(sortdiv);
 }
@@ -106,3 +106,20 @@ $(".sortable").sortable({
       $(this).removeClass("dropover");
     }*/
   });
+
+
+var destinationText = "";
+
+var currentSearch = {};
+if ("saved-location" in localStorage) {
+  currentSearch = JSON.parse(localStorage.getItem("saved-location"));
+
+  destinationText = currentSearch.city;
+  if (currentSearch.state) {
+    destinationText += ", " + currentSearch.state;
+  }
+  if (currentSearch.country) {
+    destinationText += ", " + currentSearch.country;
+  }
+}
+var destinationName = $("#destination-name").text(destinationText);

@@ -26,7 +26,6 @@
             </div>
             <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_search" id="go_to_search">GO TO SEARCH</button>
-                <button class="settings"><i class="fas fa-cog"></i></button>
             </div>
          </div>
     </header>
@@ -37,7 +36,11 @@
             <div class="sidebar-element">
                 <h3>Trip Information</h3>
                 <div class="trip-info" id= "trip_information_sub_div">
-                    Trip Info
+                    <h4>Destination:</h4>
+                    <p id="destination-name"></p>
+                    <h4>Budget:</h4>
+                    <p id="current-budget"></p>
+                    <p id="local-budget"></p>
                 </div>
             </div>
 
@@ -51,8 +54,14 @@
             </div>
         </div>
         <div class="map_div cell small-12 medium-6 large-8">
-            <div id="itinerary">Itinerary</div>
-            <div class="sortable"></div>
+            <div class="itinerary-table">
+                <div class="grid-x table-titles">
+                    <div class="cell shrink">Time</div>
+                    <div class="cell auto">Activity</div>
+                    <div class="cell shrink">Est. Cost</div>
+                </div>
+                <div class="sortable"></div>
+            </div>
         </div>
     </main>
 
