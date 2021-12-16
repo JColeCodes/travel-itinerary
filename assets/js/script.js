@@ -52,8 +52,6 @@ $( ".selector" ).datepicker({
 dateInput.trigger("focus");
 });
 
-///////////
-
 // sortable function
 $( function() {
     $( "#sortable" ).sortable();

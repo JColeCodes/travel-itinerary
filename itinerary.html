@@ -18,13 +18,13 @@
 </head>
 <body>
     <!-- Header -->
-     <header>
-        <div class="title_div">
-            <div class="title_text">
-                <h1 class="main_title">Travel Through Time</h1>
+    <header>
+        <div class="title_div grid-x">
+            <div class="title_text cell small-12 medium-auto">
+                <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
                 <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
-            <div class="title_buttons">
+            <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_search" id="go_to_search">GO TO SEARCH</button>
                 <button class="settings"><i class="fas fa-cog"></i></button>
             </div>
@@ -32,16 +32,16 @@
     </header>
 
     <!-- Main Body Content -->
-    <main>
-        <div class="left_column_div">
-            <div class="trip_information_div">
-                <div class="trip_information_title">Trip Information </div>
+    <main class="grid-x">
+        <div class="left_column_div sidebar cell small-12 medium-6 large-4">
+            <div class="sidebar-element">
+                <h3>Trip Information</h3>
                 <div class="trip-info" id= "trip_information_sub_div">
                     Trip Info
                 </div>
             </div>
-            <div class="saved_activities_div">
-                <div class="saved_activities_title"> Saved Activities </div>
+            <div class="sidebar-element">
+                <h3>Saved Activities</h3>
               <div class="trip-info" id="saved_activities_sub_div">
                 saved activities buttons
 
@@ -49,7 +49,7 @@
               </div>  
             </div>
         </div>
-        <div class="map_div">
+        <div class="map_div cell small-12 medium-6 large-8">
             <div id="itinerary">Itinerary</div>
         </div>
     </main>

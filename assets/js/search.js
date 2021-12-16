@@ -2,6 +2,7 @@ var contentSpace = $(".search-panel");
 var searchButton = $(".explore");
 var countrySelect = $("#country-select");
 var stateInput = $("#state-input");
+var adjustResults = $("#adjust-results");
 
 // Dummy Results for testing purposes
 var dummyResults = [
@@ -71,6 +72,8 @@ var searchType = [
 // Object storing the info of the current search
 var currentSearch = {
     city: null,
+    state: null,
+    country: null,
     activity: null
 };
 var searchResultArr = [];
@@ -78,19 +81,43 @@ var searchResultArr = [];
 // SAVE TO LOCAL STORAGE -> Pass info to itinerary
 var savedPlaces = [];
 
+// Get from localStorage
+if ("saved-places" in localStorage) {
+    savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
+}
+
 // Gets the information from the paramaters submitted
 function getSearchInfo() {
     // Grab the paramater string
     var queryString = document.location.search;
 
     if (queryString) {
-        var citySearch = queryString.split("=")[1];
-        citySearch = citySearch.split("&")[0];
+        var querySplit = queryString.split(/[\s=&]+/);
+        console.log(querySplit);
+        var citySearch = querySplit[1];
         citySearch.replace("%20", " ");
-        var searchType = queryString.split("=")[2];
+        var searchType = querySplit[querySplit.length - 1];
+        var stateSearch = null;
+        var countrySearch = null;
+        if (querySplit.length == 6) {
+            if (querySplit[2].includes("state")) {
+                stateSearch = querySplit[3];
+            } else {
+                countrySearch = querySplit[3];
+            }
+        } else if (querySplit.length == 8) {
+            stateSearch = querySplit[3];
+            countrySearch = querySplit[5];
+        }
+        if (searchType == $("input[name='search-type']:checked").attr("id")) {
+            $("input[name='search-type']:checked").disabled = true;
+        }
         // Search the place using this information
         currentSearch.city = citySearch;
         currentSearch.activity = searchType;
+        currentSearch.state = stateSearch;
+        currentSearch.country = countrySearch;
+        console.log(currentSearch.city, currentSearch.state, currentSearch.country);
         latLon();
     } else {
         // If no parameters, then display that this is not a valid search
@@ -108,7 +135,15 @@ function noSearchResults() {
 
 // Search for the latitude and longitude of the submitted location
 function latLon() {
-    var geocodeURL = "https://geocode.search.hereapi.com/v1/geocode?q=" + currentSearch.city + "&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
+    var searchTerm = "city=" + currentSearch.city;
+    if (currentSearch.state) {
+        searchTerm += ";state=" + currentSearch.state;
+    }
+    if (currentSearch.country) {
+        searchTerm += ";country=" + currentSearch.country;
+    }
+
+    var geocodeURL = "https://geocode.search.hereapi.com/v1/geocode?qq=" + searchTerm + "&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
 
     // Run fetch
     fetch(geocodeURL)
@@ -116,6 +151,7 @@ function latLon() {
             return response.json();
         })
         .then(function(data) {
+            console.log(geocodeURL);
             console.log(data.items[0].position.lat);
             console.log(data.items[0].position.lng);
             searchResults(data.items[0].position.lat, data.items[0].position.lng);
@@ -322,14 +358,14 @@ function displaySearch(result) {
             }
 
             // Create if statement to check if added to itinerary or not
+            /*(for (var i = 0; i < savedPlaces.length; i++) {
+
+            }*/
+
             var buttonText = "+ Add to itinerary"; // - Remove from itinerary
             var addButton = $("<button>")
-                .addClass("button submit")
                 .text(buttonText)
-                .attr("onClick", "toItinerary()");
-            function toItinerary() {
-                // Function to add and remove itinerary.
-            }
+                .attr("onClick", "toItinerary(" + searchResultArr[result].place + ", " + searchResultArr[result].web + ")");
             resultText.append(addButton);
 
             searchResult
@@ -345,6 +381,15 @@ function displaySearch(result) {
 
 function getHeight() {
     $(".search-image").height($(".search-image").width());
+}
+
+function toItinerary(placeName, webURL) {
+    var placeObject = {
+        place: placeName,
+        web: webURL
+    }
+    savedPlaces.push(placeObject);
+    localStorage.setItem("saved-places", JSON.stringify(savedPlaces));
 }
 
 // Show how many search results come up
@@ -425,17 +470,35 @@ if (searchButton.length) {
         var selectedCity = $("input[name='city']").val();
         var searchType = $("input[name='search-type']:checked").attr("id");
 
+        if ($("input[name='state']").val()) {
+            var selectedState = $("input[name='state']").val();
+            currentSearch.state = selectedState;
+        }
+        if ($("input[name='country']").val()) {
+            var selectedCountry = $("input[name='country']").val();
+            currentSearch.country = selectedCountry;
+        }
+
         console.log(selectedCity);
         console.log(searchType);
+
+        selectedCity = selectedCity.split(" ").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ");
+
+        currentSearch.city = selectedCity;
+        currentSearch.activity = searchType;
 
         // Go to results.html
         window.location.href = "./results.html?city=" + selectedCity + "&type=" + searchType;
         // TEMPORARY DISABLE OF RESULTS SO I CAN READ CONSOLE LOG OF SEARCH FUNCTIONS
         //latLon(selectedCity, "museum");
     });
-} else {
+}
+if (adjustResults.length) {
+    $("input[name='search-type'][id='" + document.location.search.split("&type=")[1] + "'").prop("checked", true);
     $("input[name='search-type']").on("click", function(){
         var searchType = $("input[name='search-type']:checked").attr("id");
-        window.location.href = "./results.html?city=" + currentSearch.city + "&type=" + searchType;
+        var searchURL = window.location.href;
+        searchURL = searchURL.split("&type=")[0];
+        window.location.href = searchURL + "&type=" + searchType;
     });
 }

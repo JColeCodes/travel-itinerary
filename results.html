@@ -18,13 +18,13 @@
 </head>
 <body>
     <!-- Header -->
-     <header>
-        <div class="title_div">
-            <div class="title_text">
-                <h1 class="main_title">Travel Through Time</h1>
+      <header>
+        <div class="title_div grid-x">
+            <div class="title_text cell small-12 medium-auto">
+                <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
                 <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
-            <div class="title_buttons">
+            <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
                 <button class="settings"><i class="fas fa-cog"></i></button>
             </div>
@@ -33,66 +33,52 @@
 
     <!-- Main Body Content -->
     <main class="grid-x">
-        <div class="left_column_div">
-            <div class="sort_results_by_div">
-                <h3 class="sort_results_by_title">Sort Results By: </h3>
-                <div class="search-params">
-                    <input type="checkbox" id="Most Travelled" name="Most Travelled" value="0">
-                    <label for="Most Travelled"> Most Travelled </label><br>
-                    <input type="checkbox" id="Highest Rated" name="Highest Rated" value="0">
-                    <label for="Highest Rated"> Highest Rated </label><br>
-                    <input type="checkbox" id="Closest In Proximity" name="Closest In Proximity" value="0">
-                    <label for="Closest In Proximity"> Closest In Proximity </label><br>
-
-                    <input type="text" id="proximity_textarea" />
-                </div>
-            </div>
-            <div class="adjust_search_results_div">
-                <h3 class="adjust_search_results_title">Adjust Search Results</h3>
-                <div class="search-params">
-                    <div class="grid-y">
-                        <div class="cell">
-                            <input type="radio" id="historic-buildings" name="search-type" value="0">
-                            <label for="historic-buildings">Historic Buildings</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="tourist-sites" name="search-type" value="0">
-                            <label for="tourist-sites">Tourist Sites</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="heritage-sites" name="search-type" value="0">
-                            <label for="heritage-sites">Heritage Sites</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="museums" name="search-type" value="0">
-                            <label for="museums">Museums</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="cultural-centers" name="search-type" value="0">
-                            <label for="cultural-centers">Cultural Centers</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="man-made" name="search-type" value="0">
-                            <label for="man-made">Man-made Locations</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="natural" name="search-type" value="0">
-                            <label for="natural">Natural Locations</label>
-                        </div>
-                        <div class="cell">
-                            <input type="radio" id="national-parks" name="search-type" value="0">
-                            <label for="national-parks">National Parks</label>
-                        </div>
-                        <div class="grid-x">
+        <div class="left_column_div sidebar cell small-12 medium-6 large-4">
+            <div class="sidebar-element">
+                <h3>Adjust Search Results</h3>
+                <div class="search-params" id="adjust-results">
+                    <div class="cell radio-select">
+                        <input type="radio" id="historic" name="search-type" value="0">
+                        <label for="historic">Historic Buildings</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="sights" name="search-type" value="0">
+                        <label for="sights">Tourist Sites</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="heritage" name="search-type" value="0">
+                        <label for="heritage">Heritage Sites</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="museum" name="search-type" value="0">
+                        <label for="museum">Museums</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="culture" name="search-type" value="0">
+                        <label for="culture">Cultural Centers</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="manmade" name="search-type" value="0">
+                        <label for="manmade">Man-made Locations</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="natural" name="search-type" value="0">
+                        <label for="natural">Natural Locations</label>
+                    </div>
+                    <div class="cell radio-select">
+                        <input type="radio" id="nationalpark" name="search-type" value="0">
+                        <label for="nationalpark">National Parks</label>
+                    </div>
+                        <!-- <div class="grid-x">
                             <input type="radio" id="other-search" name="search-type" value="0" class="cell shrink">
-                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto" placeholder="Search for something else" />
-                        </div>
+                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto radio-input" placeholder="Search for something else" />
+                        </div> IMPLEMENT THIS LATER -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="search-panel">
+        <div class="search-panel cell small-12 medium-6 large-8">
         </div>
     </main>
 
