@@ -52,7 +52,7 @@ $( ".selector" ).datepicker({
 dateInput.trigger("focus");
 });
 
-=======
+///////////
 
 // sortable function
 $( function() {
