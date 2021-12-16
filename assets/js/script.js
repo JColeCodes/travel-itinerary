@@ -52,7 +52,6 @@ $( ".selector" ).datepicker({
 dateInput.trigger("focus");
 });
 
-// =======
 var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
 for (var i=0;i<dummydata.length;i++){
   var name = dummydata[i];
