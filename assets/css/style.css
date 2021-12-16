@@ -3,23 +3,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-<<<<<<< HEAD
-body_2 {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1;
-  }
-
-  header_2 {
-    border-style: none;
-    color: white;
-    height: 80px;
-    text-align:right;
-    width:100%;
-    font-size:20px;
-    margin-top: 10px;
-  }
-=======
 
 body {
   font-family: 'Lato', sans-serif;
@@ -27,7 +10,6 @@ body {
   line-height: 1;
   background-color: #f9f8f5;
 }
->>>>>>> 4f7aa6b14ecadd06e8f483654f83cc04cc5c5ec4
 
 a, a:hover, button, button:hover {
   transition: all 0.5s ease-in-out;
