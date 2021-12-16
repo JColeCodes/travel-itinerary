@@ -300,6 +300,13 @@ input.radio-input {
   font-style: italic;
 }
 
+
+.sortable{
+  background-color:#edece9;
+  padding: 10px;
+}
+
+
 /* RESPONSIVE */
 @media screen and (max-width: 768px) {
   .map {
