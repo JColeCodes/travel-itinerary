@@ -336,7 +336,6 @@ function displaySearch(result) {
             // Create if statement to check if added to itinerary or not
             var buttonText = "+ Add to itinerary"; // - Remove from itinerary
             var addButton = $("<button>")
-                .addClass("button submit")
                 .text(buttonText)
                 .attr("onClick", "toItinerary()");
             function toItinerary() {

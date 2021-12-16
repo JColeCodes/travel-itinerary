@@ -13,18 +13,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
+
+    <!-- Map Stuff -->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css">
+    
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
+
 </head>
 <body>
     <!-- Header -->
       <header>
-        <div class="title_div">
-            <div class="title_text">
-                <h1 class="main_title">Travel Through Time</h1>
+        <div class="title_div grid-x">
+            <div class="title_text cell small-12 medium-auto">
+                <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
                 <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
-            <div class="title_buttons">
+            <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
                 <button class="settings"><i class="fas fa-cog"></i></button>
             </div>
@@ -33,7 +39,7 @@
 
     <!-- Main Body Content -->
     <main class="grid-x">
-        <div class="left_column_div">
+        <div class="left_column_div sidebar cell small-12 medium-6 large-4">
             <div class="where_are_you_going_div">
                 <h3 class="where_are_you_going_title">Where Are You Going?</h3>
                 <div class="search-params">
@@ -87,20 +93,23 @@
                         </div>
                         <div class="grid-x">
                             <input type="radio" id="other-search" name="search-type" value="0" class="cell shrink">
-                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto" placeholder="Search for something else" />
+                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto radio-input" placeholder="Search for something else" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="map_div">
+        <div class="map_div cell small-12 medium-6 large-8">
             <div class="intro-text">
                 <h2 class="map_text_1">Begin your journey</h2>
                 <h2 class="map_text_2">by typing your location on the left</h2>
             </div>
-            <img class="map" src="assets/images/world-map[1].png">
-            <button class="explore h2" id="explore" type="submit">Explore</button>
+            <div id="map" class="map"></div>
+            <!--<img class="map" src="assets/images/world-map[1].png"> -->
+            <div class="text-right">
+                <button class="h2 explore" id="explore" type="submit">Explore</button>
+            </div>
         </div>
     </main>
     
@@ -114,13 +123,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
      <!-- Foundation Framework Script -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
+
+     <!-- Map -->
+    <script src="./assets/js/map.js"></script>
 
     <!-- Custom Scripting -->
-    <script src = "./assets/js/script.js"></script>
-    <script src = "./assets/js/search.js"></script>
-    <script>
-        $(document).foundation();
-    </script>
+    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/search.js"></script>
 </body>
 </html>

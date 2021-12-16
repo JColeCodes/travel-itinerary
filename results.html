@@ -18,13 +18,13 @@
 </head>
 <body>
     <!-- Header -->
-     <header>
-        <div class="title_div">
-            <div class="title_text">
-                <h1 class="main_title">Travel Through Time</h1>
+      <header>
+        <div class="title_div grid-x">
+            <div class="title_text cell small-12 medium-auto">
+                <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
                 <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
-            <div class="title_buttons">
+            <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
                 <button class="settings"><i class="fas fa-cog"></i></button>
             </div>
@@ -33,20 +33,7 @@
 
     <!-- Main Body Content -->
     <main class="grid-x">
-        <div class="left_column_div">
-            <div class="sort_results_by_div">
-                <h3 class="sort_results_by_title">Sort Results By: </h3>
-                <div class="search-params">
-                    <input type="checkbox" id="Most Travelled" name="Most Travelled" value="0">
-                    <label for="Most Travelled"> Most Travelled </label><br>
-                    <input type="checkbox" id="Highest Rated" name="Highest Rated" value="0">
-                    <label for="Highest Rated"> Highest Rated </label><br>
-                    <input type="checkbox" id="Closest In Proximity" name="Closest In Proximity" value="0">
-                    <label for="Closest In Proximity"> Closest In Proximity </label><br>
-
-                    <input type="text" id="proximity_textarea" />
-                </div>
-            </div>
+        <div class="left_column_div sidebar cell small-12 medium-6 large-4">
             <div class="adjust_search_results_div">
                 <h3 class="adjust_search_results_title">Adjust Search Results</h3>
                 <div class="search-params">
@@ -85,14 +72,14 @@
                         </div>
                         <div class="grid-x">
                             <input type="radio" id="other-search" name="search-type" value="0" class="cell shrink">
-                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto" placeholder="Search for something else" />
+                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto radio-input" placeholder="Search for something else" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="search-panel">
+        <div class="search-panel cell small-12 medium-6 large-8">
         </div>
     </main>
 
