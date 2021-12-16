@@ -16,6 +16,10 @@ function pageReady()
 window.onload = pageInit;
 jQuery(document).ready(pageReady);
 
+// sortable function
+$( function() {
+    $( "#sortable" ).sortable();
+  } );
 $(".card .list-group").sortable({
     // enable dragging across lists
     connectWith: $(".card .list-group"),
