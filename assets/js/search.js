@@ -71,6 +71,8 @@ var searchType = [
 // Object storing the info of the current search
 var currentSearch = {
     city: null,
+    state: null,
+    country: null,
     activity: null
 };
 var searchResultArr = [];
@@ -91,6 +93,7 @@ function getSearchInfo() {
         // Search the place using this information
         currentSearch.city = citySearch;
         currentSearch.activity = searchType;
+        console.log(currentSearch.city, currentSearch.state, currentSearch.country);
         latLon();
     } else {
         // If no parameters, then display that this is not a valid search
@@ -108,7 +111,15 @@ function noSearchResults() {
 
 // Search for the latitude and longitude of the submitted location
 function latLon() {
-    var geocodeURL = "https://geocode.search.hereapi.com/v1/geocode?q=" + currentSearch.city + "&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
+    var searchTerm = "city=" + currentSearch.city;
+    if (currentSearch.state) {
+        searchTerm += ";state=" + currentSearch.state;
+    }
+    if (currentSearch.country) {
+        searchTerm += ";country=" + currentSearch.country;
+    }
+
+    var geocodeURL = "https://geocode.search.hereapi.com/v1/geocode?qq=" + searchTerm + "&apiKey=A_tZEkJx-nLOHsdriahgdmTRUsChHb6iC9uARM11Nb8";
 
     // Run fetch
     fetch(geocodeURL)
@@ -116,6 +127,7 @@ function latLon() {
             return response.json();
         })
         .then(function(data) {
+            console.log(geocodeURL);
             console.log(data.items[0].position.lat);
             console.log(data.items[0].position.lng);
             searchResults(data.items[0].position.lat, data.items[0].position.lng);
@@ -425,8 +437,22 @@ if (searchButton.length) {
         var selectedCity = $("input[name='city']").val();
         var searchType = $("input[name='search-type']:checked").attr("id");
 
+        if ($("input[name='state']").val()) {
+            var selectedState = $("input[name='state']").val();
+            currentSearch.state = selectedState;
+        }
+        if ($("input[name='country']").val()) {
+            var selectedCountry = $("input[name='country']").val();
+            currentSearch.country = selectedCountry;
+        }
+
         console.log(selectedCity);
         console.log(searchType);
+
+        selectedCity = selectedCity.split(" ").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ");
+
+        currentSearch.city = selectedCity;
+        currentSearch.activity = searchType;
 
         // Go to results.html
         window.location.href = "./results.html?city=" + selectedCity + "&type=" + searchType;
