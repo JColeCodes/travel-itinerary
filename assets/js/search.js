@@ -81,6 +81,11 @@ var searchResultArr = [];
 // SAVE TO LOCAL STORAGE -> Pass info to itinerary
 var savedPlaces = [];
 
+// Get from localStorage
+if ("saved-places" in localStorage) {
+    savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
+}
+
 // Gets the information from the paramaters submitted
 function getSearchInfo() {
     // Grab the paramater string
@@ -353,13 +358,14 @@ function displaySearch(result) {
             }
 
             // Create if statement to check if added to itinerary or not
+            /*(for (var i = 0; i < savedPlaces.length; i++) {
+
+            }*/
+
             var buttonText = "+ Add to itinerary"; // - Remove from itinerary
             var addButton = $("<button>")
                 .text(buttonText)
-                .attr("onClick", "toItinerary()");
-            function toItinerary() {
-                // Function to add and remove itinerary.
-            }
+                .attr("onClick", "toItinerary(" + searchResultArr[result].place + ", " + searchResultArr[result].web + ")");
             resultText.append(addButton);
 
             searchResult
@@ -375,6 +381,15 @@ function displaySearch(result) {
 
 function getHeight() {
     $(".search-image").height($(".search-image").width());
+}
+
+function toItinerary(placeName, webURL) {
+    var placeObject = {
+        place: placeName,
+        web: webURL
+    }
+    savedPlaces.push(placeObject);
+    localStorage.setItem("saved-places", JSON.stringify(savedPlaces));
 }
 
 // Show how many search results come up
