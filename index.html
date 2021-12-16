@@ -16,17 +16,11 @@
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class=title_div>
-            <div class="title_text">
-                <div class="main_title">Travel Through Time</div>
-                <div class="secondary_title">The History Lover's Travel Itinerary</div>
-            </div>
-            <div class="title_buttons">
-                <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
-                <button class="settings">&#9881;</button>
-            </div>
-         </div>
+    <header class="row">
+                <div class="small-3 columns">Travel Through Time</div>
+                <div class="column small-3">The History Lover's Travel Itinerary</div>
+                <button class="column small-3" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
+                <button class="column small-3">&#9881;</button>
     </header>
 
     <!-- Main Body Content -->
@@ -78,14 +72,19 @@
     <!-- Footer -->
     <footer></footer>
 
-   <!-- Foundation Framework Script -->
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></sript>
-    <!-- jQuery & jQuery UI Scripts -->
+  
+   <!-- jQuery & jQuery UI Scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+     <!-- Foundation Framework Script -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
 
     <!-- Custom Scripting -->
     <script src = "./assets/js/script.js"></script>
     <script src = "./assets/js/search.js"></script>
+    <script>
+        $(document).foundation();
+    </script>
 </body>
 </html>
