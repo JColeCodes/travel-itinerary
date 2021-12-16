@@ -52,7 +52,7 @@ $( ".selector" ).datepicker({
 dateInput.trigger("focus");
 });
 
-=======
+// =======
 
 // sortable function
 $( function() {
@@ -81,11 +81,9 @@ $(".card .list-group").sortable({
     update: function() {
       var tempArr = [];
   
-      // loop over current set of children in sortable list
       $(this)
         .children()
         .each(function() {
-          // save values in temp array
           tempArr.push({
             text: $(this)
               .find("p")
@@ -98,12 +96,12 @@ $(".card .list-group").sortable({
           });
         });
   
-      // trim down list's ID to match object property
+      
       var arrName = $(this)
         .attr("id")
         .replace("list-", "");
   
-      // update array on tasks object and save
+      
       tasks[arrName] = tempArr;
       saveTasks();
     },
