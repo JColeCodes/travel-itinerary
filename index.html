@@ -11,55 +11,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
     <!-- Header -->
-    <header class="row">
-                <div class="small-3 columns">Travel Through Time</div>
-                <div class="column small-3">The History Lover's Travel Itinerary</div>
-                <button class="column small-3" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
-                <button class="column small-3">&#9881;</button>
+      <header>
+        <div class="title_div">
+            <div class="title_text">
+                <h1 class="main_title">Travel Through Time</h1>
+                <div class="secondary_title">The History Lover's Travel Itinerary</div>
+            </div>
+            <div class="title_buttons">
+                <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
+                <button class="settings"><i class="fas fa-cog"></i></button>
+            </div>
+         </div>
     </header>
 
     <!-- Main Body Content -->
-    <main>
-        <div class=left_column_div>
+    <main class="grid-x">
+        <div class="left_column_div">
             <div class="where_are_you_going_div">
-                <div class="where_are_you_going_title">Where Are You Going?</div>
-                <div class="where_are_you_going_sub_div">
-                  
-                    <p>City</p>
+                <h3 class="where_are_you_going_title">Where Are You Going?</h3>
+                <div class="search-params">
+                    <h4>City</h4>
                     <input id="city-input" type="text" name="city" />
-                    <p>State/Province</p>
+                    <h4>State/Province</h4>
                     <input id="state-input" type="text" name="state" />
-                    <p>Country</p>
+                    <h4>Country</h4>
                     <select id="country-select" name="country"></select>
                 </div>
             </div>
 
-            <div class=what_will_you_explore_div>
-<<<<<<< HEAD
-                <div class="what_will_you_explore_title"> What Will You Explore?</div>
-              <div class="what_will_you_explore_sub_div">
-                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
-                <label for="Historical sites"> Historical Sites </label><br>
-
-                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
-                <label for="Historical sites"> Memorial Sites </label><br>
-
-                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
-                <label for="Historical sites"> Museums </label><br>
-
-                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
-                <label for="Historical sites"> Natural Landmarks </label><br>
-
-               <input id="search_for_something_else" type="text" name="other-search" placeholder="Search for something else" />
-                
-
-              </div>  
-=======
+    
+            <div class= "what_will_you_explore_div">
                 <h3 class="what_will_you_explore_title">What Will You Explore?</h3>
                 <div class="search-params">
                     <div class="grid-y">
@@ -101,17 +89,19 @@
                         </div>
                     </div>
                 </div>
->>>>>>> bfd1a945c6afc7d3aaa16c77309ece8b1c9276e7
             </div>
         </div>
 
         <div class="map_div">
-            <p class="map_text_1">Begin your journey</p>
-            <p class="map_text_2">       by typing your location on the left</p>
+            <div class="intro-text">
+                <h2 class="map_text_1">Begin your journey</h2>
+                <h2 class="map_text_2">by typing your location on the left</h2>
+            </div>
             <img class="map" src="assets/images/world-map[1].png">
-            <button class="explore" id="explore" type="submit">Explore</button>
+            <button class="explore h2" id="explore" type="submit">Explore</button>
         </div>
     </main>
+    
 
     <!-- Footer -->
     <footer></footer>
@@ -132,4 +122,3 @@
     </script>
 </body>
 </html>
-
