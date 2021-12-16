@@ -74,19 +74,18 @@ main {
     margin: 0 auto;
 }
 
-.left_column_div {
+/*.left_column_div {
     border-style: none;
     width: 35%; 
     padding: 0px;
     float:left;
-}
+}*/
    
-.where_are_you_going_div {
-    border-style: none;
-    width: 90%;
-    padding: 0px;
-    text-align: left;
-    margin: 10px;
+.sidebar-element {
+  border-style: none;
+  padding: 0px;
+  text-align: left;
+  margin: 0 20px 0 0;
 }
 
 .sidebar h3 {
@@ -98,7 +97,7 @@ main {
 
 .search-params, .trip-info {
   background-color: #edece9;
-  padding: 20px;
+  padding: 20px 20px 12px;
   border-style: none;
   width: 100%; 
   text-align: left; 
@@ -128,86 +127,13 @@ input.radio-input {
   font-size: 1.3rem;
 }
 
-.what_will_you_explore_div {
-    border-style: none;
-    width: 90%; 
-    padding: 0px;
-    text-align: left;
-    margin:10px;
-  }
-
-  .what_will_you_explore_title{
-    margin-top:10px;
-    margin-bottom:10px;
-    color: #2a506e;
-    font-weight:bold;
-}
-    .sort_results_by_div {
-      border-style: none;
-      width: 90%;
-      padding: 0px;
-      text-align: left;
-      margin: 10px;
-  }
-  
-  .sort_results_by_title{
-      margin-top:10px;
-      margin-bottom: 10px;
-      color: #2a506e;
-      font-weight:bold;
-  }
-  
-  .adjust_search_results_div {
-    border-style: none;
-    width: 90%; 
-    padding: 0px;
-    text-align: left;
-    margin:10px;
-  }
-
-  .adjust_search_results_title{
-    margin-top:10px;
-    margin-bottom:10px;
-    color: #2a506e;
-    font-weight:bold;
-}
-
-    .trip_information_div {
-      border-style: none;
-      width: 90%;
-      padding: 0px;
-      text-align: left;
-      margin: 10px;
-  }
-  
-  .trip_information_title{
-      margin-top:10px;
-      margin-bottom: 10px;
-      color: #2a506e;
-      font-weight:bold;
-  }
-  
-  .saved_activities_div {
-    border-style: none;
-    width: 90%; 
-    padding: 0px;
-    text-align: left;
-    margin:10px;
-  }
-
-  .saved_activities_title{
-    margin-top:10px;
-    margin-bottom:10px;
-    color: #2a506e;
-    font-weight:bold;
-}
-.map_div, .search-panel {
+/*.map_div, .search-panel {
     border-style: none;
     width: 65%; 
     height: 100%;
     padding: 0px;
     float:left;
-  }
+  }*/
   .map_div .intro-text {
     margin: 0 auto;
     display: inline-block;
@@ -255,6 +181,7 @@ input.radio-input {
     padding: 10px;
   }
   button:hover {
+    cursor: pointer;
     background-color: #395f7b;
   }
 
@@ -266,6 +193,15 @@ input.radio-input {
   padding: 10px 15px 13px;
   font-style: italic;
   font-weight: 300;
+}
+
+.required {
+  color: #9f333d;
+  font-style: italic;
+}
+.bold {
+  font-weight: 700;
+  font-style: normal;
 }
 
 
@@ -282,9 +218,40 @@ input.radio-input {
         I used light, regular, regular italic, bold
         Feel free to use a different font from google fonts if you find it fits better!*/
 
-button:hover {
-  cursor: pointer;
+
+.radio-select input {
+    opacity: 0;
 }
+.radio-select input + label::after {
+    content: none;
+}
+.radio-select input:checked + label::after {
+    content: "";
+}
+.radio-select label {
+    position: relative;
+    left: 5px;
+    line-height: 1.6;
+}
+.radio-select label::before {
+    content: "";
+    height: 22px;
+    width: 22px;
+    background: #f9f8f5;
+    border: 1px solid #cfcdcb;
+    position: absolute;
+    left: -30px;
+}
+.radio-select label::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: #2a506e;
+    position: absolute;
+    left: -25px;
+    top: 5px;
+}
+
 
 /* MAP STYLING */
 .map {
@@ -308,8 +275,22 @@ button:hover {
   background-position: center;
   background-size: cover;
 }
+.search-panel {
+  margin: 30px 0 0;
+}
+.search-panel h3 {
+  font-size: 1.4rem;
+  line-height: 1;
+  font-style: italic;
+  color: #595958;
+}
 .search-text {
   padding-left: 20px;
+}
+.search-text h2 {
+  color: #2a506e;
+  font-size: 2rem;
+  font-weight: 700;
 }
 .search-text p.h6 {
   font-size: 0.95em;
@@ -337,12 +318,12 @@ button:hover {
   .sidebar h3 {
     margin-top: 20px;
 }
-  .map_div .intro-text, .map_div .map {
-    display: none;
-  }
   .map_div .explore {
     float: none;
     margin: 10px auto;
     font-size: 2rem;
+  }
+  .mobile-center {
+    text-align: center;
   }
 }

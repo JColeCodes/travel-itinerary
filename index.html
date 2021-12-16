@@ -40,10 +40,10 @@
     <!-- Main Body Content -->
     <main class="grid-x">
         <div class="left_column_div sidebar cell small-12 medium-6 large-4">
-            <div class="where_are_you_going_div">
-                <h3 class="where_are_you_going_title">Where Are You Going?</h3>
+            <div class="sidebar-element">
+                <h3>Where Are You Going?</h3>
                 <div class="search-params">
-                    <h4>City</h4>
+                    <h4>City <span class="required bold">*</span></h4>
                     <input id="city-input" type="text" name="city" />
                     <h4>State/Province</h4>
                     <input id="state-input" type="text" name="state" />
@@ -51,63 +51,64 @@
                     <select id="country-select" name="country">
                         <option value="blank"></option>
                     </select>
+                    <p class="h6 required">* Required</p>
                 </div>
             </div>
 
     
-            <div class= "what_will_you_explore_div">
-                <h3 class="what_will_you_explore_title">What Will You Explore?</h3>
+            <div class="sidebar-element">
+                <h3>What Will You Explore?</h3>
                 <div class="search-params">
                     <div class="grid-y">
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="historic" name="search-type" value="0">
                             <label for="historic">Historic Buildings</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="sights" name="search-type" value="0">
                             <label for="sights">Tourist Sites</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="heritage" name="search-type" value="0">
                             <label for="heritage">Heritage Sites</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="museum" name="search-type" value="0">
                             <label for="museum">Museums</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="culture" name="search-type" value="0">
                             <label for="culture">Cultural Centers</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="manmade" name="search-type" value="0">
                             <label for="manmade">Man-made Locations</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="natural" name="search-type" value="0">
                             <label for="natural">Natural Locations</label>
                         </div>
-                        <div class="cell">
+                        <div class="cell radio-select">
                             <input type="radio" id="nationalpark" name="search-type" value="0">
                             <label for="nationalpark">National Parks</label>
                         </div>
-                        <div class="grid-x">
+                        <!-- <div class="grid-x">
                             <input type="radio" id="other-search" name="search-type" value="0" class="cell shrink">
                             <input id="search_for_something_else" type="text" name="other-search" class="cell auto radio-input" placeholder="Search for something else" />
-                        </div>
+                        </div> IMPLEMENT THIS LATER -->
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="map_div cell small-12 medium-6 large-8">
-            <div class="intro-text">
+            <div class="intro-text hide-for-small-only">
                 <h2 class="map_text_1">Begin your journey</h2>
                 <h2 class="map_text_2">by typing your location on the left</h2>
             </div>
-            <div id="map" class="map"></div>
+            <div id="map" class="map hide-for-small-only"></div>
             <!--<img class="map" src="assets/images/world-map[1].png"> -->
-            <div class="text-right">
+            <div class="text-right mobile-center">
                 <button class="h2 explore" id="explore" type="submit">Explore</button>
             </div>
         </div>

@@ -2,6 +2,7 @@ var contentSpace = $(".search-panel");
 var searchButton = $(".explore");
 var countrySelect = $("#country-select");
 var stateInput = $("#state-input");
+var adjustResults = $("#adjust-results");
 
 // Dummy Results for testing purposes
 var dummyResults = [
@@ -86,13 +87,31 @@ function getSearchInfo() {
     var queryString = document.location.search;
 
     if (queryString) {
-        var citySearch = queryString.split("=")[1];
-        citySearch = citySearch.split("&")[0];
+        var querySplit = queryString.split(/[\s=&]+/);
+        console.log(querySplit);
+        var citySearch = querySplit[1];
         citySearch.replace("%20", " ");
-        var searchType = queryString.split("=")[2];
+        var searchType = querySplit[querySplit.length - 1];
+        var stateSearch = null;
+        var countrySearch = null;
+        if (querySplit.length == 6) {
+            if (querySplit[2].includes("state")) {
+                stateSearch = querySplit[3];
+            } else {
+                countrySearch = querySplit[3];
+            }
+        } else if (querySplit.length == 8) {
+            stateSearch = querySplit[3];
+            countrySearch = querySplit[5];
+        }
+        if (searchType == $("input[name='search-type']:checked").attr("id")) {
+            $("input[name='search-type']:checked").disabled = true;
+        }
         // Search the place using this information
         currentSearch.city = citySearch;
         currentSearch.activity = searchType;
+        currentSearch.state = stateSearch;
+        currentSearch.country = countrySearch;
         console.log(currentSearch.city, currentSearch.state, currentSearch.country);
         latLon();
     } else {
@@ -458,9 +477,13 @@ if (searchButton.length) {
         // TEMPORARY DISABLE OF RESULTS SO I CAN READ CONSOLE LOG OF SEARCH FUNCTIONS
         //latLon(selectedCity, "museum");
     });
-} else {
+}
+if (adjustResults.length) {
+    $("input[name='search-type'][id='" + document.location.search.split("&type=")[1] + "'").prop("checked", true);
     $("input[name='search-type']").on("click", function(){
         var searchType = $("input[name='search-type']:checked").attr("id");
-        window.location.href = "./results.html?city=" + currentSearch.city + "&type=" + searchType;
+        var searchURL = window.location.href;
+        searchURL = searchURL.split("&type=")[0];
+        window.location.href = searchURL + "&type=" + searchType;
     });
 }
