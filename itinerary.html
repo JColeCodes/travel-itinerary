@@ -6,30 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Through Time - The History-Lover's Travel Itinerary</title>
     <!-- Foundation CSS Framework -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
     <!-- jQuery UI Style -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
     <!-- Header -->
-    <header></header>
+     <header>
+        <div class="title_div">
+            <div class="title_text">
+                <h1 class="main_title">Travel Through Time</h1>
+                <div class="secondary_title">The History Lover's Travel Itinerary</div>
+            </div>
+            <div class="title_buttons">
+                <button class="go_to_search" id="go_to_search">GO TO SEARCH</button>
+                <button class="settings"><i class="fas fa-cog"></i></button>
+            </div>
+         </div>
+    </header>
 
     <!-- Main Body Content -->
-    <main></main>
+    <main>
+        <div class="left_column_div">
+            <div class="trip_information_div">
+                <div class="trip_information_title">Trip Information </div>
+                <div class="trip-info" id= "trip_information_sub_div">
+                    Trip Info
+                </div>
+            </div>
+            <div class="saved_activities_div">
+                <div class="saved_activities_title"> Saved Activities </div>
+              <div class="trip-info" id="saved_activities_sub_div">
+                saved activities buttons
+
+
+              </div>  
+            </div>
+        </div>
+        <div class="map_div">
+            <div id="itinerary">Itinerary</div>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer></footer>
 
-    <!-- Foundation Framework Script -->
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></sript>
+    
     <!-- jQuery & jQuery UI Scripts -->
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-    <sript src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></sript>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Foundation Framework Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
     <!-- Custom Scripting -->
     <script src="./assets/js/script.js"></script>
 </body>

@@ -6,70 +6,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Through Time - The History-Lover's Travel Itinerary</title>
     <!-- Foundation CSS Framework -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/css/foundation.min.css" />
     <!-- jQuery UI Style -->
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class=title_div>
-            <div class=main_title>Travel Through Time</div>
-            <div class=secondary_title>The History ...</div>
-        </div>
-        <button class=go_to_my_itinerary>GO TO MY ITINERARY</button>
-        <button class=settings>*</button>
-
+        <div class="title_div">
+            <div class="title_text">
+                <h1 class="main_title">Travel Through Time</h1>
+                <div class="secondary_title">The History Lover's Travel Itinerary</div>
+            </div>
+            <div class="title_buttons">
+                <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
+                <button class="settings"><i class="fas fa-cog"></i></button>
+            </div>
+         </div>
     </header>
 
     <!-- Main Body Content -->
     <main>
         <div class=left_column_div>
-            <div class=where_are_you_going_div>
-                where are you going ?
-                <div class=where_are_you_going_sub_div>
-                    <p>City</p>
-                    <textarea id=city_textarea></textarea>
-                    <p>State/Province</p>
-                    <textarea id=state_textarea></textarea>
-                    <p>Country</p>
-                    <textarea id=country_textarea></textarea>
+            <div class="where_are_you_going_div">
+                <h3 class="where_are_you_going_title">Where Are You Going?</h3>
+                <div class="search-params">
+                    <h4>City</h4>
+                    <input id="city-input" type="text" name="city" />
+                    <h4>State/Province</h4>
+                    <input id="state-input" type="text" name="state" />
+                    <h4>Country</h4>
+                    <select id="country-select" name="country"></select>
                 </div>
             </div>
+
             <div class=what_will_you_explore_div>
-                what will you explore ?
-              <div class=where_are_you_going_sub_div>
-                <input type="checkbox" id="Historical sites" name="Historical sites" value="0">
-                <label for="Historical sites"> Historical Sites </label><br>
-
-                <textarea id=search_for_something_else>Search for something else</textarea>
-
-
-              </div>  
+                <h3 class="what_will_you_explore_title">What Will You Explore?</h3>
+                <div class="search-params">
+                    <div class="grid-y">
+                        <div class="cell">
+                            <input type="radio" id="historic-buildings" name="search-type" value="0">
+                            <label for="historic-buildings">Historic Buildings</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="tourist-sites" name="search-type" value="0">
+                            <label for="tourist-sites">Tourist Sites</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="heritage-sites" name="search-type" value="0">
+                            <label for="heritage-sites">Heritage Sites</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="museums" name="search-type" value="0">
+                            <label for="museums">Museums</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="cultural-centers" name="search-type" value="0">
+                            <label for="cultural-centers">Cultural Centers</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="man-made" name="search-type" value="0">
+                            <label for="man-made">Man-made Locations</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="natural" name="search-type" value="0">
+                            <label for="natural">Natural Locations</label>
+                        </div>
+                        <div class="cell">
+                            <input type="radio" id="national-parks" name="search-type" value="0">
+                            <label for="national-parks">National Parks</label>
+                        </div>
+                        <div class="grid-x">
+                            <input type="radio" id="other-search" name="search-type" value="0" class="cell shrink">
+                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto" placeholder="Search for something else" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class=map_div>
-            <p class=map_text>Begin your journey</p>
-            <p class=map_text>       by typing your location on the left</p>
-            <img class=map src="assets/images/world-map[1].png">
-            <button class=explore>Explore</button>
+
+        <div class="map_div">
+            <div class="intro-text">
+                <h2 class="map_text_1">Begin your journey</h2>
+                <h2 class="map_text_2">by typing your location on the left</h2>
+            </div>
+            <img class="map" src="assets/images/world-map[1].png">
+            <button class="explore h2" id="explore" type="submit">Explore</button>
         </div>
     </main>
 
     <!-- Footer -->
     <footer></footer>
 
-    <!-- jQuery & jQuery UI Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+   <!-- jQuery & jQuery UI Scripts -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-   <!-- Foundation Framework Script -->
-   <script src = "Foundation-Sites-CSS/js/vendor/foundation.min.js"></script>
+
+     <!-- Foundation Framework Script -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
 
     <!-- Custom Scripting -->
     <script src = "./assets/js/script.js"></script>
+    <script src = "./assets/js/search.js"></script>
+    <script>
+        $(document).foundation();
+    </script>
 </body>
 </html>
