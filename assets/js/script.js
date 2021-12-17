@@ -153,7 +153,7 @@ if (!currentSearch.budget) {
     .attr("type", "number")
     .attr("min", 1)
     .attr("name", "budget");
-  $("#current-budget").find("p").replaceWith("inputBudget");
+  $("#current-budget").find("p").replaceWith(inputBudget);
 } else {
   $("#current-budget").find("p").text("$" + currentSearch.budget);
 }
