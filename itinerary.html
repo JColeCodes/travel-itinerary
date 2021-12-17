@@ -11,44 +11,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
     <!-- Header -->
-     <header>
-        <div class=title_div>
-            <div class=title_text>
-                <div class=main_title>Travel Through Time</div>
-                <div class=secondary_title>The History Lover's Travel Itinerary</div>
+    <header>
+        <div class="title_div grid-x">
+            <div class="title_text cell small-12 medium-auto">
+                <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
+                <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
-            <div class=title_buttons>
-                <button class=go_to_search id=go_to_search>GO TO SEARCH</button>
-                <button class=settings>&#9881;</button>
+            <div class="title_buttons cell small-12 medium-shrink">
+                <button class="go_to_search" id="go_to_search">GO TO SEARCH</button>
             </div>
          </div>
     </header>
 
     <!-- Main Body Content -->
-    <main>
-        <div class=left_column_div>
-            <div class=trip_information_div>
-                <div class=trip_information_title>Trip Information </div>
-                <div class=trip_information_sub_div id= trip_information_sub_div>
-                    Trip Info
+    <main class="grid-x">
+        <div class="left_column_div sidebar cell small-12 medium-6 large-4">
+            <div class="sidebar-element">
+                <h3>Trip Information</h3>
+                <div class="trip-info" id= "trip_information_sub_div">
+                    <h4>Destination:</h4>
+                    <p id="destination-name"></p>
+                    <h4>Budget:</h4>
+                    <div id="current-budget"><p></p></div>
+                    <div id="local-budget"><p></p></div>
                 </div>
             </div>
-            <div class=saved_activities_div>
-                <div class=saved_activities_title> Saved Activities </div>
-              <div class=saved_activities_sub_div id=saved_activities_sub_div>
-                saved activities buttons
+
+            <div class="sidebar-element">
+                <h3>Saved Activities</h3>
+              <div class="trip-info" id="saved_activities_sub_div">
+                <div class="sortable initial"></div>
 
 
               </div>  
             </div>
         </div>
-        <div class=map_div>
-            <div id=itinerary>Itinerary</div>
+        <div class="map_div cell small-12 medium-6 large-8">
+            <div class="itinerary-table">
+                <div class="grid-x table-titles">
+                    <div class="cell small-2">Time</div>
+                    <div class="cell auto">Activity</div>
+                    <div class="cell small-2">Est. Cost</div>
+                </div>
+                <div class="sortable list-items"></div>
+            </div>
         </div>
     </main>
 

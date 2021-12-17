@@ -1,227 +1,148 @@
-/*:root {
-     Custom Colors 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  background-color: #f9f8f5;
+  color: #30373d;
+}
+
+a, a:hover, button, button:hover {
+  transition: all 0.5s ease-in-out;
+}
+
+h1, h2, h3, h4, h5, h6, p, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Lato', sans-serif;
+}
+
+/* HEADER */
+header {
+  width: 1520px;
+  max-width: 100%;
+  padding: 30px 30px 10px;
+  font-size: 20px;
+  margin: 0 auto;
+}
+a {
+  color: #2a506e;
+}
+a:hover{
+  color: #595958;
+}
+
+/*.title_div{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }*/
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.settings, .go_to_my_itinerary, .go_to_search {
+  margin: 0 auto;
+  font-size: 20px;
 }
-body {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1;
-  }
+.settings {
+  font-size: 20px;
+}
 
-  header {
-    border-style: none;
-    color: white;
-    height: 80px;
-    text-align:right;
-    width:100%;
-    font-size:20px;
-    margin-top: 10px;
-  }
+.main_title{
+  color:#2a506e;
+  text-align: left;
+  font-weight: 300;
+  line-height: 1;
+  font-size: 3.3rem;
+}
+.secondary_title{
+  font-size: 24px;
+  color:#363c42;
+  text-align:left;
+  line-height: 1;
+  font-style: italic;
+}
 
-  .title_div{
-    border-style: solid;
-    height: 20%;
-    width:100%;
-  }
-  .title_text{
-    float:left;
-  }
-  .title_buttons{
-    float:right;
-    vertical-align:bottom;
-    height:50px;
-  }
-
-  .settings{
-    padding-top:0px;
-    padding-bottom:0px;
-    margin-top:0px;
-    margin-bottom:0px;
-    font-size:20px;
-    vertical-align:bottom;
-  }
-
-  .go_to_my_itinerary{
-    padding-top:0px;
-    padding-bottom:0px;
-    margin-top:0px;
-    margin-bottom:0px;
-    vertical-align:bottom;
-  }
-
-  .main_title{
-    font-size:35px;
-    color:#2a506e;
-    text-align:left;
-  }
-
-  .secondary_title{
-    font-size:15px;
-    color:#363c42;
-    text-align:left;
-  }
-
-
+/* BODY CONTENT */
 main {  
     border-style: none;
     text-align: center;
-    height: 500px;
+    width: 1520px;
+    max-width: 100%;
+    padding: 0 40px;
+    margin: 0 auto;
 }
 
-.left_column_div {
+/*.left_column_div {
     border-style: none;
     width: 35%; 
     padding: 0px;
     float:left;
-}
+}*/
    
-.where_are_you_going_div {
-    border-style: none;
-    width: 90%;
-    padding: 0px;
-    text-align: left;
-    margin: 10px;
+.sidebar-element {
+  border-style: none;
+  padding: 0px;
+  text-align: left;
+  margin: 0 20px 0 0;
 }
 
-.where_are_you_going_title{
-    margin-top:10px;
-    margin-bottom: 10px;
+.sidebar h3 {
+    margin-top: 30px;
     color: #2a506e;
-    font-weight:bold;
+    font-weight: 700;
+    font-size: 1.5rem;
 }
 
-.where_are_you_going_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left;
+.search-params, .trip-info {
+  background-color: #edece9;
+  padding: 20px 20px 12px;
+  border-style: none;
+  width: 100%; 
+  text-align: left; 
+}
+label {
+  font-size: 1.05rem;
+  line-height: 1.1;
+  color: #30373d;
+}
+input {
+  background-color: #f9f8f5;
+  border: 1px solid #cfcdcb;
+  color: #626261;
+  font-style: italic;
+}
+input:focus {
+  border-color: #626261;
+}
+input.radio-input {
+  margin-left: 10px;
 }
 
-.what_will_you_explore_div {
-    border-style: none;
-    width: 90%; 
-    padding: 0px;
-    text-align: left;
-    margin:10px;
-  }
-
-  .what_will_you_explore_title{
-    margin-top:10px;
-    margin-bottom:10px;
-    color: #2a506e;
-    font-weight:bold;
+.search-params h4 {
+  color: #595958;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: 1.3rem;
 }
-  .what_will_you_explore_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left; 
-    }
 
-    .sort_results_by_div {
-      border-style: none;
-      width: 90%;
-      padding: 0px;
-      text-align: left;
-      margin: 10px;
-  }
-  
-  .sort_results_by_title{
-      margin-top:10px;
-      margin-bottom: 10px;
-      color: #2a506e;
-      font-weight:bold;
-  }
-  
-  .sort_results_by_sub_div {
-      border-style: none;
-      width: 100%; 
-      padding: 10px;
-      background-color: lightgrey;
-      text-align: left;
-  }
-
-  .adjust_search_results_div {
-    border-style: none;
-    width: 90%; 
-    padding: 0px;
-    text-align: left;
-    margin:10px;
-  }
-
-  .adjust_search_results_title{
-    margin-top:10px;
-    margin-bottom:10px;
-    color: #2a506e;
-    font-weight:bold;
-}
-  .adjust_search_results_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left; 
-    }
-
-    .trip_information_div {
-      border-style: none;
-      width: 90%;
-      padding: 0px;
-      text-align: left;
-      margin: 10px;
-  }
-  
-  .trip_information_title{
-      margin-top:10px;
-      margin-bottom: 10px;
-      color: #2a506e;
-      font-weight:bold;
-  }
-  
-  .trip_information_sub_div {
-      border-style: none;
-      width: 100%; 
-      padding: 10px;
-      background-color: lightgrey;
-      text-align: left;
-  }
-
-  .saved_activities_div {
-    border-style: none;
-    width: 90%; 
-    padding: 0px;
-    text-align: left;
-    margin:10px;
-  }
-
-  .saved_activities_title{
-    margin-top:10px;
-    margin-bottom:10px;
-    color: #2a506e;
-    font-weight:bold;
-}
-  .saved_activities_sub_div {
-    border-style: none;
-    width: 100%; 
-    padding: 10px;
-    background-color: lightgrey;
-    text-align: left; 
-    }
-
-.map_div {
+/*.map_div, .search-panel {
     border-style: none;
     width: 65%; 
     height: 100%;
     padding: 0px;
     float:left;
+  }*/
+  .map_div .intro-text {
+    margin: 0 auto;
+    display: inline-block;
   }
+.map_div h2 {
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1;
+}
   .map_text_1{
     text-align:left;
     color:#2a506e;
@@ -233,19 +154,11 @@ main {
     padding-left:40px;
   }
 
-  .map{
-    width: 80%;
+  /*.map{
+    width: 100%;
     margin-top:20px;
     margin-bottom:30px;
-  }
-
-  .explore{
-    margin-right:0px;
-  }
-
-
-
-
+  }*/
 
   input[type="checkbox" i] {
     margin-bottom:10px;
@@ -257,7 +170,7 @@ main {
 
   button{
     background-color:#2a506e;
-    color:white;
+    color:#f9f8f5;
     min-width:30px;
     min-height: 30px;
     font-size:15px;
@@ -265,8 +178,44 @@ main {
     border:none;
     text-align:center;
     border-radius:5px;
-    padding:5px;
+    padding: 10px;
   }
+  button:hover {
+    cursor: pointer;
+    background-color: #395f7b;
+  }
+
+.explore{
+  margin-right:0px;
+  line-height: 1;
+  color: #f9f8f5;
+  border-radius: 15px;
+  padding: 10px 15px 13px;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.error-message {
+  font-size: 2.2rem;
+  color: #2a506e;
+}
+.required {
+  color: #9f333d;
+  font-style: italic;
+}
+.bold {
+  font-weight: 700;
+  font-style: normal;
+}
+
+.dropover {
+  background-color: #595958;
+}
+.dropover-active {
+  background-color: #595958;
+}
+
+
         /*Hex Codes:
         #f9f8f5 - Light cream
         #edece9 - Cream
@@ -279,3 +228,165 @@ main {
         https://fonts.google.com/specimen/Lato?query=lato
         I used light, regular, regular italic, bold
         Feel free to use a different font from google fonts if you find it fits better!*/
+
+
+.radio-select input {
+    opacity: 0;
+}
+.radio-select input + label::after {
+    content: none;
+}
+.radio-select input:checked + label::after {
+    content: "";
+}
+.radio-select label {
+    position: relative;
+    left: 5px;
+    line-height: 1.6;
+}
+.radio-select label::before {
+    content: "";
+    height: 22px;
+    width: 22px;
+    background: #f9f8f5;
+    border: 1px solid #cfcdcb;
+    position: absolute;
+    left: -30px;
+}
+.radio-select label::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: #2a506e;
+    position: absolute;
+    left: -25px;
+    top: 5px;
+}
+
+/* SORTABLE STUFF */
+.saved-place {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 12px;
+  width: 100%;
+  margin: 2px 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.edit-place {
+  float: right;
+}
+.itinerary-table {
+  padding: 20px;
+  background-color: #edece9;
+  height: auto;
+}
+.table-titles div {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 10px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 2px;
+}
+
+.trip-info h4 {
+  color: #2a506e;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.trip-info p {
+  color: #363c42;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+
+/* MAP STYLING */
+.map {
+  width: 100%;
+  margin: 20px auto;
+  height: 500px;
+}
+.ol-control button {
+  background-color: rgba(42,80,110,0.5);
+  color: #f9f8f5;
+}
+.ol-control button:hover {
+  background-color: #2a506e;
+}
+
+/* SEARCH RESULTS */
+.search-result {
+  padding: 20px 0;
+}
+.search-image {
+  background-position: center;
+  background-size: cover;
+}
+.search-panel {
+  margin: 30px 0 0;
+}
+.search-panel h3 {
+  font-size: 1.4rem;
+  line-height: 1;
+  font-style: italic;
+  color: #595958;
+}
+.search-text {
+  padding-left: 20px;
+}
+.search-text h2 {
+  color: #2a506e;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.search-text p.h6 {
+  font-size: 0.95em;
+  line-height: 1.1;
+}
+.search-text p.address {
+  font-style: italic;
+}
+
+
+.sortable{
+  background-color:#edece9;
+  padding: 10px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+  .map {
+    height: 360px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .title_buttons {
+    padding-top: 20px;
+    text-align: center;
+  }
+  main {
+    padding: 0 20px;
+  }
+  .sidebar h3 {
+    margin-top: 20px;
+}
+  .map_div .explore {
+    float: none;
+    margin: 10px auto;
+    font-size: 2rem;
+  }
+  .mobile-center {
+    text-align: center;
+  }
+}
