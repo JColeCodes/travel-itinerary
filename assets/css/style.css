@@ -195,6 +195,10 @@ input.radio-input {
   font-weight: 300;
 }
 
+.error-message {
+  font-size: 2.2rem;
+  color: #2a506e;
+}
 .required {
   color: #9f333d;
   font-style: italic;
@@ -202,6 +206,13 @@ input.radio-input {
 .bold {
   font-weight: 700;
   font-style: normal;
+}
+
+.dropover {
+  background-color: #595958;
+}
+.dropover-active {
+  background-color: #595958;
 }
 
 
@@ -250,6 +261,47 @@ input.radio-input {
     position: absolute;
     left: -25px;
     top: 5px;
+}
+
+/* SORTABLE STUFF */
+.saved-place {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 12px;
+  width: 100%;
+  margin: 2px 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.edit-place {
+  float: right;
+}
+.itinerary-table {
+  padding: 20px;
+  background-color: #edece9;
+  height: auto;
+}
+.table-titles div {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 10px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 2px;
+}
+
+.trip-info h4 {
+  color: #2a506e;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.trip-info p {
+  color: #363c42;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
 
@@ -303,7 +355,11 @@ input.radio-input {
 
 .sortable{
   background-color:#edece9;
-  padding: 10px;
+  padding: 10px 0;
+}
+
+.hidden {
+  display: none;
 }
 
 

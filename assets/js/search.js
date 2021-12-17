@@ -1,37 +1,8 @@
 var contentSpace = $(".search-panel");
-var searchButton = $(".explore");
+var searchButton = $("#explore");
 var countrySelect = $("#country-select");
 var stateInput = $("#state-input");
 var adjustResults = $("#adjust-results");
-
-// Dummy Results for testing purposes
-var dummyResults = [
-    {
-        place: "Winchester Mystery House",
-        city: "San Jose",
-        address: "Dummy Address, San Jose, CA, USA"
-    }, 
-    {
-        place: "Safdarjung's Tomb",
-        city: "New Delhi",
-        address: "Dummy Address, New Delhi, Delhi, India"
-    }, 
-    {
-        place: "Osaka Castle",
-        city: "Osaka",
-        address: "Dummy Address, Osaka, Japan"
-    }, 
-    {
-        place: "Louvre Abu Dhabi",
-        city: "Abu Dhabi",
-        address: "Dummy Address, Abu Dhabi, UAE"
-    },  
-    {
-        place: "Barangaroo Reserve",
-        city: "Sydney",
-        address: "Dummy Address, Sydney, NSW, Australia"
-    }
-];
 
 // What the user is allowed to search for
 var searchType = [
@@ -85,6 +56,9 @@ var savedPlaces = [];
 if ("saved-places" in localStorage) {
     savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
 }
+if ("saved-location" in localStorage) {
+    currentSearch = JSON.parse(localStorage.getItem("saved-location"));
+}
 
 // Gets the information from the paramaters submitted
 function getSearchInfo() {
@@ -95,30 +69,38 @@ function getSearchInfo() {
         var querySplit = queryString.split(/[\s=&]+/);
         console.log(querySplit);
         var citySearch = querySplit[1];
-        citySearch.replace("%20", " ");
-        var searchType = querySplit[querySplit.length - 1];
-        var stateSearch = null;
-        var countrySearch = null;
-        if (querySplit.length == 6) {
-            if (querySplit[2].includes("state")) {
+        console.log(citySearch);
+        if (citySearch == "state" || citySearch == "country" || citySearch == "type" || querySplit[querySplit.length - 1] == "undefined") {
+            noSearchResults();
+        }
+        else {
+            citySearch = citySearch.replace("%20", " ");
+            var searchType = querySplit[querySplit.length - 1];
+            var stateSearch = null;
+            var countrySearch = null;
+            if (querySplit.length == 6) {
+                if (querySplit[2].includes("state")) {
+                    stateSearch = querySplit[3];
+                } else {
+                    countrySearch = querySplit[3];
+                }
+            } else if (querySplit.length == 8) {
                 stateSearch = querySplit[3];
-            } else {
-                countrySearch = querySplit[3];
+                countrySearch = querySplit[5];
             }
-        } else if (querySplit.length == 8) {
-            stateSearch = querySplit[3];
-            countrySearch = querySplit[5];
+            if (searchType == $("input[name='search-type']:checked").attr("id")) {
+                $("input[name='search-type']:checked").disabled = true;
+            }
+            // Search the place using this information
+            currentSearch.city = citySearch;
+            currentSearch.activity = searchType;
+            currentSearch.state = stateSearch;
+            currentSearch.country = countrySearch;
+            saveLocationInfo();
+            console.log(currentSearch.city, currentSearch.state, currentSearch.country);
+            latLon();
         }
-        if (searchType == $("input[name='search-type']:checked").attr("id")) {
-            $("input[name='search-type']:checked").disabled = true;
-        }
-        // Search the place using this information
-        currentSearch.city = citySearch;
-        currentSearch.activity = searchType;
-        currentSearch.state = stateSearch;
-        currentSearch.country = countrySearch;
-        console.log(currentSearch.city, currentSearch.state, currentSearch.country);
-        latLon();
+        
     } else {
         // If no parameters, then display that this is not a valid search
         noSearchResults();
@@ -129,8 +111,17 @@ getSearchInfo(); // Get parameters on load
 function noSearchResults() {
     console.log("No search");
     var noSearch = $("<h2>")
+        .addClass("error-message")
         .text("This is not a search.");
+    var errorMessage = $("<h3>")
+        .addClass("error-message")
+        .text("Please make sure you are searching for at least a city and a point of interest type.");
     contentSpace.append(noSearch);
+    contentSpace.append(errorMessage);
+}
+
+function saveLocationInfo() {
+    localStorage.setItem("saved-location", JSON.stringify(currentSearch));
 }
 
 // Search for the latitude and longitude of the submitted location
@@ -151,9 +142,11 @@ function latLon() {
             return response.json();
         })
         .then(function(data) {
+            console.log(data);
             console.log(geocodeURL);
             console.log(data.items[0].position.lat);
             console.log(data.items[0].position.lng);
+
             searchResults(data.items[0].position.lat, data.items[0].position.lng);
         })
         .catch(function(error){
@@ -207,6 +200,11 @@ function searchResults(lat, lon) {
                 // Instead of passing all this stufd through the functions, just save to object array
                 //getDescription(dataItem.address_line1, city, address);
             }
+            
+            currentSearch.state = data.features[0].properties.state;
+            currentSearch.country = data.features[0].properties.country;
+            saveLocationInfo();
+
             for (var i = 0; i < searchResultArr.length; i++) {
                 getDescription(i);
                 console.log(searchResultArr);
@@ -358,14 +356,19 @@ function displaySearch(result) {
             }
 
             // Create if statement to check if added to itinerary or not
-            /*(for (var i = 0; i < savedPlaces.length; i++) {
-
-            }*/
-
             var buttonText = "+ Add to itinerary"; // - Remove from itinerary
+            for (var i = 0; i < savedPlaces.length; i++) {
+                if (savedPlaces[i].place == searchResultArr[result].place) {
+                    buttonText = "- Remove from itinerary";
+                    break;
+                }
+            }
+            var dataPlaceName = searchResultArr[result].place.replace(/ /g, "-").toLowerCase();
             var addButton = $("<button>")
                 .text(buttonText)
-                .attr("onClick", "toItinerary(" + searchResultArr[result].place + ", " + searchResultArr[result].web + ")");
+                .addClass("add-button")
+                .attr("data-place", dataPlaceName)
+                .attr("onClick", "toItinerary('" + searchResultArr[result].place + "', '" + searchResultArr[result].web + "', '" + dataPlaceName + "')");
             resultText.append(addButton);
 
             searchResult
@@ -383,24 +386,42 @@ function getHeight() {
     $(".search-image").height($(".search-image").width());
 }
 
-function toItinerary(placeName, webURL) {
+function toItinerary(placeName, webURL, dataId) {
     var placeObject = {
         place: placeName,
-        web: webURL
+        web: webURL,
+        time: null,
+        cost: null
     }
-    savedPlaces.push(placeObject);
+    if ($("button[data-place='" + dataId + "'").text().includes("Remove")) {
+        for (var i = 0; i < savedPlaces.length; i++) {
+            if (savedPlaces[i].place == placeName) {
+                savedPlaces.splice(i, 1);
+            }
+        }
+        $("button[data-place='" + dataId + "'").text("+ Add to itinerary");
+    } else {
+        savedPlaces.push(placeObject);
+        $("button[data-place='" + dataId + "'").text("- Remove from itinerary");
+    }
     localStorage.setItem("saved-places", JSON.stringify(savedPlaces));
 }
 
 // Show how many search results come up
 function showResultNumber(number, city) {
-    var cityName = city;
+    var displayLocation = city;
     if (city.includes("%20")) {
-        cityName = city.replace("%20", " ");
+        displayLocation = city.replace("%20", " ");
+    }
+    if (currentSearch.state) {
+        displayLocation += ", " + currentSearch.state;
+    }
+    if (currentSearch.country) {
+        displayLocation += ", " + currentSearch.country;
     }
     var searchResultNum = $("<h3>")
         .addClass("text-left")
-        .text("There are " + number + " results for " + cityName);
+        .text("Showing " + number + " results for " + displayLocation);
     contentSpace.append(searchResultNum);
 }
 
@@ -434,18 +455,21 @@ function listCountries() {
                     }
                 }
                 // Loop through states and add them to the autocomplete array
-                for (var i = 0; i < data.data[countryIndex].states.length; i++){
-                    availableStates.push(data.data[countryIndex].states[i].name);
+                if (selectedCountry != "blank") {
+                    for (var i = 0; i < data.data[countryIndex].states.length; i++){
+                        availableStates.push(data.data[countryIndex].states[i].name);
+                    }
+                    // Functions to run autocomplete
+                    var selectIem = function(event, ui) {
+                        stateInput.val(ui.item.value);
+                        return false;
+                    }
+                    stateInput.autocomplete({
+                        source: availableStates,
+                        select: selectIem
+                    });
                 }
-                // Functions to run autocomplete
-                var selectIem = function(event, ui) {
-                    stateInput.val(ui.item.value);
-                    return false;
-                }
-                stateInput.autocomplete({
-                    source: availableStates,
-                    select: selectIem
-                });
+                
                 availableStates = [];
             });
         });
@@ -470,15 +494,6 @@ if (searchButton.length) {
         var selectedCity = $("input[name='city']").val();
         var searchType = $("input[name='search-type']:checked").attr("id");
 
-        if ($("input[name='state']").val()) {
-            var selectedState = $("input[name='state']").val();
-            currentSearch.state = selectedState;
-        }
-        if ($("input[name='country']").val()) {
-            var selectedCountry = $("input[name='country']").val();
-            currentSearch.country = selectedCountry;
-        }
-
         console.log(selectedCity);
         console.log(searchType);
 
@@ -486,6 +501,20 @@ if (searchButton.length) {
 
         currentSearch.city = selectedCity;
         currentSearch.activity = searchType;
+
+        var selectedState = $("input[name='state']").val();
+        if (selectedState) {
+            selectedState = selectedState.split(" ").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ");
+            currentSearch.state = selectedState;
+            console.log(selectedState);
+            selectedCity += "&state=" + selectedState;
+        }
+        var selectedCountry = $("select[name='country']").val();
+        if (selectedCountry && selectedCountry != "blank") {
+            currentSearch.country = selectedCountry;
+            console.log(selectedCountry);
+            selectedCity += "&country=" + selectedCountry;
+        }
 
         // Go to results.html
         window.location.href = "./results.html?city=" + selectedCity + "&type=" + searchType;
