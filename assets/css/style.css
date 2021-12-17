@@ -208,6 +208,13 @@ input.radio-input {
   font-style: normal;
 }
 
+.dropover {
+  background-color: #595958;
+}
+.dropover-active {
+  background-color: #595958;
+}
+
 
         /*Hex Codes:
         #f9f8f5 - Light cream
@@ -277,7 +284,7 @@ input.radio-input {
 .table-titles div {
   background-color: #2a506e;
   color: #f9f8f5;
-  padding: 10px 50px 10px 10px;
+  padding: 10px;
   text-align: left;
   font-weight: 700;
   font-size: 1.5rem;
@@ -348,7 +355,11 @@ input.radio-input {
 
 .sortable{
   background-color:#edece9;
-  padding: 10px;
+  padding: 10px 0;
+}
+
+.hidden {
+  display: none;
 }
 
 

@@ -74,7 +74,7 @@ function getSearchInfo() {
             noSearchResults();
         }
         else {
-            citySearch.replace("%20", " ");
+            citySearch = citySearch.replace("%20", " ");
             var searchType = querySplit[querySplit.length - 1];
             var stateSearch = null;
             var countrySearch = null;
