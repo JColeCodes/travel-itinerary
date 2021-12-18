@@ -1,3 +1,5 @@
+$(document).foundation();
+
 function pageInit()
 {
     console.log("running pageInit");
@@ -81,7 +83,7 @@ for (var i = 0; i < savedPlaces.length; i++) {
   $(".initial").append(fullSortable);
 }
 
-// sortable 
+// ITINERARY SORTABLE
 var sortOne, sortTwo;
 $(".list-items, .initial").sortable({
     // enable dragging across lists
@@ -152,6 +154,7 @@ $(".list-items, .initial").sortable({
   });
 
 
+// DISPLAY DESTINATION
 var destinationText = "";
 
 var currentSearch = {};
@@ -168,6 +171,8 @@ if ("saved-location" in localStorage) {
 }
 var destinationName = $("#destination-name").text(destinationText);
 
+
+// EDIT BUDGET
 if (!currentSearch.budget) {
   var inputBudget = $("<input>")
     .attr("type", "number")
@@ -208,3 +213,60 @@ $("#current-budget").on("blur", "input", function() {
   currentSearch.budget = textBudgetNum;
   localStorage.setItem("saved-location", JSON.stringify(currentSearch));
 });
+
+
+// SETTINGS
+var settingsContentEl = $(".settings-content");
+
+var settingsTitle = $("<h2>")
+  .text("Settings");
+
+var countryList = $("<select>")
+  .attr("name", "default-country");
+function listCountries() {
+  var countryListAPI = "https://countriesnow.space/api/v0.1/countries/states";
+  // Run fetch
+  fetch(countryListAPI)
+      .then(function(response) {
+          return response.json();
+      })
+      .then(function(data) {
+          // Add list of countries to drop down
+          for (var i = 0; i < data.data.length; i++) {
+              var countryName = data.data[i].name;
+              var option = $("<option>")
+                  .attr("value", countryName)
+                  .text(countryName);
+                countryList.append(option);
+          }
+      });
+}
+listCountries();
+
+var settingsContentDefault = $("<div>")
+  .addClass("setting-item")
+  .html("<h3>Set your default country</h3>")
+  .append(countryList);
+
+var settingsContentDisplayCost = $("<div>")
+  .addClass("setting-item")
+  .html("<h3>Display costs as...</h3>\
+  <div class='radio-select'>\
+    <input type='radio' name='search-display' id='default' value='0' checked />\
+    <label for='default'>Default Country</label>\
+  </div>\
+  <div class='radio-select'>\
+    <input type='radio' name='search-display' id='destination' value='0' />\
+    <label for='destination'>Destination Country</label>\
+  </div>");
+
+var settingsContentClearItems = $("<div>")
+  .addClass("setting-item")
+  .html("<h3>Reset itinerary</h3>\
+    <button class='clear-items'>Clear saved activities?</button>");
+
+settingsContentEl
+  .append(settingsTitle)
+  .append(settingsContentDefault)
+  .append(settingsContentDisplayCost)
+  .append(settingsContentClearItems);

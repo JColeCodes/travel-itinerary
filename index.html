@@ -32,6 +32,7 @@
             </div>
             <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
+                <button class="settings" data-open="settingsModal"><i class="fas fa-cog"></i></button>
             </div>
          </div>
     </header>
@@ -113,10 +114,16 @@
         </div>
     </main>
    
-    
-
     <!-- Footer -->
     <footer></footer>
+
+    <!-- Modal -->
+    <div class="reveal settings-body" id="settingsModal" data-reveal>
+        <div class="settings-content"></div>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
   
    <!-- jQuery & jQuery UI Scripts -->

@@ -337,6 +337,46 @@ input.radio-input {
   background-color: #2a506e;
 }
 
+/* SETTINGS */
+.settings-iframe {
+  border: 0;
+  width: 100%;
+  padding: 10px;
+}
+.settings-body {
+  background-color: #f9f8f5;
+  border: 0;
+}
+.setting-item {
+  margin-top: 10px;
+}
+.setting-item h3 {
+  font-size: 1.6rem;
+  color: #595958;
+}
+.setting-item button.clear-items {
+  background-color: #9f333d;
+}
+.setting-item button.clear-items:hover {
+  background-color: #8c2730;
+}
+.settings-content h2 {
+  font-size: 2.7rem;
+  color: #2a506e;
+  font-weight: 300;
+  margin: -10px 0 0;
+}
+.close-button {
+  color: #f9f8f5;
+  line-height: 0.75;
+  border-radius: 8px;
+  margin: 5px 0 0 0;
+}
+.close-button:hover {
+  color: #f9f8f5;
+  background-color: #395f7b;
+}
+
 /* SEARCH RESULTS */
 .search-result {
   padding: 20px 0;
