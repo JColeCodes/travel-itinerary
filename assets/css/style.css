@@ -12,7 +12,7 @@ body {
   color: #30373d;
 }
 
-a, a:hover, button, button:hover {
+a, a:hover, button, button:hover, i, i:hover {
   transition: all 0.5s ease-in-out;
 }
 
@@ -281,6 +281,7 @@ input.radio-input {
   padding: 20px;
   background-color: #edece9;
   height: auto;
+  text-align: left;
 }
 .table-titles div {
   background-color: #2a506e;
@@ -322,6 +323,29 @@ input.radio-input {
   display: none;
 }
 
+.add-to-itinerary {
+  background: none;
+  color: #2a506e;
+  padding: 0;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+.add-to-itinerary i {
+  background-color: #2a506e;
+  color: #f9f8f5;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  margin: 0 8px 0 0;
+}
+.add-to-itinerary:hover {
+  background: none;
+  color: #595958;
+}
+.add-to-itinerary:hover i{
+  background-color: #395f7b;
+}
+
 
 /* MAP STYLING */
 .map {
@@ -350,21 +374,25 @@ input.radio-input {
 .setting-item {
   margin-top: 10px;
 }
-.setting-item h3 {
-  font-size: 1.6rem;
-  color: #595958;
-}
 .setting-item button.clear-items {
   background-color: #9f333d;
 }
 .setting-item button.clear-items:hover {
   background-color: #8c2730;
 }
-.settings-content h2 {
+.settings-body h2 {
   font-size: 2.7rem;
   color: #2a506e;
   font-weight: 300;
   margin: -10px 0 0;
+}
+.settings-body h3 {
+  font-size: 1.6rem;
+  color: #595958;
+}
+.settings-body button {
+  border-radius: 6px;
+  font-size: 1rem;
 }
 .close-button {
   color: #f9f8f5;

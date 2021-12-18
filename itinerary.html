@@ -51,8 +51,6 @@
                 <h3>Saved Activities</h3>
               <div class="trip-info" id="saved_activities_sub_div">
                 <div class="sortable initial"></div>
-
-
               </div>  
             </div>
         </div>
@@ -64,6 +62,7 @@
                     <div class="cell small-2">Est. Cost</div>
                 </div>
                 <div class="sortable list-items"></div>
+                <button class="add-to-itinerary" data-open="customAddModal"><i class="fas fa-plus"></i>Add custom activity</button>
             </div>
         </div>
     </main>
@@ -71,7 +70,8 @@
     <!-- Footer -->
     <footer></footer>
 
-    <!-- Modal -->
+    <!-- Modals -->
+    <!-- Settings -->
     <div class="reveal settings-body" id="settingsModal" data-reveal>
         <div class="settings-content"></div>
         <button class="close-button" data-close aria-label="Close modal" type="button">
@@ -79,6 +79,20 @@
         </button>
     </div>
 
+    <!-- Add Custom Itinerary Item -->
+    <div class="reveal settings-body" id="customAddModal" data-reveal>
+        <h2>Add custom activity</h2>
+        <h3>Time</h3>
+        <input type="text" name="custom-time" />
+        <h3>Activity</h3>
+        <input type="text" name="custom-activity" />
+        <h3>Estimated Cost</h3>
+        <input type="number" name="custom-cost" />
+        <button type="submit">Add to itinerary</button>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     
     <!-- jQuery & jQuery UI Scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
