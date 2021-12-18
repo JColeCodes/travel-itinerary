@@ -33,7 +33,7 @@ window.onload = pageInit;
 jQuery(document).ready(pageReady);
 
 // calendar 
-$(".list-group").on("click", "span", function() {
+/*$(".list-group").on("click", "span", function() {
  
     var date = $(this).text().trim();
   
@@ -50,7 +50,9 @@ $( ".selector" ).datepicker({
   });
 
 dateInput.trigger("focus");
-});
+});*/
+
+
 
 // Local Storage
 var savedPlaces = [];
@@ -62,11 +64,11 @@ if ("saved-places" in localStorage) {
 for (var i = 0; i < savedPlaces.length; i++) {
   var dataName = savedPlaces[i].place;
   var fullSortable = $("<div>")
-    .addClass("grid-x");
+    .addClass("grid-x hide-time-cost initial-place");
   var timeDiv = $("<div>")
-    .addClass("time cell small-2 hidden");
+    .addClass("time cell small-2");
   var costDiv = $("<div>")
-    .addClass("cost cell small-2 hidden");
+    .addClass("cost cell small-2");
   var sortdiv = $("<div>").text(dataName).addClass("saved-place cell auto");
 
   var editButton = $("<span>").addClass("edit-place").html("<i class=\"fas fa-pencil-alt\"></i>");
@@ -80,9 +82,10 @@ for (var i = 0; i < savedPlaces.length; i++) {
 }
 
 // sortable 
-$(".sortable").sortable({
+var sortOne, sortTwo;
+$(".list-items, .initial").sortable({
     // enable dragging across lists
-    connectWith: $(".sortable"),
+    connectWith: $(".list-items, .initial"),
     scroll: false,
     tolerance: "pointer",
     helper: "clone",
@@ -94,14 +97,17 @@ $(".sortable").sortable({
     },
     over: function(event, ui) {
       $(event.target).addClass("dropover-active");
-      //ui.children(".time").removeClass("hidden");
-      //ui.children(".cost").removeClass("hidden");
     },
     out: function(event, ui) {
       $(event.target).removeClass("dropover-active");
-    }/*,
+    },
     
-    update:function() {
+    update:function(event) {
+      /*if ($(event.target).hasClass("initial")) {
+        $(event.target).addClass("initial-box");
+      } else {
+        $(event.target).addClass("itinerary-box");
+      }
       var tempArr = [];
 
       $(this)
@@ -124,11 +130,25 @@ $(".sortable").sortable({
         .replace("list-", "");
   
       tasks[arrName] = tempArr;
-      saveTasks();
+      saveTasks();*/
     },
-    stop: function(event) {
-      $(this).removeClass("dropover");
-    }*/
+    start: function(event, ui) {
+      sortOne = sortTwo = ui.item.parent();
+    },
+    stop: function(event, ui) {
+      if ($(ui.item).hasClass("initial-place") && sortOne != sortTwo) {
+        $(ui.item).removeClass("hide-time-cost initial-place")
+          .addClass("itinerary-place");
+      } else if ($(ui.item).hasClass("itinerary-place") && sortOne != sortTwo) {
+        $(ui.item).removeClass("itinerary-place")
+          .addClass("hide-time-cost initial-place");
+      }
+    },
+      change: function(event, ui) {
+        if (ui.sender) {
+          sortOne = ui.placeholder.parent();
+        }
+      }
   });
 
 
@@ -174,6 +194,7 @@ $("#current-budget").on("click", "p", function() {
       .val(currentBudgetNum);
 
     $("#current-budget").find("p").replaceWith(inputBudget);
+    inputBudget.trigger("focus");
 });
 
 $("#current-budget").on("blur", "input", function() {

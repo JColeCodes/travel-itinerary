@@ -142,15 +142,10 @@ input.radio-input {
   font-style: italic;
   font-weight: 300;
   line-height: 1;
+    text-align:left;
+    color:#2a506e;
 }
-  .map_text_1{
-    text-align:left;
-    color:#2a506e;
-  }
-
   .map_text_2{
-    text-align:left;
-    color:#2a506e;
     padding-left:40px;
   }
 
@@ -208,13 +203,6 @@ input.radio-input {
   font-style: normal;
 }
 
-.dropover {
-  background-color: #595958;
-}
-.dropover-active {
-  background-color: #595958;
-}
-
 
         /*Hex Codes:
         #f9f8f5 - Light cream
@@ -264,7 +252,7 @@ input.radio-input {
 }
 
 /* SORTABLE STUFF */
-.saved-place {
+.initial-place .cell {
   background-color: #2a506e;
   color: #f9f8f5;
   padding: 12px;
@@ -272,6 +260,19 @@ input.radio-input {
   margin: 2px 0;
   font-weight: 700;
   font-size: 1.2rem;
+}
+.itinerary-place .cell {
+  background-color: #f9f8f5;
+  color: #2a506e;
+  border: 1px solid #dbdad7;
+  padding: 12px;
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-align: left;
+}
+.itinerary-place .small-2 {
+  width: calc(16.66667% + 2px);
 }
 .edit-place {
   float: right;
@@ -288,7 +289,7 @@ input.radio-input {
   text-align: left;
   font-weight: 700;
   font-size: 1.5rem;
-  margin: 2px;
+  margin: 0 1px 10px;
 }
 
 .trip-info h4 {
@@ -302,6 +303,23 @@ input.radio-input {
   font-weight: 400;
   font-size: 1.5rem;
   line-height: 1;
+}
+
+.sortable{
+  min-height: 40px;
+  transition: all 0.3s ease-in-out;
+}
+.dropover, .dropover-active {
+  transition: all 0.3s ease-in-out;
+}
+.dropover {
+  background-color: #dbdad7;
+}
+.dropover-active {
+  background-color: #c8c7c5;
+}
+.hide-time-cost .cost, .hide-time-cost .time {
+  display: none;
 }
 
 
@@ -350,16 +368,6 @@ input.radio-input {
 }
 .search-text p.address {
   font-style: italic;
-}
-
-
-.sortable{
-  background-color:#edece9;
-  padding: 10px 0;
-}
-
-.hidden {
-  display: none;
 }
 
 
