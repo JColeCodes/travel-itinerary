@@ -70,29 +70,57 @@ var savedPlaces = [];
 if ("saved-places" in localStorage) {
   savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
 }
+function savePlaces() {
+  localStorage.setItem("saved-places", JSON.stringify(savedPlaces));
+}
+
+var settingsInfo = {
+  defaultCountry: null,
+  displayCosts: "default"
+};
+if ("itinerary-settings" in localStorage) {
+  settingsInfo = JSON.parse(localStorage.getItem("itinerary-settings"));
+}
+function saveSettings() {
+  localStorage.setItem("itinerary-settings", JSON.stringify(settingsInfo));
+}
 
 // SAVE ITINERARY
 var savedItinerary = [];
 
 //var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
-for (var i = 0; i < savedPlaces.length; i++) {
-  var dataName = savedPlaces[i].place;
-  var fullSortable = $("<div>")
-    .addClass("grid-x hide-time-cost initial-place");
-  var timeDiv = $("<div>")
-    .addClass("time cell small-2");
-  var costDiv = $("<div>")
-    .addClass("cost cell small-2");
-  var sortdiv = $("<div>").text(dataName).addClass("saved-place cell auto");
+function listItems() {
+  for (var i = 0; i < savedPlaces.length; i++) {
+    var dataName = savedPlaces[i].place;
+    var fullSortable = $("<div>")
+      .addClass("grid-x hide-time-cost initial-place");
+    var timeDiv = $("<div>")
+      .addClass("time cell small-2");
+    var costDiv = $("<div>")
+      .addClass("cost cell small-2");
+    var sortdiv = $("<div>").text(dataName).addClass("saved-place cell auto");
 
-  var editButton = $("<span>").addClass("edit-place").html("<i class=\"fas fa-pencil-alt\"></i>");
+    var deleteButton = $("<button>")
+      .addClass("delete-place")
+      .html("<i class=\"fas fa-times\"></i>")
+      .attr("onClick", "removeItem('" + savedPlaces[i].place + "')");
 
-  sortdiv.append(editButton);
-  fullSortable
-    .append(timeDiv)
-    .append(sortdiv)
-    .append(costDiv);
-  $(".initial").append(fullSortable);
+    sortdiv.append(deleteButton);
+    fullSortable
+      .append(timeDiv)
+      .append(sortdiv)
+      .append(costDiv);
+    $(".initial").append(fullSortable);
+  }
+}
+listItems();
+
+function removeItem(placeName) {
+  var placeIndex = savedPlaces.map(obj => obj.place).indexOf(placeName);
+  savedPlaces.splice(placeIndex, 1);
+  savePlaces();
+  $(".initial").html("");
+  listItems();
 }
 
 // ITINERARY SORTABLE
@@ -185,46 +213,102 @@ var destinationName = $("#destination-name").text(destinationText);
 
 
 // EDIT BUDGET
-if (!currentSearch.budget) {
-  var inputBudget = $("<input>")
-    .attr("type", "number")
-    .attr("min", 1)
-    .attr("name", "budget");
-  $("#current-budget").find("p").replaceWith(inputBudget);
-} else {
-  $("#current-budget").find("p").text("$" + currentSearch.budget);
-}
-
-$("#current-budget").on("click", "p", function() {
-    var getNum = $("#current-budget").find("p").text().trim();
-
-    console.log(getNum);
-
-    var currentBudgetNum = getNum.replace("$", "");
-
-    console.log(currentBudgetNum);
-
+var currencyInfo = {
+  defaultCurrency: null,
+  defaultSymbol: null,
+  destinationCurrency: null,
+  destinationSymbol: null
+};
+function showDefaultBudget() {
+  if (!currentSearch.budget) {
     var inputBudget = $("<input>")
       .attr("type", "number")
-      .attr("name", "budget")
       .attr("min", 1)
-      .val(currentBudgetNum);
-
+      .attr("name", "budget");
     $("#current-budget").find("p").replaceWith(inputBudget);
-    inputBudget.trigger("focus");
-});
-
-$("#current-budget").on("blur", "input", function() {
-  var textBudgetNum = $("#current-budget").find("input").val().trim();
-
-  var displayBudget = $("<p>")
-    .text("$" + textBudgetNum);
+  } else {
+    $("#current-budget").find("p").text(currencyInfo.defaultSymbol + currentSearch.budget);
+  }
+  $("#current-budget").on("click", "p", function() {
+      var getNum = $("#current-budget").find("p").text().trim();
   
-  $("#current-budget").find("input").replaceWith(displayBudget);
+      console.log(getNum);
+  
+      var currentBudgetNum = getNum.replace(currencyInfo.defaultSymbol, "");
+  
+      console.log(currentBudgetNum);
+  
+      var inputBudget = $("<input>")
+        .attr("type", "number")
+        .attr("name", "budget")
+        .attr("min", 1)
+        .val(currentBudgetNum);
+  
+      $("#current-budget").find("p").replaceWith(inputBudget);
+      inputBudget.trigger("focus");
+  });
+  
+  $("#current-budget").on("blur", "input", function() {
+    var textBudgetNum = $("#current-budget").find("input").val().trim();
+  
+    var displayBudget = $("<p>")
+      .text(currencyInfo.defaultSymbol + textBudgetNum);
+    
+    $("#current-budget").find("input").replaceWith(displayBudget);
 
-  currentSearch.budget = textBudgetNum;
-  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
-});
+    getCurrSymbol(settingsInfo.defaultCountry, "default");
+    getCurrSymbol(currentSearch.country, "destination");
+  
+    currentSearch.budget = textBudgetNum;
+    localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+  });
+}
+// Cody's converter code
+function convert(currency1, currency2, value) {
+  const host = "api.frankfurter.app";
+  fetch (
+      'https://' + host + '/latest?amount=' + value + '&from=' + currency1 + '&to=' + currency2
+  )
+  .then((val) => val.json())
+  .then((val) => {
+          console.log(Object.values(val.rates)[0]);
+          $("#local-budget p").text(currencyInfo.destinationSymbol + Object.values(val.rates)[0]);
+          var localConversion = $("<span>")
+            .addClass("convert-tag")
+            .text("(local conversion)");
+          $("#local-budget p").append(localConversion);
+      });
+}
+
+// GET CURRENCIES
+function getCurrSymbol(countryName, searchType) {
+  var url = "https://raw.githubusercontent.com/mansourcodes/country-databases/main/country-currancy-flag-phone-code.json";
+
+  // Run fetch
+  fetch(url)
+      .then(function(response) {
+          return response.json();
+      })
+      .then(function(data) {
+          console.log(data);
+          for (var i = 0; i < data.length; i++) {
+            if (countryName == data[i].name && searchType == "default") {
+              currencyInfo.defaultCurrency = data[i].currency.code;
+              currencyInfo.defaultSymbol = data[i].currency.symbol;
+              showDefaultBudget();
+              break;
+            } else if (countryName == data[i].name && searchType == "destination") {
+              currencyInfo.destinationCurrency = data[i].currency.code;
+              currencyInfo.destinationSymbol = data[i].currency.symbol;
+              convert(currencyInfo.defaultCurrency, currencyInfo.destinationCurrency, currentSearch.budget);
+              break;
+            }
+          }
+      });
+}
+getCurrSymbol(settingsInfo.defaultCountry, "default");
+getCurrSymbol(currentSearch.country, "destination");
+console.log(currentSearch.country);
 
 
 // EDIT DATE RANGE
@@ -288,15 +372,20 @@ $("#time-frame p").on("click", "span", function() {
     dateInput.trigger("focus");
 });
 
+// p, input, div ALL MESSED UP, need to fix!!!
+
 $("#time-frame").on("blur", "input", function() {
-  var startDateText = $("#time-frame p").find("#start-date").val().trim();
-  var endDateText = $("#time-frame p").find("#end-date").val().trim();
+  console.log($("#time-frame").find("#start-date").val());
+  if ($("#time-frame").find("#start-date").val() && $("#time-frame").find("#end-date").val()){
+    var startDateText = $("#time-frame").find("#start-date").val().trim();
+    var endDateText = $("#time-frame").find("#end-date").val().trim();
 
-  $("#time-frame").find("p").replaceWith("<span id='start-date-span'>" + startDateText + "</span> to <span id='end-date-span'>" + endDateText + "</span>");
+    $("#time-frame").find("div").replaceWith("<span id='start-date-span'>" + startDateText + "</span> to <span id='end-date-span'>" + endDateText + "</span>");
 
-  currentSearch.startDate = startDateText;
-  currentSearch.endDate = endDateText;
-  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+    currentSearch.startDate = startDateText;
+    currentSearch.endDate = endDateText;
+    //localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+  }
 });
 
 
@@ -320,13 +409,23 @@ function listCountries() {
           for (var i = 0; i < data.data.length; i++) {
               var countryName = data.data[i].name;
               var option = $("<option>")
-                  .attr("value", countryName)
-                  .text(countryName);
-                countryList.append(option);
+                .attr("value", countryName)
+                .text(countryName);
+              if (countryName == settingsInfo.defaultCountry) {
+                console.log(countryName);
+                option.prop("selected", true);
+              }
+              countryList.append(option);
           }
       });
 }
 listCountries();
+
+countryList.on("click", function() {
+  var selectedCountry = countryList.val();
+  settingsInfo.defaultCountry = selectedCountry;
+  saveSettings();
+});
 
 var settingsContentDefault = $("<div>")
   .addClass("setting-item")

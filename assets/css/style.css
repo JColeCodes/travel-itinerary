@@ -271,17 +271,46 @@ input.radio-input {
   font-size: 1.2rem;
   text-align: left;
 }
-.itinerary-place .small-2 {
+.itinerary-place .small-2, .daily-estimate .small-2 {
   width: calc(16.66667% + 2px);
 }
-.edit-place {
-  float: right;
+.delete-place {
+  position: absolute;
+  width: 42px;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 1.4rem;
+  transform: rotate(0deg) scale(0);
+  opacity: 0;
+  background-color: transparent;
+  color: #edece9;
+}
+.itinerary-place .delete-place {
+  color: #2a506e;
+}
+.initial-place .saved-place .delete-place:hover {
+  background-color: #2a506e;
+  color: #f9f8f5;
+}
+.itinerary-place .saved-place .delete-place:hover {
+  background-color: #f9f8f5;
+  color: #9f333d;
+}
+.saved-place:hover .delete-place {
+  transform: rotate(180deg) scale(1);
+  opacity: 1;
+}
+.saved-place {
+  position: relative;
 }
 .itinerary-table {
   padding: 20px;
   background-color: #edece9;
   height: auto;
   text-align: left;
+  position: relative;
 }
 .table-titles div {
   background-color: #2a506e;
@@ -328,7 +357,8 @@ input.radio-input {
   color: #2a506e;
   padding: 0;
   font-size: 1.3rem;
-  margin-top: 10px;
+  position: absolute;
+  bottom: 15px;
 }
 .add-to-itinerary i {
   background-color: #2a506e;
@@ -344,6 +374,22 @@ input.radio-input {
 }
 .add-to-itinerary:hover i{
   background-color: #395f7b;
+}
+
+.estimate-label {
+  text-align: right;
+  color: #595958;
+  font-style: italic;
+  font-size: 1.2rem;
+  padding: 12px;
+}
+.estimate-box {
+  background: #f9f8f5;
+  padding: 12px;
+  border: 1px solid #2a506e;
+  color: #2a506e;
+  font-weight: 700;
+  font-size: 1.3rem;
 }
 
 
@@ -383,6 +429,17 @@ input.radio-input {
 }
 .date-to {
   padding: 5px;
+}
+
+/* CURRENCY STYLING */
+.convert-tag {
+  color: #595958;
+  font-style: italic;
+  font-size: 1.3rem;
+  margin: 0 0 0 8px;
+}
+#current-budget p, #local-budget p {
+  margin-bottom: 0.5rem;
 }
 
 /* SETTINGS */
