@@ -116,8 +116,12 @@ function noSearchResults() {
     var errorMessage = $("<h3>")
         .addClass("error-message")
         .text("Please make sure you are searching for at least a city and a point of interest type.");
+    var noSearchLink = $("<p>")
+        .addClass("error-message")
+        .html("<button onclick=\"window.location.href='index.html';\">Return to main page</button>")
     contentSpace.append(noSearch);
     contentSpace.append(errorMessage);
+    contentSpace.append(noSearchLink);
 }
 
 function saveLocationInfo() {
@@ -210,6 +214,9 @@ function searchResults(lat, lon) {
                 console.log(searchResultArr);
             }
             showResultNumber(numberOfResults, currentSearch.city);
+        })
+        .catch(function(error){
+            noSearchResults();
         });
 }
 /*searchResultArr = dummyResults;
@@ -242,6 +249,9 @@ function getDescription(result) {
             } else {
                 getWebURL(result);
             }
+        })
+        .catch(function(error){
+            noSearchResults();
         });
 }
 
@@ -278,6 +288,9 @@ function getWebURL(result) {
             if (webURL == "") {
                 displaySearch(result);
             }
+        })
+        .catch(function(error){
+            noSearchResults();
         });
 }
 /*for (var i = 0; i < dummyResults.length; i++) {
@@ -378,6 +391,9 @@ function displaySearch(result) {
             contentSpace.append(searchResult);
 
             getHeight();
+        })
+        .catch(function(error){
+            noSearchResults();
         });
     }
 }
@@ -472,6 +488,9 @@ function listCountries() {
                 
                 availableStates = [];
             });
+        })
+        .catch(function(error){
+            noSearchResults();
         });
 }
 listCountries();
