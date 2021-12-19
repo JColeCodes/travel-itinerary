@@ -30,6 +30,8 @@ function pageReady()
             window.location = "index.html";
         });
     }
+
+
 }
 window.onload = pageInit;
 jQuery(document).ready(pageReady);
