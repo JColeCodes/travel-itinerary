@@ -34,7 +34,7 @@ function pageReady()
 window.onload = pageInit;
 jQuery(document).ready(pageReady);
 
-// calendar 
+// CALENDAR
 /*$(".list-group").on("click", "span", function() {
  
     var date = $(this).text().trim();
@@ -53,6 +53,9 @@ $( ".selector" ).datepicker({
 
 dateInput.trigger("focus");
 });*/
+$( ".selector" ).datepicker({
+  changeMonth: true
+});
 
 
 
@@ -61,6 +64,9 @@ var savedPlaces = [];
 if ("saved-places" in localStorage) {
   savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
 }
+
+// SAVE ITINERARY
+var savedItinerary = [];
 
 //var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
 for (var i = 0; i < savedPlaces.length; i++) {
@@ -213,6 +219,50 @@ $("#current-budget").on("blur", "input", function() {
   currentSearch.budget = textBudgetNum;
   localStorage.setItem("saved-location", JSON.stringify(currentSearch));
 });
+
+
+// EDIT DATE RANGE
+if (!currentSearch.startDate) {
+  var dateInput = $("<div>")
+    .addClass("grid-x")
+    .html("<input type='text' name='start' id='start-date' class='cell small-12 large-auto' />\
+    <p class='cell shrink date-to'>to</p> \
+    <input type='text' name='end' id='end-date' class='cell small-12 large-auto' />");
+  $("#time-frame").find("p").replaceWith(dateInput);
+} else {
+  $("#time-frame").find("p").text(currentSearch.dates.start + " to " + currentSearch.dates.end);
+}
+
+$("#time-frame").on("change", "#end", function() {
+  var dateFormat = "MM d";
+  //$(this).datepicker();
+  from = $("end").datepicker({
+    defaultDate: "+1w",
+    changeMonth: true,
+    numberOfMonths: 3
+  })
+  .on("change", function() {
+    to.datepicker("option", "minDate", getDate(this));
+  }),
+  to = $("#start").datepicker({
+    defaultDate: "+1w",
+    changeMonth: true,
+    numberOfMonths: 3
+  })
+  .on("change", function() {
+    from.datepicker("option", "maxDate", getDate(this))
+  });
+});
+
+function getDate(element) {
+  var date;
+  try {
+    date = $.datepicker.parseDate(dateFormat, element.value);
+  } catch(error) {
+    date = null;
+  }
+  return date;
+}
 
 
 // SETTINGS

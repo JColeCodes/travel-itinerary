@@ -361,6 +361,10 @@ input.radio-input {
   background-color: #2a506e;
 }
 
+.date-to {
+  padding: 5px;
+}
+
 /* SETTINGS */
 .settings-iframe {
   border: 0;
