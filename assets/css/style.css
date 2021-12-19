@@ -328,7 +328,7 @@ input.radio-input {
   font-size: 1.5rem;
   line-height: 1;
 }
-.trip-info p {
+.trip-info p, .trip-info span {
   color: #363c42;
   font-weight: 400;
   font-size: 1.5rem;
@@ -427,8 +427,17 @@ input.radio-input {
   border-width: 1px;
   color: #585859;
 }
+#time-frame {
+  margin: 0 0 1rem;
+}
+#time-frame input {
+  margin: 0;
+}
 .date-to {
-  padding: 5px;
+  margin: 0 5px 0;
+}
+#start-date-span {
+  margin-left: 0;
 }
 
 /* CURRENCY STYLING */

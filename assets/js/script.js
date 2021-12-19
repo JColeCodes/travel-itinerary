@@ -87,6 +87,20 @@ function saveSettings() {
 
 // SAVE ITINERARY
 var savedItinerary = [];
+/*
+localStorage is going to save into this savedItinerary array as a list of objects:
+{
+  date: null, <- Keeps track of the day!
+  items: [ <- Items has an array of the saved items, each are objects with information
+    {
+      place: "",
+      cost: 0,
+      time: 0,
+      web: ""
+    }
+  ]
+}
+*/
 
 //var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
 function listItems() {
@@ -313,29 +327,95 @@ console.log(currentSearch.country);
 
 // EDIT DATE RANGE
 if (!currentSearch.startDate) {
-  var dateInput = $("<div>")
-    .addClass("grid-x")
-    .html("<input type='text' name='start' id='start-date' class='cell small-12 large-auto' />\
-    <p class='cell shrink date-to'>to</p> \
-    <input type='text' name='end' id='end-date' class='cell small-12 large-auto' />");
-  $("#time-frame").find("p").replaceWith(dateInput);
+  var startDateInput = $("<input>")
+    .addClass("cell small-12 large-auto")
+    .attr("type", "text")
+    .attr("name", "start")
+    .attr("id", "start-date-input");
+  var endDateInput = $("<input>")
+    .addClass("cell small-12 large-auto")
+    .attr("type", "text")
+    .attr("name", "end")
+    .attr("id", "end-date-input");
+  $("#time-frame").find("#start-date-span").replaceWith(startDateInput);
+  $("#time-frame").find("#end-date-span").replaceWith(endDateInput);
 } else {
-  $("#time-frame").find("p").html("<span id='start-date-span'>" + currentSearch.startDate + "</span> to <span id='end-date-span'>" + currentSearch.endDate + "</span>");
+  $("#time-frame").find("#start-date-span").text(currentSearch.startDate);
+  $("#time-frame").find("#end-date-span").text(currentSearch.endDate);
 }
 
-$(function() {
+$("#time-frame").on("click", "#start-date-span", function() {
+    var getStartDate = $("#time-frame").find("#start-date-span").text().trim();
+
+    var dateInput = $("<input>")
+      .addClass("cell small-12 large-auto")
+      .attr("type", "text")
+      .attr("name", "start")
+      .attr("id", "start-date-input")
+      .val(getStartDate);
+
+    $("#time-frame").find("#start-date-span").replaceWith(dateInput);
+    dateInput.trigger("focus");
+});
+$("#time-frame").on("click", "#end-date-span", function() {
+    var getEndDate = $("#time-frame").find("#end-date-span").text().trim();
+
+    var dateInput = $("<input>")
+      .addClass("cell small-12 large-auto")
+      .attr("type", "text")
+      .attr("name", "end")
+      .attr("id", "end-date-input")
+      .val(getEndDate);
+
+    $("#time-frame").find("#end-date-span").replaceWith(dateInput);
+    dateInput.trigger("focus");
+});
+
+// p, input, div ALL MESSED UP, need to fix!!!
+
+$("#time-frame").on("change", "#start-date-input", function() {
+  console.log($("#time-frame").find("#start-date-input").val());
+  var startDateText = $("#time-frame").find("#start-date-input").val().trim();
+
+  var displayStartDate = $("<span>")
+    .addClass("cell small-12 large-shrink date-to")
+    .attr("id", "start-date-span")
+    .text(startDateText);
+
+  $("#time-frame").find("#start-date-input").replaceWith(displayStartDate);
+
+  currentSearch.startDate = startDateText;
+  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+});
+$("#time-frame").on("change", "#end-date-input", function() {
+  console.log($("#time-frame").find("#end-date-input").val());
+  var endDateText = $("#time-frame").find("#end-date-input").val().trim();
+
+  var displayEndDate = $("<span>")
+    .addClass("cell small-12 large-shrink date-to")
+    .attr("id", "end-date-span")
+    .text(endDateText);
+
+  $("#time-frame").find("#end-date-input").replaceWith(displayEndDate);
+
+  currentSearch.endDate = endDateText;
+  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+});
+
+$("#time-frame").on("focus", "input", function() {
   var dateFormat = "mm/dd/yy",
-  from = $("#end-date").datepicker({
+  from = $("#time-frame").find("#end-date-input").datepicker({
     defaultDate: "+1w",
     changeMonth: true,
     changeYear: true,
     numberOfMonths: 1,
+    minDate: 0,
     dateFormat: "MM d"
   })
   .on("change", function() {
     to.datepicker("option", "minDate", getDate(this));
   }),
-  to = $("#start-date").datepicker({
+  to = $("#time-frame").find("#start-date-input").datepicker({
     defaultDate: "+1w",
     changeMonth: true,
     changeYear: true,
@@ -355,36 +435,6 @@ $(function() {
       date = null;
     }
     return date;
-  }
-});
-
-$("#time-frame p").on("click", "span", function() {
-    var getStartDate = $("#time-frame p").find("#start-date").text().trim(); 
-    var getEndDate = $("#time-frame p").find("#end-date").text().trim(); 
-
-    var dateInput = $("<div>")
-      .addClass("grid-x")
-      .html("<input type='text' name='start' id='start-date' class='cell small-12 large-auto' value='" + getStartDate + "' />\
-      <p class='cell shrink date-to'>to</p> \
-      <input type='text' name='end' id='end-date' class='cell small-12 large-auto' value='" + getEndDate + "' />");
-
-    $("#time-frame").find("p").replaceWith(dateInput);
-    dateInput.trigger("focus");
-});
-
-// p, input, div ALL MESSED UP, need to fix!!!
-
-$("#time-frame").on("blur", "input", function() {
-  console.log($("#time-frame").find("#start-date").val());
-  if ($("#time-frame").find("#start-date").val() && $("#time-frame").find("#end-date").val()){
-    var startDateText = $("#time-frame").find("#start-date").val().trim();
-    var endDateText = $("#time-frame").find("#end-date").val().trim();
-
-    $("#time-frame").find("div").replaceWith("<span id='start-date-span'>" + startDateText + "</span> to <span id='end-date-span'>" + endDateText + "</span>");
-
-    currentSearch.startDate = startDateText;
-    currentSearch.endDate = endDateText;
-    //localStorage.setItem("saved-location", JSON.stringify(currentSearch));
   }
 });
 
