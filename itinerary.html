@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
+    <!-- calendar css -->
+    <link href="./assets/css/calendar.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
@@ -63,6 +65,27 @@
                 <div class="sortable list-items"></div>
             </div>
         </div>
+        <!-- calendar html -->
+        <div id="cal-wrap">
+            <!-- (A) PERIOD SELECTOR -->
+            <div id="cal-date">
+              <select id="cal-mth"></select>
+              <select id="cal-yr"></select>
+            </div>
+      
+            <!-- (B) CALENDAR -->
+            <div id="cal-container"></div>
+      
+            <!-- (C) EVENT FORM -->
+            <form id="cal-event">
+              <h1 id="evt-head"></h1>
+              <div id="evt-date"></div>
+              <textarea id="evt-details" required></textarea>
+              <input id="evt-close" type="button" value="Close"/>
+              <input id="evt-del" type="button" value="Delete"/>
+              <input id="evt-save" type="submit" value="Save"/>
+            </form>
+          </div>
     </main>
 
     <!-- Footer -->
@@ -76,5 +99,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.4/js/foundation.min.js"></script>
     <!-- Custom Scripting -->
     <script src="./assets/js/script.js"></script>
+    <!-- calendar -->
+    <script async src="./assets/calendar.js"></script>
 </body>
 </html>
