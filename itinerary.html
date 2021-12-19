@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
-    <!-- Custom Styling -->
-    <link rel="stylesheet" href="./assets/css/style.css" />
     <!-- calendar css -->
     <link href="./assets/css/calendar.css" rel="stylesheet">
+    <!-- Custom Styling -->
+    <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
     <!-- Header -->
@@ -38,11 +38,32 @@
         <div class="left_column_div sidebar cell small-12 medium-6 large-4">
             <div class="sidebar-element">
                 <h3>Trip Information</h3>
-                <div class="trip-info" id= "trip_information_sub_div">
+                <div class="trip-info" id="trip_information_sub_div">
                     <h4>Destination:</h4>
                     <p id="destination-name"></p>
                     <h4>Time Frame:</h4>
                     <div id="time-frame"><p></p></div>
+                        <!-- calendar html -->
+                        <div id="cal-wrap" class="calendar hidden">
+                            <!-- (A) PERIOD SELECTOR -->
+                            <div id="cal-date">
+                            <select id="cal-mth"></select>
+                            <select id="cal-yr"></select>
+                            </div>
+                    
+                            <!-- (B) CALENDAR -->
+                            <div id="cal-container"></div>
+                    
+                            <!-- (C) EVENT FORM -->
+                            <form id="cal-event">
+                            <h1 id="evt-head"></h1>
+                            <div id="evt-date"></div>
+                            <textarea id="evt-details" required></textarea>
+                            <input id="evt-close" type="button" value="Close"/>
+                            <input id="evt-del" type="button" value="Delete"/>
+                            <input id="evt-save" type="submit" value="Save"/>
+                            </form>
+                        </div>
                     <h4>Budget:</h4>
                     <div id="current-budget"><p></p></div>
                     <div id="local-budget"><p></p></div>
@@ -57,6 +78,11 @@
             </div>
         </div>
         <div class="map_div cell small-12 medium-6 large-8">
+            <div class="arrows grid-x align-center">
+                <button id="prev"><i class="fas fa-chevron-left"></i></button>
+                <p id="currentDay" class="lead current-day"></p>
+                <button id="next"><i class="fas fa-chevron-right"></i></button>
+            </div>
             <div class="itinerary-table">
                 <div class="grid-x table-titles">
                     <div class="cell small-2">Time</div>
@@ -67,27 +93,6 @@
                 <button class="add-to-itinerary" data-open="customAddModal"><i class="fas fa-plus"></i>Add custom activity</button>
             </div>
         </div>
-        <!-- calendar html -->
-        <div id="cal-wrap">
-            <!-- (A) PERIOD SELECTOR -->
-            <div id="cal-date">
-              <select id="cal-mth"></select>
-              <select id="cal-yr"></select>
-            </div>
-      
-            <!-- (B) CALENDAR -->
-            <div id="cal-container"></div>
-      
-            <!-- (C) EVENT FORM -->
-            <form id="cal-event">
-              <h1 id="evt-head"></h1>
-              <div id="evt-date"></div>
-              <textarea id="evt-details" required></textarea>
-              <input id="evt-close" type="button" value="Close"/>
-              <input id="evt-del" type="button" value="Delete"/>
-              <input id="evt-save" type="submit" value="Save"/>
-            </form>
-          </div>
     </main>
 
     <!-- Footer -->
@@ -127,6 +132,6 @@
     <!-- Custom Scripting -->
     <script src="./assets/js/script.js"></script>
     <!-- calendar -->
-    <script async src="./assets/calendar.js"></script>
+    <script async src="./assets/js/calendar.js"></script>
 </body>
 </html>

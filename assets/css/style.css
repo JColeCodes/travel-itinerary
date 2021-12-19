@@ -16,7 +16,7 @@ a, a:hover, button, button:hover, i, i:hover {
   transition: all 0.5s ease-in-out;
 }
 
-h1, h2, h3, h4, h5, h6, p, .h1, .h2, .h3, .h4, .h5, .h6 {
+h1, h2, h3, h4, h5, h6, p, .h1, .h2, .h3, .h4, .h5, .h6, #cal-wrap * {
   font-family: 'Lato', sans-serif;
 }
 
@@ -361,6 +361,26 @@ input.radio-input {
   background-color: #2a506e;
 }
 
+/* CALENDAR */
+.calendar {
+  background: #f9f8f5;
+  border: 1px solid #dedcda;
+  margin: -10px 0;
+  position: absolute;
+}
+#cal-wrap {
+  width: 600px;
+  max-width: calc(100% - 80px);
+}
+.calendar select, .calendar table {
+  margin-bottom: 0;
+}
+#cal-mth, #cal-yr {
+  font-size: 1em;
+  line-height: 1;
+  border-width: 1px;
+  color: #585859;
+}
 .date-to {
   padding: 5px;
 }
@@ -442,11 +462,26 @@ input.radio-input {
   font-style: italic;
 }
 
+.hidden {
+  display: none;
+}
+
 
 /* RESPONSIVE */
 @media screen and (max-width: 768px) {
   .map {
     height: 360px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #calendar tr.head td {
+    color: #f9f8f5;
+    font-size: .8rem;
+    padding: 5px;
+  }
+  .sidebar-element {
+    margin: 0;
   }
 }
 
@@ -468,5 +503,8 @@ input.radio-input {
   }
   .mobile-center {
     text-align: center;
+  }
+  #cal-wrap {
+    max-width: calc(100% - 50px);
   }
 }

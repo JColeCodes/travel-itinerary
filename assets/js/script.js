@@ -236,39 +236,68 @@ if (!currentSearch.startDate) {
     <input type='text' name='end' id='end-date' class='cell small-12 large-auto' />");
   $("#time-frame").find("p").replaceWith(dateInput);
 } else {
-  $("#time-frame").find("p").text(currentSearch.dates.start + " to " + currentSearch.dates.end);
+  $("#time-frame").find("p").html("<span id='start-date-span'>" + currentSearch.startDate + "</span> to <span id='end-date-span'>" + currentSearch.endDate + "</span>");
 }
 
-$("#time-frame").on("change", "#end", function() {
-  var dateFormat = "MM d";
-  //$(this).datepicker();
-  from = $("end").datepicker({
+$(function() {
+  var dateFormat = "mm/dd/yy",
+  from = $("#end-date").datepicker({
     defaultDate: "+1w",
     changeMonth: true,
-    numberOfMonths: 3
+    changeYear: true,
+    numberOfMonths: 1,
+    dateFormat: "MM d"
   })
   .on("change", function() {
     to.datepicker("option", "minDate", getDate(this));
   }),
-  to = $("#start").datepicker({
+  to = $("#start-date").datepicker({
     defaultDate: "+1w",
     changeMonth: true,
-    numberOfMonths: 3
+    changeYear: true,
+    numberOfMonths: 1,
+    minDate: 0,
+    dateFormat: "MM d"
   })
   .on("change", function() {
-    from.datepicker("option", "maxDate", getDate(this))
+    from.datepicker("option", "maxDate", getDate(this));
   });
+
+  function getDate(element) {
+    var date;
+    try {
+      date = $.datepicker.parseDate(dateFormat, element.value);
+    } catch(error) {
+      date = null;
+    }
+    return date;
+  }
 });
 
-function getDate(element) {
-  var date;
-  try {
-    date = $.datepicker.parseDate(dateFormat, element.value);
-  } catch(error) {
-    date = null;
-  }
-  return date;
-}
+$("#time-frame p").on("click", "span", function() {
+    var getStartDate = $("#time-frame p").find("#start-date").text().trim(); 
+    var getEndDate = $("#time-frame p").find("#end-date").text().trim(); 
+
+    var dateInput = $("<div>")
+      .addClass("grid-x")
+      .html("<input type='text' name='start' id='start-date' class='cell small-12 large-auto' value='" + getStartDate + "' />\
+      <p class='cell shrink date-to'>to</p> \
+      <input type='text' name='end' id='end-date' class='cell small-12 large-auto' value='" + getEndDate + "' />");
+
+    $("#time-frame").find("p").replaceWith(dateInput);
+    dateInput.trigger("focus");
+});
+
+$("#time-frame").on("blur", "input", function() {
+  var startDateText = $("#time-frame p").find("#start-date").val().trim();
+  var endDateText = $("#time-frame p").find("#end-date").val().trim();
+
+  $("#time-frame").find("p").replaceWith("<span id='start-date-span'>" + startDateText + "</span> to <span id='end-date-span'>" + endDateText + "</span>");
+
+  currentSearch.startDate = startDateText;
+  currentSearch.endDate = endDateText;
+  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+});
 
 
 // SETTINGS
