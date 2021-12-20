@@ -90,7 +90,9 @@ function saveSettings() {
 // SAVE ITINERARY
 var savedItinerary;
 console.log(savedItinerary);
-if (!"itinerary-save-info" in localStorage) {
+if ("itinerary-save-info" in localStorage) {
+  savedItinerary = JSON.parse(localStorage.getItem("itinerary-save-info"));
+} else {
   savedItinerary = [
     {
       date: null,
@@ -107,29 +109,10 @@ if (!"itinerary-save-info" in localStorage) {
   }
   saveItinerary();
 }
-function loadItinerary() {
-  if ("itinerary-save-info" in localStorage) {
-    savedItinerary = JSON.parse(localStorage.getItem("itinerary-save-info"));
-  }
-}
 function saveItinerary() {
   localStorage.setItem("itinerary-save-info", JSON.stringify(savedItinerary));
 }
 
-/*
-localStorage is going to save into this savedItinerary array as a list of objects:
-{
-  date: null, <- Keeps track of the day!
-  items: [ <- Items has an array of the saved items, each are objects with information
-    {
-      place: "",
-      cost: 0,
-      time: 0,
-      web: ""
-    }
-  ]
-}
-*/
 
 for (var i = 0; i < savedPlaces.length; i++) {
 
@@ -154,13 +137,18 @@ var destinationName = $("#destination-name").text(destinationText);
 var firstDay = moment(currentSearch.startDate).format("MMMM D, YYYY");
 var lastDay = moment(currentSearch.endDate).format("MMMM D, YYYY");
 var dayForward = 0;
-var selectedDate = null;
+var selectedDate = firstDay;
+
+console.log(firstDay, "first day");
+console.log(lastDay, "last day");
+console.log(selectedDate, "selected day");
 
 var itineraryContentEl = $(".itinerary-content");
 
 function displayItinerary(day) {
   itineraryContentEl.html("");
-  selectedDate = day.split(",")[0];
+  selectedDate = day;
+  displayDateText = day.split(",")[0];
   var arrowsEl = $("<div>").addClass("arrows grid-x align-center");
   var prevArrow = $("<button>")
     .attr("id", "prev")
@@ -171,7 +159,7 @@ function displayItinerary(day) {
   var dayLabel = $("<p>")
     .attr("id", "currentDay")
     .addClass("lead current-day")
-    .text(selectedDate);
+    .text(displayDateText);
   arrowsEl
     .append(prevArrow)
     .append(dayLabel)
@@ -228,6 +216,7 @@ function displayItinerary(day) {
     nextArrow.prop("disabled", true);
   }
   dragDropEnable(day);
+  listItems();
 }
 displayItinerary(firstDay);
 
@@ -244,7 +233,7 @@ $(itineraryContentEl).on("click", "#prev", function() {
   if (lastDay == selectedDate) {
     itineraryContentEl.find("#prev").prop("disabled", false);
   }
-  console.log(moment(date), dayForward);
+  console.log(date, dayForward);
   displayItinerary(date);
 });
 $(itineraryContentEl).on("click", "#next", function() {
@@ -256,37 +245,70 @@ $(itineraryContentEl).on("click", "#next", function() {
   if (firstDay == selectedDate) {
     itineraryContentEl.find("#next").prop("disabled", false);
   }
-  console.log(moment(date), dayForward);
+  console.log(date, dayForward);
   displayItinerary(date);
 });
 
-console.log(moment(currentSearch.startDate).format("MMMM D, YYYY"));
+//console.log(moment(currentSearch.startDate).format("MMMM D, YYYY"));
 
 
 //var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
 function listItems() {
-  loadItinerary();
+  $(".initial").html("");
+  $(".list-items").html("");
   for (var i = 0; i < savedPlaces.length; i++) {
-    var dataName = savedPlaces[i].place;
+    //var dataName = savedPlaces[i].place;
     var fullSortable = $("<div>")
       .addClass("grid-x");
+    var timeP = $("<p>");
+    var costP = $("<p>");
     var timeDiv = $("<div>")
-      .addClass("time cell small-2");
+      .addClass("time cell small-2")
+      .append(timeP);
     var costDiv = $("<div>")
-      .addClass("cost cell small-2");
-    var sortdiv = $("<div>").text(dataName).addClass("saved-place cell auto");
+      .addClass("cost cell small-2")
+      .append(costP);
+    var sortdiv = $("<div>").addClass("saved-place cell auto");
 
     var websiteButton = $("<a>")
       .addClass("web-button")
       .html("<i class='fas fa-link'></i>")
-      .attr("href", savedPlaces[i].web)
       .attr("target", "_blank");
 
     var deleteButton = $("<button>")
       .addClass("delete-place")
-      .html("<i class=\"fas fa-times\"></i>")
-      .attr("onClick", "removeItem('" + savedPlaces[i].place + "')");
+      .html("<i class=\"fas fa-times\"></i>");
 
+    console.log(savedPlaces);
+    console.log(savedItinerary);
+
+    for (var a = 0; a < savedItinerary.length; a++) {
+      console.log("savedItinerary[a].date", savedItinerary[a].date);
+      console.log("selected date", selectedDate);
+      if (savedItinerary[a].date == null) {
+        for (var n = 0; n < savedItinerary[a].items.length; n++) {
+          if (savedItinerary[a].items[n].place == savedPlaces[i].place){
+            sortdiv.text(savedItinerary[a].items[n].place);
+            websiteButton.attr("href", savedItinerary[a].items[n].web);
+            deleteButton.attr("onClick", "removeItem('" + savedItinerary[a].items[n].place + "')");
+            fullSortable.addClass("hide-time-cost initial-place");
+            $(".initial").append(fullSortable);
+            console.log(savedItinerary[a].items[n]);
+          }
+        }
+      } else if (savedItinerary[a].date == selectedDate) {
+        for (var n = 0; n < savedItinerary[a].items.length; n++) {
+          if (savedItinerary[a].items[n].place == savedPlaces[i].place){
+            sortdiv.text(savedItinerary[a].items[n].place);
+            websiteButton.attr("href", savedItinerary[a].items[n].web);
+            deleteButton.attr("onClick", "removeItem('" + savedItinerary[a].items[n].place + "')");
+            fullSortable.addClass("itinerary-place");
+            $(".itinerary-content").find(".list-items").append(fullSortable);
+            console.log(savedItinerary[a].items[n]);
+          }
+        }
+      }
+    }
     sortdiv
       .append(websiteButton)
       .append(deleteButton);
@@ -294,25 +316,47 @@ function listItems() {
       .append(timeDiv)
       .append(sortdiv)
       .append(costDiv);
-
-    for (var a = 0; a < savedItinerary.length; a++) {
-      if (savedItinerary[a].date == null) {
-        for (var n = 0; n < savedItinerary[a].items.length; n++) {
-          fullSortable.addClass("hide-time-cost initial-place");
-          $(".initial").append(fullSortable);
-          console.log(savedItinerary[a], i, a, n);
-        }
-      } else {
-        for (var n = 0; n < savedItinerary[a].items.length; n++) {
-          fullSortable.addClass("itinerary-place");
-          $(".list-items").append(fullSortable);
-          console.log(savedItinerary[a], i, a, n);
-        }
-      }
-    } 
   }
 }
-listItems();
+//listItems();
+
+$(".itinerary-content").on("click", ".time", function(event) {
+  console.log($(event.target).parent().children(".saved-place").text());
+  var timeText = $(event.target).find("p").text();
+  var inputTime = $("<input>")
+      .attr("type", "text")
+      .attr("name", "time-input")
+      .val(timeText);
+  $(event.target).find("p").replaceWith(inputTime);
+  inputTime.trigger("focus");
+});
+$(".itinerary-content").on("change", ".time", function(event) {
+  console.log($(event.target).parent().children(".saved-place").text());
+  var timeText = $(event.target).val();
+  var saveTime = $("<p>")
+      .text(timeText);
+  $(event.target).replaceWith(saveTime);
+});
+
+$(".itinerary-content").on("click", ".cost", function(event) {
+  console.log($(event.target).parent().children(".saved-place").text());
+  var costText = $(event.target).find("p").text();
+  var inputCost = $("<input>")
+      .attr("type", "number")
+      .attr("min", 1)
+      .attr("name", "cost-input")
+      .val(costText);
+  $(event.target).find("p").replaceWith(inputCost);
+  inputCost.trigger("focus");
+});
+$(".itinerary-content").on("change", ".cost", function(event) {
+  console.log($(event.target).parent().children(".saved-place").text());
+  var costText = $(event.target).val();
+  var saveCost = $("<p>")
+      .text(costText);
+  $(event.target).replaceWith(saveCost);
+});
+
 
 function removeItem(placeName) {
   var placeIndex = savedPlaces.map(obj => obj.place).indexOf(placeName);
@@ -345,10 +389,12 @@ function dragDropEnable(selectedDate) {
       },
       
       update: function(event, ui) {
-        if (!ui.sender) {
+        /*if (!ui.sender) {
+          //var tempArr = savedPlaces;
           var tempObj = { items: [] };
           for (var i = 0; i < savedPlaces.length; i++) {
-            if (savedPlaces[i].place == $(ui.item).text() && $(ui.item).parent().hasClass("list-items")) {
+            console.log($(this), $(event.target), $(ui.placeholder));
+            if (savedPlaces[i].place == $(ui.item).text() && $(ui.item).parent().hasClass("list-items") && !$(ui.placeholder).hasClass("itinerary-place")) {
               console.log($(ui.item).text(), "MATCH!!!");
               console.log(savedItinerary[0].items[i].place);
               console.log(selectedDate);
@@ -367,10 +413,13 @@ function dragDropEnable(selectedDate) {
                 tempObj = { items: [] };
               }
               savedItinerary[0].items.splice(i, 1);
-              console.log(savedItinerary);
+              var tempMove = savedPlaces[i];
+              savedPlaces.splice(i, 1);
+              savedPlaces.push(tempMove);
+              console.log(savedItinerary[0].items, i);
               break;
             }
-            else if (savedPlaces[i].place == $(ui.item).text() && $(ui.item).parent().hasClass("initial")) {
+            else if (savedPlaces[i].place == $(ui.item).text() && $(ui.item).parent().hasClass("initial") && !$(ui.placeholder).hasClass("initial-place")) {
               console.log($(ui.item).text(), "BACK TO ORIGINAL LIST");
               for (var a = 0; a < savedItinerary.length; a++) {
                 if (savedItinerary[a].date == null) {
@@ -379,6 +428,7 @@ function dragDropEnable(selectedDate) {
                   for (var n = 0; n < savedItinerary[a].items.length; n++) {
                     if (savedItinerary[a].items[n].place == $(ui.item).text()){
                       savedItinerary[a].items.splice(n, 1);
+                      console.log(savedItinerary[a].items, n);
                     }
                   }
                 }
@@ -388,7 +438,7 @@ function dragDropEnable(selectedDate) {
             }
           }
           saveItinerary();
-        }
+        }*/
       },
       start: function(event, ui) {
         sortOne = sortTwo = ui.item.parent();
