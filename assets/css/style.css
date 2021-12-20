@@ -298,6 +298,12 @@ input.radio-input {
   background-color: #f9f8f5;
   color: #9f333d;
 }
+.initial .web-button {
+  display: none;
+}
+.itinerary-place .web-button {
+  margin: 0 40px 0 10px;
+}
 .saved-place:hover .delete-place {
   transform: rotate(180deg) scale(1);
   opacity: 1;
