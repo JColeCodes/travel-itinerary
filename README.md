@@ -3,4 +3,8 @@ Our website offers a way to explore the historical sites, monuments, museums, et
 
 The technologies used in order to make this application include: Foundation css framework, JQuery, JQuery UI, several different APIs and Javascript API fetching.
 
-deployed application: https://jcolecodes.github.io/travel-itinerary-project-01/ 
+# View Live Page
+[View the live Travel Itinerary page on GitHub.](https://jcolecodes.github.io/travel-itinerary-project-01/ )
+
+# Screenshot
+![Screenshot of the travel itinerary](./screenshot.png)
