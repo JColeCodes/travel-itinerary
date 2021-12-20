@@ -104,6 +104,130 @@ localStorage is going to save into this savedItinerary array as a list of object
 }
 */
 
+var currentSearch = {};
+if ("saved-location" in localStorage) {
+  currentSearch = JSON.parse(localStorage.getItem("saved-location"));
+
+  destinationText = currentSearch.city;
+  if (currentSearch.state) {
+    destinationText += ", " + currentSearch.state;
+  }
+  if (currentSearch.country) {
+    destinationText += ", " + currentSearch.country;
+  }
+}
+var destinationName = $("#destination-name").text(destinationText);
+
+
+// ITINERARY PAGE CONTENT
+var firstDay = moment(currentSearch.startDate).format("MMMM D");
+var lastDay = moment(currentSearch.endDate).format("MMMM D");
+var dayForward = 0;
+var selectedDate = null;
+
+var itineraryContentEl = $(".itinerary-content");
+
+function displayItinerary(day) {
+  itineraryContentEl.html("");
+  selectedDate = day;
+  var arrowsEl = $("<div>").addClass("arrows grid-x align-center");
+  var prevArrow = $("<button>")
+    .attr("id", "prev")
+    .html("<i class='fas fa-chevron-left'></i>");
+  var nextArrow = $("<button>")
+    .attr("id", "next")
+    .html("<i class='fas fa-chevron-right'></i>");
+  var dayLabel = $("<p>")
+    .attr("id", "currentDay")
+    .addClass("lead current-day")
+    .text(selectedDate);
+  arrowsEl
+    .append(prevArrow)
+    .append(dayLabel)
+    .append(nextArrow);
+
+  var itineraryTable = $("<div>").addClass("itinerary-table");
+  var tableTitlesEl = $("<div>").addClass("grid-x table-titles");
+  var tableTitleTime = $("<div>")
+    .addClass("cell small-2")
+    .text("Time");
+  var tableTitleActivity = $("<div>")
+    .addClass("cell auto")
+    .text("Activity");
+  var tableTitleCost = $("<div>")
+    .addClass("cell small-2")
+    .text("Est. Cost");
+  tableTitlesEl
+    .append(tableTitleTime)
+    .append(tableTitleActivity)
+    .append(tableTitleCost);
+
+  var sortableEl = $("<div>").addClass("sortable list-items");
+
+  var dailyEstimateEl = $("<div>").addClass("grid-x align-right daily-estimate");
+  var dailyEstimateLabel = $("<div>")
+    .addClass("estimate-label cell auto")
+    .text("Daily estimate");
+  var dailyEstimateBox = $("<div>").addClass("estimate-box cell small-2");
+  dailyEstimateEl
+    .append(dailyEstimateLabel)
+    .append(dailyEstimateBox);
+
+  var customItemButton = $("<button>")
+    .addClass("add-to-itinerary")
+    .attr("data-open", "customAddModal")
+    .html("<i class='fas fa-plus'></i>Add custom activity");
+
+  itineraryTable
+    .append(tableTitlesEl)
+    .append(sortableEl)
+    .append(dailyEstimateEl)
+    .append(customItemButton);
+  itineraryContentEl
+    .append(arrowsEl)
+    .append(itineraryTable);
+
+  if (firstDay == selectedDate) {
+    prevArrow.prop("disabled", true);
+  } else if (lastDay == selectedDate) {
+    nextArrow.prop("disabled", true);
+  }
+  dragDropEnable();
+}
+displayItinerary(firstDay);
+
+// Button functions
+$(itineraryContentEl).on("click", "#prev", function() {
+  var date;
+  if (selectedDate == moment(currentSearch.startDate).add(1, "days").format("MMMM D")) {
+    dayForward--;
+    date = firstDay;
+  } else if (selectedDate > firstDay) {
+    dayForward--;
+    date = moment(currentSearch.startDate).add(dayForward, "days").format("MMMM D");
+  }
+  if (lastDay == selectedDate) {
+    itineraryContentEl.find("#prev").prop("disabled", false);
+  }
+  console.log(moment(date), dayForward);
+  displayItinerary(date);
+});
+$(itineraryContentEl).on("click", "#next", function() {
+  var date;
+  if (selectedDate == firstDay || selectedDate > firstDay) {
+    dayForward++;
+    date = moment(currentSearch.startDate).add(dayForward, "days").format("MMMM D");
+  }
+  if (firstDay == selectedDate) {
+    itineraryContentEl.find("#next").prop("disabled", false);
+  }
+  console.log(moment(date), dayForward);
+  displayItinerary(date);
+});
+
+console.log(moment(currentSearch.startDate).format("MMMM D"));
+
+
 //var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
 function listItems() {
   for (var i = 0; i < savedPlaces.length; i++) {
@@ -140,92 +264,80 @@ function removeItem(placeName) {
 }
 
 // ITINERARY SORTABLE
-var sortOne, sortTwo;
-$(".list-items, .initial").sortable({
-    // enable dragging across lists
-    connectWith: $(".list-items, .initial"),
-    scroll: false,
-    tolerance: "pointer",
-    helper: "clone",
-    activate: function() {
-      $(this).addClass("dropover");
-    },
-    deactivate: function() {
-      $(this).removeClass("dropover");
-    },
-    over: function(event, ui) {
-      $(event.target).addClass("dropover-active");
-    },
-    out: function(event, ui) {
-      $(event.target).removeClass("dropover-active");
-    },
-    
-    update:function(event) {
-      /*if ($(event.target).hasClass("initial")) {
-        $(event.target).addClass("initial-box");
-      } else {
-        $(event.target).addClass("itinerary-box");
-      }
-      var tempArr = [];
+function dragDropEnable() {
+  var sortOne, sortTwo;
+  $(".list-items, .initial").sortable({
+      // enable dragging across lists
+      connectWith: $(".list-items, .initial"),
+      scroll: false,
+      tolerance: "pointer",
+      helper: "clone",
+      activate: function() {
+        $(this).addClass("dropover");
+      },
+      deactivate: function() {
+        $(this).removeClass("dropover");
+      },
+      over: function(event, ui) {
+        $(event.target).addClass("dropover-active");
+      },
+      out: function(event, ui) {
+        $(event.target).removeClass("dropover-active");
+      },
+      
+      update:function(event) {
+        /*if ($(event.target).hasClass("initial")) {
+          $(event.target).addClass("initial-box");
+        } else {
+          $(event.target).addClass("itinerary-box");
+        }
+        var tempArr = [];
 
-      $(this)
-        .children()
-        .each(function() {
-          tempArr.push({
-            text: $(this)
-              .find("p")
-              .text()
-              .trim(),
-            date: $(this)
-              .find("span")
-              .text()
-              .trim()
+        $(this)
+          .children()
+          .each(function() {
+            tempArr.push({
+              text: $(this)
+                .find("p")
+                .text()
+                .trim(),
+              date: $(this)
+                .find("span")
+                .text()
+                .trim()
+            });
           });
-        });
-  
-      var arrName = $(this)
-        .attr("id")
-        .replace("list-", "");
-  
-      tasks[arrName] = tempArr;
-      saveTasks();*/
-    },
-    start: function(event, ui) {
-      sortOne = sortTwo = ui.item.parent();
-    },
-    stop: function(event, ui) {
-      if ($(ui.item).hasClass("initial-place") && sortOne != sortTwo) {
-        $(ui.item).removeClass("hide-time-cost initial-place")
-          .addClass("itinerary-place");
-      } else if ($(ui.item).hasClass("itinerary-place") && sortOne != sortTwo) {
-        $(ui.item).removeClass("itinerary-place")
-          .addClass("hide-time-cost initial-place");
-      }
-    },
+    
+        var arrName = $(this)
+          .attr("id")
+          .replace("list-", "");
+    
+        tasks[arrName] = tempArr;
+        saveTasks();*/
+      },
+      start: function(event, ui) {
+        sortOne = sortTwo = ui.item.parent();
+      },
+      stop: function(event, ui) {
+        if ($(ui.item).hasClass("initial-place") && sortOne != sortTwo) {
+          $(ui.item).removeClass("hide-time-cost initial-place")
+            .addClass("itinerary-place");
+        } else if ($(ui.item).hasClass("itinerary-place") && sortOne != sortTwo) {
+          $(ui.item).removeClass("itinerary-place")
+            .addClass("hide-time-cost initial-place");
+        }
+      },
       change: function(event, ui) {
         if (ui.sender) {
           sortOne = ui.placeholder.parent();
         }
       }
   });
+}
 
 
 // DISPLAY DESTINATION
 var destinationText = "";
-
-var currentSearch = {};
-if ("saved-location" in localStorage) {
-  currentSearch = JSON.parse(localStorage.getItem("saved-location"));
-
-  destinationText = currentSearch.city;
-  if (currentSearch.state) {
-    destinationText += ", " + currentSearch.state;
-  }
-  if (currentSearch.country) {
-    destinationText += ", " + currentSearch.country;
-  }
-}
-var destinationName = $("#destination-name").text(destinationText);
 
 
 // EDIT BUDGET
@@ -342,8 +454,8 @@ if (!currentSearch.startDate) {
   $("#time-frame").find("#start-date-span").replaceWith(startDateInput);
   $("#time-frame").find("#end-date-span").replaceWith(endDateInput);
 } else {
-  $("#time-frame").find("#start-date-span").text(currentSearch.startDate);
-  $("#time-frame").find("#end-date-span").text(currentSearch.endDate);
+  $("#time-frame").find("#start-date-span").text(currentSearch.startDate.split(",")[0]);
+  $("#time-frame").find("#end-date-span").text(currentSearch.endDate.split(",")[0]);
 }
 
 $("#time-frame").on("click", "#start-date-span", function() {
@@ -382,12 +494,15 @@ $("#time-frame").on("change", "#start-date-input", function() {
   var displayStartDate = $("<span>")
     .addClass("cell small-12 large-shrink date-to")
     .attr("id", "start-date-span")
-    .text(startDateText);
+    .text(startDateText.split(",")[0]);
 
   $("#time-frame").find("#start-date-input").replaceWith(displayStartDate);
 
   currentSearch.startDate = startDateText;
   localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+
+  firstDay = moment(currentSearch.startDate).format("MMMM D");
+  displayItinerary(firstDay);
 });
 $("#time-frame").on("change", "#end-date-input", function() {
   console.log($("#time-frame").find("#end-date-input").val());
@@ -396,12 +511,15 @@ $("#time-frame").on("change", "#end-date-input", function() {
   var displayEndDate = $("<span>")
     .addClass("cell small-12 large-shrink date-to")
     .attr("id", "end-date-span")
-    .text(endDateText);
+    .text(endDateText.split(",")[0]);
 
   $("#time-frame").find("#end-date-input").replaceWith(displayEndDate);
 
   currentSearch.endDate = endDateText;
   localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+
+  lastDay = moment(currentSearch.endDate).format("MMMM D");
+  displayItinerary(firstDay);
 });
 
 $("#time-frame").on("focus", "input", function() {
@@ -412,7 +530,7 @@ $("#time-frame").on("focus", "input", function() {
     changeYear: true,
     numberOfMonths: 1,
     minDate: 0,
-    dateFormat: "MM d"
+    dateFormat: "MM d, yy"
   })
   .on("change", function() {
     to.datepicker("option", "minDate", getDate(this));
@@ -423,7 +541,7 @@ $("#time-frame").on("focus", "input", function() {
     changeYear: true,
     numberOfMonths: 1,
     minDate: 0,
-    dateFormat: "MM d"
+    dateFormat: "MM d, yy"
   })
   .on("change", function() {
     from.datepicker("option", "maxDate", getDate(this));

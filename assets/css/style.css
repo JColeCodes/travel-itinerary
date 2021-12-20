@@ -440,8 +440,34 @@ input.radio-input {
   margin-left: 0;
 }
 
+.arrows {
+  padding: 16px;
+  font-size: 1.2rem;
+}
+.arrows button {
+  background: none;
+  color: #2a506e;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.arrows button:hover {
+  color: #585859;
+}
+.arrows button:disabled {
+  opacity: 0;
+}
+.arrows button:disabled:hover {
+  cursor: default;
+}
+.current-day {
+  line-height: 1;
+  font-weight: 700;
+  margin: 5px;
+  color: #2a506e;
+}
+
 /* CURRENCY STYLING */
-.convert-tag {
+span.convert-tag {
   color: #595958;
   font-style: italic;
   font-size: 1.3rem;
