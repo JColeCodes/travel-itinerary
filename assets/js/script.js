@@ -93,19 +93,15 @@ console.log(savedItinerary);
 if ("itinerary-save-info" in localStorage) {
   savedItinerary = JSON.parse(localStorage.getItem("itinerary-save-info"));
 } else {
-  savedItinerary = [
-    {
-      date: null,
-      items: []
-    }
-  ];
+  savedItinerary = [];
   for (var i = 0; i < savedPlaces.length; i++) {
-    console.log(savedPlaces[i]);
+    savedItinerary.push({date: null, item: savedPlaces[i]});
+    /*console.log(savedPlaces[i]);
     for (var a = 0; a < savedItinerary.length; a++) {
       if (savedItinerary[a].date == null) {
         savedItinerary[a].items.push(savedPlaces[i]);
       }
-    }
+    }*/
   }
   saveItinerary();
 }
@@ -282,11 +278,11 @@ function listItems() {
     console.log(savedPlaces);
     console.log(savedItinerary);
 
-    for (var a = 0; a < savedItinerary.length; a++) {
-      console.log("savedItinerary[a].date", savedItinerary[a].date);
+    for (var j = 0; j < savedItinerary.length; j++) {
+      console.log("savedItinerary[j].date", savedItinerary[j].date);
       console.log("selected date", selectedDate);
-      if (savedItinerary[a].date == null) {
-        for (var n = 0; n < savedItinerary[a].items.length; n++) {
+      if (savedItinerary[j].date == null && savedItinerary[j].item.place == savedPlaces[i].place) {
+        /*for (var k = 0; k < savedItinerary[j].items.length; k++) {
           if (savedItinerary[a].items[n].place == savedPlaces[i].place){
             sortdiv.text(savedItinerary[a].items[n].place);
             websiteButton.attr("href", savedItinerary[a].items[n].web);
@@ -295,9 +291,15 @@ function listItems() {
             $(".initial").append(fullSortable);
             console.log(savedItinerary[a].items[n]);
           }
-        }
-      } else if (savedItinerary[a].date == selectedDate) {
-        for (var n = 0; n < savedItinerary[a].items.length; n++) {
+        }*/
+      console.log("savedItinerary[j].item.place", savedItinerary[j].item.place);
+        sortdiv.text(savedItinerary[j].item.place);
+        websiteButton.attr("href", savedItinerary[j].item.web);
+        deleteButton.attr("onClick", "removeItem('" + savedItinerary[j].item.place + "')");
+        fullSortable.addClass("hide-time-cost initial-place");
+        $(".initial").append(fullSortable);
+      } else if (savedItinerary[j].date == selectedDate && savedItinerary[j].item.place == savedPlaces[i].place) {
+        /*for (var n = 0; n < savedItinerary[a].items.length; n++) {
           if (savedItinerary[a].items[n].place == savedPlaces[i].place){
             sortdiv.text(savedItinerary[a].items[n].place);
             websiteButton.attr("href", savedItinerary[a].items[n].web);
@@ -306,7 +308,12 @@ function listItems() {
             $(".itinerary-content").find(".list-items").append(fullSortable);
             console.log(savedItinerary[a].items[n]);
           }
-        }
+        }*/
+        sortdiv.text(savedItinerary[j].item.place);
+        websiteButton.attr("href", savedItinerary[j].item.web);
+        deleteButton.attr("onClick", "removeItem('" + savedItinerary[j].item.place + "')");
+        fullSortable.addClass("itinerary-place");
+        $(".itinerary-content").find(".list-items").append(fullSortable);
       }
     }
     sortdiv
@@ -320,40 +327,59 @@ function listItems() {
 }
 //listItems();
 
-$(".itinerary-content").on("click", ".time", function(event) {
-  console.log($(event.target).parent().children(".saved-place").text());
-  var timeText = $(event.target).find("p").text();
-  var inputTime = $("<input>")
-      .attr("type", "text")
-      .attr("name", "time-input")
-      .val(timeText);
-  $(event.target).find("p").replaceWith(inputTime);
+function createHourSelect(timeText) {
+  var inputTime = $("<select>")
+    .attr("name", "time-select")
+    .val(timeText);
+  for (i = 0; i < 24; i++) {
+    var optionText = moment().hour(i).minute(0).format("h:mm A");
+    var optionTime = $("<option>")
+      .val(i)
+      .text(optionText);
+    inputTime.append(optionTime);
+  }
   inputTime.trigger("focus");
+  return inputTime;
+}
+function createCostInput(costText) {
+  var inputCost = $("<input>")
+    .attr("type", "number")
+    .attr("min", 1)
+    .attr("name", "cost-input")
+    .val(costText);
+  inputCost.trigger("focus");
+  return inputCost;
+}
+
+$(".itinerary-content").on("click", ".time", function(event) {
+  var timeText = $(event.target).find("p").text();
+  $(event.target).find("p").replaceWith(createHourSelect(timeText));
 });
-$(".itinerary-content").on("change", ".time", function(event) {
-  console.log($(event.target).parent().children(".saved-place").text());
-  var timeText = $(event.target).val();
+$(".itinerary-content .time").on("click", "p", function(event) {
+  var timeText = $(event.target).text();
+  $(event.target).replaceWith(createHourSelect(timeText));
+});
+$(".itinerary-content").on("blur", ".time", function(event) {
+  var timeText = moment().hour($(event.target).val()).minute(0).format("h:mm A");
   var saveTime = $("<p>")
-      .text(timeText);
+    .addClass("time")
+    .text(timeText);
   $(event.target).replaceWith(saveTime);
 });
 
 $(".itinerary-content").on("click", ".cost", function(event) {
-  console.log($(event.target).parent().children(".saved-place").text());
   var costText = $(event.target).find("p").text();
-  var inputCost = $("<input>")
-      .attr("type", "number")
-      .attr("min", 1)
-      .attr("name", "cost-input")
-      .val(costText);
-  $(event.target).find("p").replaceWith(inputCost);
-  inputCost.trigger("focus");
+  $(event.target).find("p").replaceWith(createCostInput(costText));
 });
-$(".itinerary-content").on("change", ".cost", function(event) {
-  console.log($(event.target).parent().children(".saved-place").text());
+$(".itinerary-content .cost").on("click", "p", function(event) {
+  var costText = $(event.target).text();
+  $(event.target).replaceWith(createCostInput(costText));
+});
+$(".itinerary-content").on("blur", ".cost", function(event) {
   var costText = $(event.target).val();
   var saveCost = $("<p>")
-      .text(costText);
+    .addClass("cost")
+    .text(costText);
   $(event.target).replaceWith(saveCost);
 });
 
@@ -389,6 +415,17 @@ function dragDropEnable(selectedDate) {
       },
       
       update: function(event, ui) {
+        if (!ui.sender) {
+          for (var i = 0; i < savedItinerary.length; i++) {
+            if (savedItinerary[i].item.place == $(ui.item).text() && $(ui.item).parent().hasClass("list-items")) {
+              savedItinerary[i].date = selectedDate;
+            } else if (savedItinerary[i].item.place == $(ui.item).text() && $(ui.item).parent().hasClass("initial")) {
+              savedItinerary[i].date = null;
+            }
+          }
+          console.log(savedItinerary);
+          saveItinerary();
+        }
         /*if (!ui.sender) {
           //var tempArr = savedPlaces;
           var tempObj = { items: [] };
@@ -518,14 +555,17 @@ function showDefaultBudget() {
 }
 // Cody's converter code
 function convert(currency1, currency2, value) {
-  const host = "api.frankfurter.app";
+  //const host = "api.frankfurter.app";
+  var convertURL = "https://api.exchangerate.host/convert?amount=" + value + "&from=" + currency1 + "&to=" + currency2 + "&places=2";
   fetch (
-      'https://' + host + '/latest?amount=' + value + '&from=' + currency1 + '&to=' + currency2
+    convertURL
+      //'https://' + host + '/latest?amount=' + value + '&from=' + currency1 + '&to=' + currency2
   )
   .then((val) => val.json())
   .then((val) => {
-          console.log(Object.values(val.rates)[0]);
-          $("#local-budget p").text(currencyInfo.destinationSymbol + Object.values(val.rates)[0]);
+          //console.log(Object.values(val.rates)[0]);
+          console.log(val);
+          $("#local-budget p").text(currencyInfo.destinationSymbol + /*Object.values(val.rates)[0]*/val.result);
           var localConversion = $("<span>")
             .addClass("convert-tag")
             .text("(local conversion)");

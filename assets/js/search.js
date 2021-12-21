@@ -96,7 +96,7 @@ function getSearchInfo() {
             currentSearch.activity = searchType;
             currentSearch.state = stateSearch;
             currentSearch.country = countrySearch;
-            saveLocationInfo();
+            //saveLocationInfo();
             console.log(currentSearch.city, currentSearch.state, currentSearch.country);
             latLon();
         }
@@ -147,6 +147,13 @@ function latLon() {
         })
         .then(function(data) {
             console.log(data);
+  
+            /*if (data.items[0].address.state) {
+                currentSearch.state = data.items[0].address.state;    
+            }
+            currentSearch.country = data.items[0].address.country;
+            saveLocationInfo();*/
+            
             console.log(geocodeURL);
             console.log(data.items[0].position.lat);
             console.log(data.items[0].position.lng);
@@ -236,7 +243,7 @@ function getDescription(result) {
                 response.json().then(function(data) {
                     console.log(data);
                     searchResultArr[result].description = data.extract;
-                    var image = data.originalimage;
+                    var image = data.thumbnail;
                     if (image && !image.source.toLowerCase().includes("logo")) {
                         searchResultArr[result].image = image.source;
                     } else {
@@ -249,9 +256,6 @@ function getDescription(result) {
             } else {
                 getWebURL(result);
             }
-        })
-        .catch(function(error){
-            noSearchResults();
         });
 }
 
@@ -288,9 +292,6 @@ function getWebURL(result) {
             if (webURL == "") {
                 displaySearch(result);
             }
-        })
-        .catch(function(error){
-            noSearchResults();
         });
 }
 /*for (var i = 0; i < dummyResults.length; i++) {
@@ -318,8 +319,8 @@ function displaySearch(result) {
                 if (data.data.result.items) {
                     // This allows for multiple images to be an option if the first one does not work
                     for (var i = 0; i < data.data.result.items.length; i++) {
-                        imageThumb = data.data.result.items[i].media;
-                        if (data.data.result.items[0].media) {
+                        imageThumb = data.data.result.items[i].thumbnail;
+                        if (data.data.result.items[0].thumbnail) {
                             break;
                         }
                     }
@@ -391,9 +392,6 @@ function displaySearch(result) {
             contentSpace.append(searchResult);
 
             getHeight();
-        })
-        .catch(function(error){
-            noSearchResults();
         });
     }
 }

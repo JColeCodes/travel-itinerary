@@ -398,6 +398,15 @@ input.radio-input {
   font-size: 1.3rem;
 }
 
+.time p, .cost p {
+  margin: 0;
+  padding: 0;
+}
+.time select, .cost input {
+  margin: 0;
+  padding: 5px;
+}
+
 
 /* MAP STYLING */
 .map {
