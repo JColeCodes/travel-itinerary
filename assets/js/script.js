@@ -313,6 +313,12 @@ function listItems() {
         websiteButton.attr("href", savedItinerary[j].item.web);
         deleteButton.attr("onClick", "removeItem('" + savedItinerary[j].item.place + "')");
         fullSortable.addClass("itinerary-place");
+        if (savedItinerary[j].item.time) {
+          timeP.text(moment().hour(savedItinerary[j].item.time).minute(0).format("h:mm A"));
+        }
+        if (savedItinerary[j].item.cost) {
+          costP.text(savedItinerary[j].item.cost);
+        }
         $(".itinerary-content").find(".list-items").append(fullSortable);
       }
     }
@@ -364,6 +370,13 @@ $(".itinerary-content").on("blur", ".time", function(event) {
   var saveTime = $("<p>")
     .addClass("time")
     .text(timeText);
+  console.log($(this).parent().children(".saved-place").text());
+  for (var i = 0; i < savedItinerary.length; i++) {
+    if (savedItinerary[i].item.place == $(this).parent().children(".saved-place").text()) {
+      savedItinerary[i].item.time = parseInt($(event.target).val());
+    }
+  }
+  saveItinerary();
   $(event.target).replaceWith(saveTime);
 });
 
@@ -376,10 +389,17 @@ $(".itinerary-content .cost").on("click", "p", function(event) {
   $(event.target).replaceWith(createCostInput(costText));
 });
 $(".itinerary-content").on("blur", ".cost", function(event) {
-  var costText = $(event.target).val();
+  var costText = parseInt($(event.target).val());
   var saveCost = $("<p>")
     .addClass("cost")
     .text(costText);
+  console.log($(this).parent().children(".saved-place").text());
+  for (var i = 0; i < savedItinerary.length; i++) {
+    if (savedItinerary[i].item.place == $(this).parent().children(".saved-place").text()) {
+      savedItinerary[i].item.cost = costText;
+    }
+  }
+  saveItinerary();
   $(event.target).replaceWith(saveCost);
 });
 
