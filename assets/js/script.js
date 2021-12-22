@@ -60,11 +60,11 @@ $( ".selector" ).datepicker({
   });
 
 dateInput.trigger("focus");
-});*/
+});
 $( ".selector" ).datepicker({
   changeMonth: true
 });
-
+*/
 
 
 // Local Storage
@@ -110,15 +110,23 @@ function saveItinerary() {
 }
 
 
+var currencyInfo = {
+  defaultCurrency: null,
+  defaultSymbol: null,
+  destinationCurrency: null,
+  destinationSymbol: null
+};
+
+/*
 for (var i = 0; i < savedPlaces.length; i++) {
 
-}
+}*/
 
 var currentSearch = {};
 if ("saved-location" in localStorage) {
   currentSearch = JSON.parse(localStorage.getItem("saved-location"));
 
-  destinationText = currentSearch.city;
+  var destinationText = currentSearch.city;
   if (currentSearch.state) {
     destinationText += ", " + currentSearch.state;
   }
@@ -183,7 +191,12 @@ function displayItinerary(day) {
   var dailyEstimateLabel = $("<div>")
     .addClass("estimate-label cell auto")
     .text("Daily estimate");
-  var dailyEstimateBox = $("<div>").addClass("estimate-box cell small-2");
+  var dailyEstimateSymbol = $("<span>");
+  var dailyEstimateNum = $("<p>");
+  var dailyEstimateBox = $("<div>")
+    .addClass("estimate-box cell small-2 grid-x")
+    .append(dailyEstimateSymbol)
+    .append(dailyEstimateNum);
   dailyEstimateEl
     .append(dailyEstimateLabel)
     .append(dailyEstimateBox);
@@ -213,6 +226,7 @@ function displayItinerary(day) {
   }
   dragDropEnable(day);
   listItems();
+  autoCalculate();
 }
 displayItinerary(firstDay);
 
@@ -258,11 +272,20 @@ function listItems() {
       .addClass("grid-x");
     var timeP = $("<p>");
     var costP = $("<p>");
+    var costSymbol = $("<span>");
+    if (settingsInfo.displayCosts == "default") {
+      costSymbol.text(currencyInfo.defaultSymbol);
+      $(".estimate-box span").text(currencyInfo.defaultSymbol);
+    } else if (settingsInfo.displayCosts == "destination") {
+      costSymbol.text(currencyInfo.destinationSymbol);
+      $(".estimate-box span").text(currencyInfo.destinationSymbol);
+    }
     var timeDiv = $("<div>")
       .addClass("time cell small-2")
       .append(timeP);
     var costDiv = $("<div>")
-      .addClass("cost cell small-2")
+      .addClass("cost cell small-2 grid-x")
+      .append(costSymbol)
       .append(costP);
     var sortdiv = $("<div>").addClass("saved-place cell auto");
 
@@ -337,14 +360,16 @@ function createHourSelect(timeText) {
   var inputTime = $("<select>")
     .attr("name", "time-select")
     .val(timeText);
-  for (i = 0; i < 24; i++) {
+  for (var i = 0; i < 24; i++) {
     var optionText = moment().hour(i).minute(0).format("h:mm A");
     var optionTime = $("<option>")
       .val(i)
       .text(optionText);
+    if (optionText == timeText) {
+      optionTime.prop("selected", true);
+    }
     inputTime.append(optionTime);
   }
-  inputTime.trigger("focus");
   return inputTime;
 }
 function createCostInput(costText) {
@@ -352,23 +377,25 @@ function createCostInput(costText) {
     .attr("type", "number")
     .attr("min", 1)
     .attr("name", "cost-input")
+    .addClass("cell auto")
     .val(costText);
-  inputCost.trigger("focus");
   return inputCost;
 }
 
 $(".itinerary-content").on("click", ".time", function(event) {
-  var timeText = $(event.target).find("p").text();
-  $(event.target).find("p").replaceWith(createHourSelect(timeText));
+  event.stopPropagation();
+  var timeText = $(this).find("p").text();
+  $(this).find("p").replaceWith(createHourSelect(timeText));
+  $("select").trigger("focus");
 });
-$(".itinerary-content .time").on("click", "p", function(event) {
+/*$(".itinerary-content .time").on("click", "p", function(event) {
   var timeText = $(event.target).text();
   $(event.target).replaceWith(createHourSelect(timeText));
-});
+  $("select").trigger("focus");
+});*/
 $(".itinerary-content").on("blur", ".time", function(event) {
   var timeText = moment().hour($(event.target).val()).minute(0).format("h:mm A");
   var saveTime = $("<p>")
-    .addClass("time")
     .text(timeText);
   console.log($(this).parent().children(".saved-place").text());
   for (var i = 0; i < savedItinerary.length; i++) {
@@ -381,17 +408,19 @@ $(".itinerary-content").on("blur", ".time", function(event) {
 });
 
 $(".itinerary-content").on("click", ".cost", function(event) {
-  var costText = $(event.target).find("p").text();
-  $(event.target).find("p").replaceWith(createCostInput(costText));
+  event.stopPropagation();
+  var costText = $(this).find("p").text();
+  $(this).find("p").replaceWith(createCostInput(costText));
+  $("input").trigger("focus");
 });
-$(".itinerary-content .cost").on("click", "p", function(event) {
+/*$(".itinerary-content .cost").on("click", "p", function(event) {
   var costText = $(event.target).text();
   $(event.target).replaceWith(createCostInput(costText));
-});
+  $("input").trigger("focus");
+});*/
 $(".itinerary-content").on("blur", ".cost", function(event) {
   var costText = parseInt($(event.target).val());
   var saveCost = $("<p>")
-    .addClass("cost")
     .text(costText);
   console.log($(this).parent().children(".saved-place").text());
   for (var i = 0; i < savedItinerary.length; i++) {
@@ -401,6 +430,7 @@ $(".itinerary-content").on("blur", ".cost", function(event) {
   }
   saveItinerary();
   $(event.target).replaceWith(saveCost);
+  autoCalculate();
 });
 
 
@@ -518,17 +548,7 @@ function dragDropEnable(selectedDate) {
 }
 
 
-// DISPLAY DESTINATION
-var destinationText = "";
-
-
 // EDIT BUDGET
-var currencyInfo = {
-  defaultCurrency: null,
-  defaultSymbol: null,
-  destinationCurrency: null,
-  destinationSymbol: null
-};
 function showDefaultBudget() {
   if (!currentSearch.budget) {
     var inputBudget = $("<input>")
@@ -573,6 +593,9 @@ function showDefaultBudget() {
     localStorage.setItem("saved-location", JSON.stringify(currentSearch));
   });
 }
+
+var zeroDecimal = ["BIF", "CLP", "DJF", "GNF", "ISK", "JPY", "KMF", "KRW", "PYG", "RWF", "UGX", "UYI", "VND", "VUV", "XAF", "XOF", "XPF"];
+
 // Cody's converter code
 function convert(currency1, currency2, value) {
   //const host = "api.frankfurter.app";
@@ -585,11 +608,45 @@ function convert(currency1, currency2, value) {
   .then((val) => {
           //console.log(Object.values(val.rates)[0]);
           console.log(val);
-          $("#local-budget p").text(currencyInfo.destinationSymbol + /*Object.values(val.rates)[0]*/val.result);
+          var convertedBudget = val.result;
+          for (var i = 0; i < zeroDecimal.length; i++) {
+            if (currency2 == zeroDecimal[i]) {
+              convertedBudget = Math.round(val.result);
+              break;
+            }
+          }
+          $("#local-budget p").text(currencyInfo.destinationSymbol + /*Object.values(val.rates)[0]*/convertedBudget);
           var localConversion = $("<span>")
             .addClass("convert-tag")
             .text("(local conversion)");
           $("#local-budget p").append(localConversion);
+      });
+}
+
+function convertCosts(currency1, currency2, value, placeName) {
+  var convertURL = "https://api.exchangerate.host/convert?amount=" + value + "&from=" + currency1 + "&to=" + currency2 + "&places=2";
+  fetch (convertURL)
+  .then((val) => val.json())
+  .then((val) => {
+          console.log(val.result);
+          var convertedBudget = val.result;
+          for (var i = 0; i < zeroDecimal.length; i++) {
+            if (currency2 == zeroDecimal[i]) {
+              convertedBudget = Math.round(val.result);
+              break;
+            }
+          }
+          for (var i = 0; i < savedItinerary.length; i++) {
+            if (savedItinerary[i].item.place == placeName) {
+              savedItinerary[i].item.cost = convertedBudget;
+              console.log(placeName);
+              console.log("item cost", savedItinerary[i].item.cost);
+            }
+          }
+          console.log(savedItinerary);
+          saveItinerary();
+          listItems();
+          autoCalculate();
       });
 }
 
@@ -617,11 +674,28 @@ function getCurrSymbol(countryName, searchType) {
               break;
             }
           }
+          listItems();
       });
 }
 getCurrSymbol(settingsInfo.defaultCountry, "default");
 getCurrSymbol(currentSearch.country, "destination");
 console.log(currentSearch.country);
+
+
+// AUTO-CALCULATE COSTS FOR THE DAY
+function autoCalculate() {
+  var dailyTotal = 0;
+  $(".cost p").each(function() {
+    console.log(parseFloat($(this).text()));
+    var itemCost = parseFloat($(this).text());
+    if (isNaN(itemCost)) {
+      itemCost = 0;
+    }
+    dailyTotal += itemCost;
+  });
+  console.log(dailyTotal);
+  $(".estimate-box p").text(dailyTotal);
+}
 
 
 // EDIT DATE RANGE
@@ -791,7 +865,7 @@ var settingsContentDisplayCost = $("<div>")
   .addClass("setting-item")
   .html("<h3>Display costs as...</h3>\
   <div class='radio-select'>\
-    <input type='radio' name='search-display' id='default' value='0' checked />\
+    <input type='radio' name='search-display' id='default' value='0' />\
     <label for='default'>Default Country</label>\
   </div>\
   <div class='radio-select'>\
@@ -809,3 +883,31 @@ settingsContentEl
   .append(settingsContentDefault)
   .append(settingsContentDisplayCost)
   .append(settingsContentClearItems);
+
+$("input[name='search-display']").each( function() {
+  if ($(this).attr("id") == settingsInfo.displayCosts) {
+    $(this).prop("checked", true);
+  }
+});
+
+settingsContentDisplayCost.on("click", "input[name='search-display']", function(event) {
+  console.log($(event.target).attr("id"));
+  $(event.target).prop("checked", true);
+  settingsInfo.displayCosts = $(event.target).attr("id");
+  saveSettings();
+  console.log(settingsInfo.displayCosts);
+  if (settingsInfo.displayCosts == "default") {
+    var curr1 = currencyInfo.destinationCurrency;
+    var curr2 = currencyInfo.defaultCurrency;
+  } else {
+    var curr1 = currencyInfo.defaultCurrency;
+    var curr2 = currencyInfo.destinationCurrency;
+  }
+  $(".cost p").each(function() {
+    console.log(".COST P EACH", $(this).text());
+    console.log(curr1, curr2, $(this).text());
+    var placeName = $(this).parent().parent().children(".saved-place").text();
+    convertCosts(curr1, curr2, $(this).text(), placeName);
+    //console.log($(this).parent().parent().children(".saved-place").text());
+  });
+});
