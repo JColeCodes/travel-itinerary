@@ -407,6 +407,11 @@ input.radio-input {
   margin: 0;
   padding: 5px;
 }
+#custom-cost-symbol {
+  line-height: 1;
+  margin: 0 5px 0 0;
+  font-size: 1.9rem;
+}
 
 
 /* MAP STYLING */

@@ -92,6 +92,27 @@ var savedItinerary;
 console.log(savedItinerary);
 if ("itinerary-save-info" in localStorage) {
   savedItinerary = JSON.parse(localStorage.getItem("itinerary-save-info"));
+
+  if (savedItinerary.length != savedPlaces.length) {
+    var newPlacesTemp = [];
+    for (var i = 0; i < savedPlaces.length; i++) {
+      var arrayMatch;
+      for (var j = 0; j < savedItinerary.length; j++) {
+        if (savedPlaces[i].place == savedItinerary[j].item.place) {
+          arrayMatch = true;
+          break;
+        } else {
+          arrayMatch = false;
+        }
+      }
+      if (!arrayMatch) {
+        newPlacesTemp.push({date: null, item: savedPlaces[i]});
+      }
+    }
+    console.log(newPlacesTemp);
+    savedItinerary = savedItinerary.concat(newPlacesTemp);
+    saveItinerary();
+  }
 } else {
   savedItinerary = [];
   for (var i = 0; i < savedPlaces.length; i++) {
@@ -266,7 +287,7 @@ $(itineraryContentEl).on("click", "#next", function() {
 function listItems() {
   $(".initial").html("");
   $(".list-items").html("");
-  for (var i = 0; i < savedPlaces.length; i++) {
+  for (var i = 0; i < savedItinerary.length; i++) {
     //var dataName = savedPlaces[i].place;
     var fullSortable = $("<div>")
       .addClass("grid-x");
@@ -276,9 +297,11 @@ function listItems() {
     if (settingsInfo.displayCosts == "default") {
       costSymbol.text(currencyInfo.defaultSymbol);
       $(".estimate-box span").text(currencyInfo.defaultSymbol);
+      $("#custom-cost-symbol").text(currencyInfo.defaultSymbol);
     } else if (settingsInfo.displayCosts == "destination") {
       costSymbol.text(currencyInfo.destinationSymbol);
       $(".estimate-box span").text(currencyInfo.destinationSymbol);
+      $("#custom-cost-symbol").text(currencyInfo.destinationSymbol);
     }
     var timeDiv = $("<div>")
       .addClass("time cell small-2")
@@ -301,10 +324,10 @@ function listItems() {
     console.log(savedPlaces);
     console.log(savedItinerary);
 
-    for (var j = 0; j < savedItinerary.length; j++) {
-      console.log("savedItinerary[j].date", savedItinerary[j].date);
-      console.log("selected date", selectedDate);
-      if (savedItinerary[j].date == null && savedItinerary[j].item.place == savedPlaces[i].place) {
+    //for (var j = 0; j < savedItinerary.length; j++) {
+      //console.log("savedItinerary[j].date", savedItinerary[j].date);
+      //console.log("selected date", selectedDate);
+      if (savedItinerary[i].date == null) {
         /*for (var k = 0; k < savedItinerary[j].items.length; k++) {
           if (savedItinerary[a].items[n].place == savedPlaces[i].place){
             sortdiv.text(savedItinerary[a].items[n].place);
@@ -315,13 +338,13 @@ function listItems() {
             console.log(savedItinerary[a].items[n]);
           }
         }*/
-      console.log("savedItinerary[j].item.place", savedItinerary[j].item.place);
-        sortdiv.text(savedItinerary[j].item.place);
-        websiteButton.attr("href", savedItinerary[j].item.web);
-        deleteButton.attr("onClick", "removeItem('" + savedItinerary[j].item.place + "')");
+        console.log("savedItinerary[i].item.place", savedItinerary[i].item.place);
+        sortdiv.text(savedItinerary[i].item.place);
+        websiteButton.attr("href", savedItinerary[i].item.web);
+        deleteButton.attr("onClick", "removeItem('" + savedItinerary[i].item.place + "')");
         fullSortable.addClass("hide-time-cost initial-place");
         $(".initial").append(fullSortable);
-      } else if (savedItinerary[j].date == selectedDate && savedItinerary[j].item.place == savedPlaces[i].place) {
+      } else if (savedItinerary[i].date == selectedDate) {
         /*for (var n = 0; n < savedItinerary[a].items.length; n++) {
           if (savedItinerary[a].items[n].place == savedPlaces[i].place){
             sortdiv.text(savedItinerary[a].items[n].place);
@@ -332,19 +355,23 @@ function listItems() {
             console.log(savedItinerary[a].items[n]);
           }
         }*/
-        sortdiv.text(savedItinerary[j].item.place);
-        websiteButton.attr("href", savedItinerary[j].item.web);
-        deleteButton.attr("onClick", "removeItem('" + savedItinerary[j].item.place + "')");
+        sortdiv.text(savedItinerary[i].item.place);
+        websiteButton.attr("href", savedItinerary[i].item.web);
+        deleteButton.attr("onClick", "removeItem('" + savedItinerary[i].item.place + "')");
         fullSortable.addClass("itinerary-place");
-        if (savedItinerary[j].item.time) {
-          timeP.text(moment().hour(savedItinerary[j].item.time).minute(0).format("h:mm A"));
+        if (savedItinerary[i].item.time) {
+          timeP.text(moment().hour(savedItinerary[i].item.time).minute(0).format("h:mm A"));
         }
-        if (savedItinerary[j].item.cost) {
-          costP.text(savedItinerary[j].item.cost);
+        if (savedItinerary[i].item.cost) {
+          costP.text(savedItinerary[i].item.cost);
         }
         $(".itinerary-content").find(".list-items").append(fullSortable);
+
+        if (!savedItinerary[i].item.web) {
+          websiteButton.addClass("hidden");
+        }
       }
-    }
+    //}
     sortdiv
       .append(websiteButton)
       .append(deleteButton);
@@ -419,7 +446,7 @@ $(".itinerary-content").on("click", ".cost", function(event) {
   $("input").trigger("focus");
 });*/
 $(".itinerary-content").on("blur", ".cost", function(event) {
-  var costText = parseInt($(event.target).val());
+  var costText = parseFloat($(event.target).val());
   var saveCost = $("<p>")
     .text(costText);
   console.log($(this).parent().children(".saved-place").text());
@@ -466,13 +493,55 @@ function dragDropEnable(selectedDate) {
       
       update: function(event, ui) {
         if (!ui.sender) {
+          var currDayTemp = [];
+          var otherDayTemp = [];
+          if ($(ui.item).parent().hasClass("list-items")) {
+            var isDay = true;
+          } else if ($(ui.item).parent().hasClass("initial")) {
+            var isDay = false;
+          }
+          //var nullDayTemp = [];
           for (var i = 0; i < savedItinerary.length; i++) {
-            if (savedItinerary[i].item.place == $(ui.item).text() && $(ui.item).parent().hasClass("list-items")) {
+            if (savedItinerary[i].item.place == $(ui.item).text() && isDay) {
               savedItinerary[i].date = selectedDate;
-            } else if (savedItinerary[i].item.place == $(ui.item).text() && $(ui.item).parent().hasClass("initial")) {
+            } else if (savedItinerary[i].item.place == $(ui.item).text() && !isDay) {
               savedItinerary[i].date = null;
             }
+            if ((savedItinerary[i].date != null && !isDay) || (savedItinerary[i].date != selectedDate && isDay)) {
+              console.log(savedItinerary[i].date);
+              otherDayTemp.push(savedItinerary[i]);
+            }
           }
+
+          /*if (!isDay) {
+            $(this).children().each(function() {
+              var orderedTitle = $(this).find(".saved-place").text();
+              for (var i = 0; i < savedItinerary.length; i++) {
+                if (orderedTitle == savedItinerary[i].item.place) {
+                  nullDayTemp.push(savedItinerary[i]);
+                }
+              }
+            });
+          } else {*/
+            $(this).children().each(function() {
+              console.log($(this).find(".saved-place").text());
+              var orderedTitle = $(this).find(".saved-place").text();
+              for (var i = 0; i < savedItinerary.length; i++) {
+                if (orderedTitle == savedItinerary[i].item.place) {
+                  currDayTemp.push(savedItinerary[i]);
+                }
+              }
+            });
+          //}
+          
+          console.log(otherDayTemp);
+          console.log(currDayTemp);
+
+          var newArrTemp = currDayTemp.concat(otherDayTemp);
+
+          console.log(newArrTemp);
+
+          savedItinerary = newArrTemp;
           console.log(savedItinerary);
           saveItinerary();
         }
@@ -817,6 +886,44 @@ $("#time-frame").on("focus", "input", function() {
   }
 });
 
+// ADD CUSTOM ACTIVITY
+for (var i = 0; i < 24; i++) {
+  var optionText = moment().hour(i).minute(0).format("h:mm A");
+  var optionTime = $("<option>")
+  .val(i)
+  .text(optionText);
+  $("select[name='custom-time']").append(optionTime);
+}
+
+function customActivity() {
+  console.log($("select[name='custom-time']").val());
+  console.log($("input[name='custom-activity']").val());
+  console.log($("input[name='custom-cost']").val());
+  console.log(selectedDate);
+
+  if ($("input[name='custom-activity']").val()){
+    var customObject = {
+      date: selectedDate,
+      item: {
+        place: $("input[name='custom-activity']").val(),
+        time: parseInt($("select[name='custom-time']").val()),
+        cost: parseFloat($("input[name='custom-cost']").val()),
+        web: null
+      }
+    }
+
+    $("#submit-custom").attr("data-close","");
+
+    console.log(customObject);
+
+    savedItinerary.push(customObject);
+
+    console.log(savedItinerary);
+    saveItinerary();
+    listItems();
+  }
+}
+
 
 // SETTINGS
 var settingsContentEl = $(".settings-content");
@@ -886,13 +993,14 @@ settingsContentEl
 
 $("input[name='search-display']").each( function() {
   if ($(this).attr("id") == settingsInfo.displayCosts) {
-    $(this).prop("checked", true);
+    $(this).prop("checked", true).prop("disabled", true);
   }
 });
 
 settingsContentDisplayCost.on("click", "input[name='search-display']", function(event) {
   console.log($(event.target).attr("id"));
-  $(event.target).prop("checked", true);
+  $("input[name='search-display']").prop("disabled", false);
+  $(event.target).prop("checked", true).prop("disabled", true);
   settingsInfo.displayCosts = $(event.target).attr("id");
   saveSettings();
   console.log(settingsInfo.displayCosts);

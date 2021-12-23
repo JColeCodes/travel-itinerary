@@ -119,12 +119,15 @@
     <div class="reveal settings-body" id="customAddModal" data-reveal>
         <h2>Add custom activity</h2>
         <h3>Time</h3>
-        <input type="text" name="custom-time" />
+        <select name="custom-time"></select>
         <h3>Activity</h3>
         <input type="text" name="custom-activity" />
         <h3>Estimated Cost</h3>
-        <input type="number" name="custom-cost" />
-        <button type="submit">Add to itinerary</button>
+        <div class="grid-x">
+            <span id="custom-cost-symbol" class="cell shrink"></span>
+            <input type="number" name="custom-cost" class="cell auto" />
+        </div>
+        <button type="submit" id="submit-custom" onClick="customActivity()">Add to itinerary</button>
         <button class="close-button" data-close aria-label="Close modal" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
