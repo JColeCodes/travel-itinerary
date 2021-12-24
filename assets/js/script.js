@@ -13,7 +13,7 @@ function pageReady()
     var button = document.getElementById("go_to_my_itinerary");
     if (button != null){
         button.addEventListener("click", function(){
-            window.location = "itinerary.html";
+            window.location = "./itinerary.html";
         });
     }
 
@@ -27,7 +27,7 @@ function pageReady()
     button = document.getElementById("go_to_search");  
     if (button != null){
         button.addEventListener("click", function(){
-            window.location = "index.html";
+            window.location = "./index.html";
         });
     }
 
@@ -193,13 +193,13 @@ function displayItinerary(day) {
   var itineraryTable = $("<div>").addClass("itinerary-table");
   var tableTitlesEl = $("<div>").addClass("grid-x table-titles");
   var tableTitleTime = $("<div>")
-    .addClass("cell small-2")
+    .addClass("cell small-6 large-2 time")
     .text("Time");
   var tableTitleActivity = $("<div>")
-    .addClass("cell auto")
+    .addClass("cell small-12 large-auto saved-place")
     .text("Activity");
   var tableTitleCost = $("<div>")
-    .addClass("cell small-2")
+    .addClass("cell small-6 large-2 cost")
     .text("Est. Cost");
   tableTitlesEl
     .append(tableTitleTime)
@@ -215,7 +215,7 @@ function displayItinerary(day) {
   var dailyEstimateSymbol = $("<span>");
   var dailyEstimateNum = $("<p>");
   var dailyEstimateBox = $("<div>")
-    .addClass("estimate-box cell small-2 grid-x")
+    .addClass("estimate-box cell small-6 large-2 grid-x")
     .append(dailyEstimateSymbol)
     .append(dailyEstimateNum);
   dailyEstimateEl
@@ -304,13 +304,13 @@ function listItems() {
       $("#custom-cost-symbol").text(currencyInfo.destinationSymbol);
     }
     var timeDiv = $("<div>")
-      .addClass("time cell small-2")
+      .addClass("cell small-6 large-2 time")
       .append(timeP);
     var costDiv = $("<div>")
-      .addClass("cost cell small-2 grid-x")
+      .addClass("cell small-6 large-2 grid-x cost")
       .append(costSymbol)
       .append(costP);
-    var sortdiv = $("<div>").addClass("saved-place cell auto");
+    var sortdiv = $("<div>").addClass("cell auto saved-place");
 
     var websiteButton = $("<a>")
       .addClass("web-button")
@@ -1018,4 +1018,34 @@ settingsContentDisplayCost.on("click", "input[name='search-display']", function(
     convertCosts(curr1, curr2, $(this).text(), placeName);
     //console.log($(this).parent().parent().children(".saved-place").text());
   });
+});
+
+settingsContentClearItems.on("click", ".clear-items", function() {
+  console.log("Delete button pressed");
+  var savedPlaces = [];
+
+  var savedItinerary = [];
+
+  var currencyInfo = {
+    defaultCurrency: null,
+    defaultSymbol: null,
+    destinationCurrency: null,
+    destinationSymbol: null
+  };
+
+  var currentSearch = {
+    activity: null,
+    budget: null,
+    city: null,
+    country: null,
+    endDate: null,
+    startDate: null
+  };
+
+  console.log(savedPlaces, savedItinerary, currencyInfo, currentSearch);
+  savedPlaces();
+  saveSettings();
+  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+
+  window.location = "./index.html";
 });
