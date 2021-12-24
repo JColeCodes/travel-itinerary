@@ -175,9 +175,13 @@ function searchResults(lat, lon) {
         }
     }
     // TO-DO: Get search to look up searchType's apiParam by the input activity identifier
-    var placesURL = "https://api.geoapify.com/v2/places?categories=" + activity + "&filter=circle:" + lon + "," + lat + ",5000&limit=20&apiKey=5f64f49cb696477d8dcdf83ec8fc94f2";
+    var placesURL = "https://api.geoapify.com/v2/places?categories=" + activity + "&filter=circle:" + lon + "," + lat + ",5000&limit=40&apiKey=5f64f49cb696477d8dcdf83ec8fc94f2";
 
     var numberOfResults = 0;
+
+    var latinLetters = "abcdefghijklnopqrstuvwxyz";
+    latinLetters = latinLetters.split("");
+    console.log(latinLetters);
 
     // Run fetch
     fetch(placesURL)
@@ -194,11 +198,11 @@ function searchResults(lat, lon) {
               image: url,
               description: string - empty or filled,
               web: url } */
+
             for (var i = 0; i < data.features.length; i++) {
                 var dataItem = data.features[i].properties;
                 console.log(dataItem.name);
                 //var address = dataItem.address_line2;
-                numberOfResults++;
 
                 var placeObject = {
                     place: dataItem.address_line1,
@@ -207,9 +211,31 @@ function searchResults(lat, lon) {
                     description: "",
                     web: ""
                 }
-                searchResultArr.push(placeObject);
+                //searchResultArr.push(placeObject);
                 // Instead of passing all this stufd through the functions, just save to object array
                 //getDescription(dataItem.address_line1, city, address);
+                var duplicateItem;
+                for (var j = 0; j < searchResultArr.length; j++) {
+                    if (searchResultArr[j].place == placeObject.place) {
+                        duplicateItem = true;
+                        break;
+                    } else {
+                        duplicateItem = false;
+                    }
+                }
+                var placeLower = placeObject.place.toLowerCase();
+                for (var j = 0; j < latinLetters.length; j++) {
+                    if (placeLower.includes(latinLetters[j])){
+                        duplicateItem = false;
+                        break;
+                    } else {
+                        duplicateItem = true;
+                    }
+                }
+                if (!duplicateItem) {
+                    numberOfResults++;
+                    searchResultArr.push(placeObject);
+                }
             }
             
             currentSearch.state = data.features[0].properties.state;
@@ -272,11 +298,12 @@ function getWebURL(result) {
             var website = data.data.result.items.mainline;
             var webURL = "";
             for (var i = 0; i < website.length; i++) {
-                if (website[i].type = "web") {
-                    for (var n = 0; n < website[i].items.length; n++) {
-                        var websiteURL =  website[i].items[n].url;
+                if (website[i].type = "web" && website[i].items) {
+                    for (var j = 0; j < website[i].items.length; j++) {
+                        var websiteURL =  website[i].items[j].source;
                         if (websiteURL) {
-                            if (!websiteURL.includes("wikipedia") && !websiteURL.includes("tripadvisor") && !websiteURL.includes("bing") && !websiteURL.includes("hotel") && !website[i].items[n].media) {
+                            websiteURL = websiteURL.toLowerCase();
+                            if (websiteURL.includes("http") && !websiteURL.includes("wikipedia") && !websiteURL.includes("tripadvisor") && !websiteURL.includes("bing") && !websiteURL.includes("youtube") && !websiteURL.includes("google") && !websiteURL.includes("yahoo") && !websiteURL.includes("hotel") && !websiteURL.includes("photo") && !websiteURL.includes("map") && !website[i].items[j].media) {
                                 searchResultArr[result].web = websiteURL;
                                 break;
                             }

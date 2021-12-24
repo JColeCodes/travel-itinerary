@@ -597,7 +597,7 @@ span.convert-tag {
   .table-titles div { margin: 0; border: 1px solid #edece9; }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 639px) {
   #calendar tr.head td {
     color: #f9f8f5;
     font-size: .8rem;
@@ -606,9 +606,6 @@ span.convert-tag {
   .sidebar-element {
     margin: 0;
   }
-}
-
-@media screen and (max-width: 425px) {
   .title_buttons {
     padding-top: 20px;
     text-align: center;
@@ -629,5 +626,8 @@ span.convert-tag {
   }
   #cal-wrap {
     max-width: calc(100% - 50px);
+  }
+  .search-text {
+    padding: 10px 0 0 0;
   }
 }
