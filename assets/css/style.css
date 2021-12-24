@@ -585,7 +585,9 @@ span.convert-tag {
   .map {
     height: 360px;
   }
-
+  .search-text h2 {
+    line-height: 1;
+  }
   .add-to-itinerary {
     position: relative;
     bottom: 0;
@@ -615,7 +617,7 @@ span.convert-tag {
   }
   .sidebar h3 {
     margin-top: 20px;
-}
+  }
   .map_div .explore {
     float: none;
     margin: 10px auto;

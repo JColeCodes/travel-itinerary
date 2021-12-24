@@ -259,7 +259,14 @@ for (var i = 0; i < searchResultArr.length; i++) {
 
 // Get place description, if one can be found
 function getDescription(result) {
-    var wikipediaURL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchResultArr[result].place;
+    //var wikipediaURL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchResultArr[result].place;
+    var searchTerm;
+    if (searchResultArr[result].place.toLowerCase().includes(currentSearch.city.toLowerCase())) {
+        searchTerm = searchResultArr[result].place;
+    } else {
+        searchTerm = searchResultArr[result].place + " " + currentSearch.city;
+    }
+    var wikipediaURL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchTerm;
 
     // Run fetch
     fetch(wikipediaURL)
