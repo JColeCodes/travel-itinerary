@@ -7,4 +7,6 @@ The technologies used in order to make this application include: Foundation css 
 [View the live Travel Itinerary page on GitHub.](https://jcolecodes.github.io/travel-itinerary-project-01/ )
 
 # Screenshot
-![Screenshot of the travel itinerary](./screenshot.png)
+![Screenshot of the travel itinerary index](./screenshot-index.jpg)
+![Screenshot of the travel itinerary results page](./screenshot-results.jpg)
+![Screenshot of the travel itinerary itinerary management page](./screenshot-itinerary.jpg)
