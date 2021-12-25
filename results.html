@@ -20,10 +20,12 @@
     <!-- Header -->
       <header>
         <div class="title_div grid-x">
+            <!-- Title & link to index -->
             <div class="title_text cell small-12 medium-auto">
                 <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
                 <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
+            <!-- Button to go to itinerary page -->
             <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_my_itinerary" id="go_to_my_itinerary">GO TO MY ITINERARY</button>
                 <button class="settings" data-open="settingsModal"><i class="fas fa-cog"></i></button>
@@ -34,56 +36,61 @@
     <!-- Main Body Content -->
     <main class="grid-x">
         <div class="left_column_div sidebar cell small-12 medium-5 large-4">
+            <!-- Sidebar -->
+            <!-- Adjust search results -->
             <div class="sidebar-element">
                 <h3>Adjust Search Results</h3>
                 <div class="search-params" id="adjust-results">
-                    <div class="cell radio-select">
-                        <input type="radio" id="historic" name="search-type" value="0">
-                        <label for="historic">Historic Buildings</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="sights" name="search-type" value="0">
-                        <label for="sights">Tourist Sites</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="heritage" name="search-type" value="0">
-                        <label for="heritage">Heritage Sites</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="museum" name="search-type" value="0">
-                        <label for="museum">Museums</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="culture" name="search-type" value="0">
-                        <label for="culture">Cultural Centers</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="manmade" name="search-type" value="0">
-                        <label for="manmade">Man-made Locations</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="natural" name="search-type" value="0">
-                        <label for="natural">Natural Locations</label>
-                    </div>
-                    <div class="cell radio-select">
-                        <input type="radio" id="nationalpark" name="search-type" value="0">
-                        <label for="nationalpark">National Parks</label>
-                    </div>
-                        <!-- <div class="grid-x">
-                            <input type="radio" id="other-search" name="search-type" value="0" class="cell shrink">
-                            <input id="search_for_something_else" type="text" name="other-search" class="cell auto radio-input" placeholder="Search for something else" />
-                        </div> IMPLEMENT THIS LATER -->
+                    <!-- Radio select options -->
+                    <div class="grid-y">
+                        <!-- Historic Buildings -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="historic" name="search-type" value="0">
+                            <label for="historic">Historic Buildings</label>
+                        </div>
+                        <!-- Tourist Sites -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="sights" name="search-type" value="0">
+                            <label for="sights">Tourist Sites</label>
+                        </div>
+                        <!-- Heritage Sites, including UNESCO -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="heritage" name="search-type" value="0">
+                            <label for="heritage">Heritage Sites</label>
+                        </div>
+                        <!-- Museums -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="museum" name="search-type" value="0">
+                            <label for="museum">Museums</label>
+                        </div>
+                        <!-- Cultural Centers -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="culture" name="search-type" value="0">
+                            <label for="culture">Cultural Centers</label>
+                        </div>
+                        <!-- Man-made, like bridges, lighthouses, etc. -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="manmade" name="search-type" value="0">
+                            <label for="manmade">Man-made Locations</label>
+                        </div>
+                        <!-- Natural, like rivers, dunes, etc. -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="natural" name="search-type" value="0">
+                            <label for="natural">Natural Locations</label>
+                        </div>
+                        <!-- National Parks, like Arches or Yellowstone -->
+                        <div class="cell radio-select">
+                            <input type="radio" id="nationalpark" name="search-type" value="0">
+                            <label for="nationalpark">National Parks</label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        <!-- Search results (dynamically added) -->
         <div class="search-panel cell small-12 medium-7 large-8">
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer></footer>
 
     <!-- Modal -->
     <div class="reveal settings-body" id="settingsModal" data-reveal>
@@ -93,7 +100,6 @@
         </button>
     </div>
 
-    
     <!-- jQuery & jQuery UI Scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>

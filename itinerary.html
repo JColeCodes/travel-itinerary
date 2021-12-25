@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap">
-    <!-- calendar css -->
-    <link href="./assets/css/calendar.css" rel="stylesheet">
     <!-- Custom Styling -->
     <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
@@ -22,10 +20,12 @@
     <!-- Header -->
     <header>
         <div class="title_div grid-x">
+            <!-- Title & link to index -->
             <div class="title_text cell small-12 medium-auto">
                 <h1 class="main_title"><a href="./index.html">Travel Through Time</a></h1>
                 <div class="secondary_title">The History Lover's Travel Itinerary</div>
             </div>
+            <!-- Button to go back to search & open settings -->
             <div class="title_buttons cell small-12 medium-shrink">
                 <button class="go_to_search" id="go_to_search">GO TO SEARCH</button>
                 <button class="settings" data-open="settingsModal"><i class="fas fa-cog"></i></button>
@@ -36,44 +36,28 @@
     <!-- Main Body Content -->
     <main class="grid-x">
         <div class="left_column_div sidebar cell small-12 medium-5 large-4">
+            <!-- Sidebar -->
+            <!-- Trip Information -->
             <div class="sidebar-element">
                 <h3>Trip Information</h3>
                 <div class="trip-info" id="trip_information_sub_div">
+                    <!-- Destination - Retrieved from search -->
                     <h4>Destination:</h4>
                     <p id="destination-name"></p>
+                    <!-- Time frame -->
                     <h4>Time Frame:</h4>
                     <div id="time-frame" class="grid-x align-middle">
                         <span id="start-date-span" class="cell small-12 large-shrink date-to"></span>
                         <span class='cell shrink date-to'>to</span>
                         <span id="end-date-span" class="cell small-12 large-shrink date-to"></span>
                     </div>
-                        <!-- calendar html -->
-                        <div id="cal-wrap" class="calendar hidden">
-                            <!-- (A) PERIOD SELECTOR -->
-                            <div id="cal-date">
-                            <select id="cal-mth"></select>
-                            <select id="cal-yr"></select>
-                            </div>
-                    
-                            <!-- (B) CALENDAR -->
-                            <div id="cal-container"></div>
-                    
-                            <!-- (C) EVENT FORM -->
-                            <form id="cal-event">
-                            <h1 id="evt-head"></h1>
-                            <div id="evt-date"></div>
-                            <textarea id="evt-details" required></textarea>
-                            <input id="evt-close" type="button" value="Close"/>
-                            <input id="evt-del" type="button" value="Delete"/>
-                            <input id="evt-save" type="submit" value="Save"/>
-                            </form>
-                        </div>
+                    <!-- Budget -->
                     <h4>Budget:</h4>
                     <div id="current-budget"><p></p></div>
                     <div id="local-budget"><p></p></div>
                 </div>
             </div>
-
+            <!-- Saved activities - unsorted -->
             <div class="sidebar-element">
                 <h3>Saved Activities</h3>
               <div class="trip-info" id="saved_activities_sub_div">
@@ -81,30 +65,11 @@
               </div>  
             </div>
         </div>
+
+        <!-- Main itinerary content (dynamically added) -->
         <div class="map_div cell small-12 medium-7 large-8 itinerary-content">
-            <!-- <div class="arrows grid-x align-center">
-                <button id="prev"><i class="fas fa-chevron-left"></i></button>
-                <p id="currentDay" class="lead current-day"></p>
-                <button id="next"><i class="fas fa-chevron-right"></i></button>
-            </div>
-            <div class="itinerary-table">
-                <div class="grid-x table-titles">
-                    <div class="cell small-2">Time</div>
-                    <div class="cell auto">Activity</div>
-                    <div class="cell small-2">Est. Cost</div>
-                </div>
-                <div class="sortable list-items"></div>
-                <div class="grid-x align-right daily-estimate">
-                    <div class="estimate-label cell auto">Daily estimate</div>
-                    <div class="estimate-box cell small-2"></div>
-                </div>
-                <button class="add-to-itinerary" data-open="customAddModal"><i class="fas fa-plus"></i>Add custom activity</button>
-            </div> -->
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer></footer>
 
     <!-- Modals -->
     <!-- Settings -->
@@ -142,7 +107,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <!-- Custom Scripting -->
     <script src="./assets/js/script.js"></script>
-    <!-- calendar -->
-    <script async src="./assets/js/calendar.js"></script>
 </body>
 </html>

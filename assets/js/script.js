@@ -1,81 +1,38 @@
+// Enable Foundation Framework's JS
 $(document).foundation();
 
-function pageInit()
-{
-    console.log("running pageInit");
-}
-
-
+// Haader button links
 function pageReady()
 {
-    console.log("running pageReady");
-
-    var button = document.getElementById("go_to_my_itinerary");
-    if (button != null){
-        button.addEventListener("click", function(){
-            window.location = "./itinerary.html";
-        });
-    }
-
-    /*button = document.getElementById("explore");  
-    if (button != null){
-        button.addEventListener("click", function(){
-            window.location = "results.html";
-        });
-    }*/
-
-    button = document.getElementById("go_to_search");  
-    if (button != null){
-        button.addEventListener("click", function(){
-            window.location = "./index.html";
-        });
-    }
-
-
+  // Go to itinerary page
+  var button = document.getElementById("go_to_my_itinerary");
+  if (button != null){
+      button.addEventListener("click", function(){
+          window.location = "./itinerary.html";
+      });
+  }
+  // Go to homepage
+  button = document.getElementById("go_to_search");  
+  if (button != null){
+      button.addEventListener("click", function(){
+          window.location = "./index.html";
+      });
+  }
 }
-window.onload = pageInit;
 jQuery(document).ready(pageReady);
 
-// CALENDAR
-/*$(".list-group").on("click", "span", function() {
- 
-    var date = $(this).text().trim();
-  
-    var dateInput = $("<input>").attr("type", "text").addClass("form-control").val(date);
-  
-    $(this).replaceWith(dateInput);
 
-    $("#modalDueDate").datepicker({
-    minDate: 1
-});
-dateInput.datepicker({
-    minDate: 1,
-    onClose: function() {
-      $(this).trigger("change");
-    }
-  });  
-// additional Jquery code
-$( ".selector" ).datepicker({
-    changeMonth: true
-  });
-
-dateInput.trigger("focus");
-});
-$( ".selector" ).datepicker({
-  changeMonth: true
-});
-*/
-
-
-// Local Storage
-var savedPlaces = [];
+// GET FROM LOCAL STORAGE
+// Saved Places
+var savedPlaces = []; // This array holds all "+ Add to itinerary" items from the search
 if ("saved-places" in localStorage) {
   savedPlaces = JSON.parse(localStorage.getItem("saved-places"));
 }
+// Save places, needed for 
 function savePlaces() {
   localStorage.setItem("saved-places", JSON.stringify(savedPlaces));
 }
-
+// Settings
 var settingsInfo = {
   defaultCountry: null,
   displayCosts: "default"
@@ -83,20 +40,24 @@ var settingsInfo = {
 if ("itinerary-settings" in localStorage) {
   settingsInfo = JSON.parse(localStorage.getItem("itinerary-settings"));
 }
+// Save settings function
 function saveSettings() {
   localStorage.setItem("itinerary-settings", JSON.stringify(settingsInfo));
 }
 
-// SAVE ITINERARY
-var savedItinerary;
-console.log(savedItinerary);
-if ("itinerary-save-info" in localStorage) {
-  savedItinerary = JSON.parse(localStorage.getItem("itinerary-save-info"));
 
+// SAVE ITINERARY
+var savedItinerary; // This array holds all the items in the itinerary (with placement dates), including custom items
+if ("itinerary-save-info" in localStorage) {
+  // Grab currently saved itinerary info
+  savedItinerary = JSON.parse(localStorage.getItem("itinerary-save-info"));
+  // Push new items to itinerary if new items exist
   if (savedItinerary.length != savedPlaces.length) {
     var newPlacesTemp = [];
+    // For each item in savedPlaces array
     for (var i = 0; i < savedPlaces.length; i++) {
       var arrayMatch;
+      // For each item already in savedItinerary, skip
       for (var j = 0; j < savedItinerary.length; j++) {
         if (savedPlaces[i].place == savedItinerary[j].item.place) {
           arrayMatch = true;
@@ -105,48 +66,43 @@ if ("itinerary-save-info" in localStorage) {
           arrayMatch = false;
         }
       }
+      // Push only the new ones to a temporary array
       if (!arrayMatch) {
         newPlacesTemp.push({date: null, item: savedPlaces[i]});
       }
     }
-    console.log(newPlacesTemp);
+    // Concatinate the temporary array to SavedItinerary
     savedItinerary = savedItinerary.concat(newPlacesTemp);
-    saveItinerary();
+    saveItinerary(); // Save
   }
 } else {
   savedItinerary = [];
+  // If nothing is in localStorage, add all saved items from search to a new savedItinerary array
   for (var i = 0; i < savedPlaces.length; i++) {
     savedItinerary.push({date: null, item: savedPlaces[i]});
-    /*console.log(savedPlaces[i]);
-    for (var a = 0; a < savedItinerary.length; a++) {
-      if (savedItinerary[a].date == null) {
-        savedItinerary[a].items.push(savedPlaces[i]);
-      }
-    }*/
   }
-  saveItinerary();
+  saveItinerary(); // Save
 }
+// Save itinerary function
 function saveItinerary() {
   localStorage.setItem("itinerary-save-info", JSON.stringify(savedItinerary));
 }
 
-
+// CURRENCY INFO
 var currencyInfo = {
   defaultCurrency: null,
-  defaultSymbol: null,
+  defaultSymbol: "",
   destinationCurrency: null,
-  destinationSymbol: null
+  destinationSymbol: ""
 };
 
-/*
-for (var i = 0; i < savedPlaces.length; i++) {
 
-}*/
-
-var currentSearch = {};
+// CURRENT SEARCH
+var currentSearch = {}; // Object that holds current travel information (city, state, country, budget, date range)
 if ("saved-location" in localStorage) {
   currentSearch = JSON.parse(localStorage.getItem("saved-location"));
 
+  // Make destination into one string
   var destinationText = currentSearch.city;
   if (currentSearch.state) {
     destinationText += ", " + currentSearch.state;
@@ -155,25 +111,31 @@ if ("saved-location" in localStorage) {
     destinationText += ", " + currentSearch.country;
   }
 }
-var destinationName = $("#destination-name").text(destinationText);
+$("#destination-name").text(destinationText); // Display on page
+// Save current search information function
+function saveCurrentSearch() {
+  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+}
 
 
 // ITINERARY PAGE CONTENT
-var firstDay = moment(currentSearch.startDate).format("MMMM D, YYYY");
-var lastDay = moment(currentSearch.endDate).format("MMMM D, YYYY");
-var dayForward = 0;
-var selectedDate = firstDay;
-
-console.log(firstDay, "first day");
-console.log(lastDay, "last day");
-console.log(selectedDate, "selected day");
-
+var firstDay = moment(currentSearch.startDate).format("MMMM D, YYYY"); // First day of selected time frame
+var lastDay = moment(currentSearch.endDate).format("MMMM D, YYYY"); // Last day of selected time frame
+var dayForward = 0; // How many days forward in the navigation
+var selectedDate = firstDay; // Selected day defaults with trip's first day
+// Unless current day has surpassed beginning of trip
+if (moment().isAfter(currentSearch.startDate)) {
+  selectedDate = moment().format("MMMM D, YYYY");
+}
+// Itinerary Content Div
 var itineraryContentEl = $(".itinerary-content");
 
+// Display Itinerary Function
 function displayItinerary(day) {
-  itineraryContentEl.html("");
-  selectedDate = day;
-  displayDateText = day.split(",")[0];
+  itineraryContentEl.html(""); // Clear previous content
+  selectedDate = day; // selectedDay is the day being passed through
+  displayDateText = day.split(",")[0]; // Do not display year (year is only for date keeping function)
+  // Create previous and next day arrows
   var arrowsEl = $("<div>").addClass("arrows grid-x align-center");
   var prevArrow = $("<button>")
     .attr("id", "prev")
@@ -181,39 +143,45 @@ function displayItinerary(day) {
   var nextArrow = $("<button>")
     .attr("id", "next")
     .html("<i class='fas fa-chevron-right'></i>");
+  // Label that shows the date above itinerary
   var dayLabel = $("<p>")
     .attr("id", "currentDay")
     .addClass("lead current-day")
     .text(displayDateText);
+  // Append date navigation
   arrowsEl
     .append(prevArrow)
     .append(dayLabel)
     .append(nextArrow);
 
+  // Create itinerary table
   var itineraryTable = $("<div>").addClass("itinerary-table");
   var tableTitlesEl = $("<div>").addClass("grid-x table-titles");
+  // Table Titles
   var tableTitleTime = $("<div>")
     .addClass("cell small-6 large-2 time")
-    .text("Time");
+    .text("Time"); // Time
   var tableTitleActivity = $("<div>")
     .addClass("cell small-12 large-auto saved-place")
-    .text("Activity");
+    .text("Activity"); // Activity
   var tableTitleCost = $("<div>")
     .addClass("cell small-6 large-2 cost")
-    .text("Est. Cost");
+    .text("Est. Cost"); // Est. Cost
   tableTitlesEl
     .append(tableTitleTime)
     .append(tableTitleActivity)
     .append(tableTitleCost);
 
+  // Add place for sortable
   var sortableEl = $("<div>").addClass("sortable list-items");
 
-  var dailyEstimateEl = $("<div>").addClass("grid-x align-right daily-estimate hidden");
+  // Daily Estimation (Auto-calculated daily costs) Div
+  var dailyEstimateEl = $("<div>").addClass("grid-x align-right daily-estimate");
   var dailyEstimateLabel = $("<div>")
     .addClass("estimate-label cell auto")
-    .text("Daily estimate");
-  var dailyEstimateSymbol = $("<span>");
-  var dailyEstimateNum = $("<p>");
+    .text("Daily estimate"); // Label
+  var dailyEstimateSymbol = $("<span>"); // Money Symbol
+  var dailyEstimateNum = $("<p>"); // P for  calculated number
   var dailyEstimateBox = $("<div>")
     .addClass("estimate-box cell small-6 large-2 grid-x")
     .append(dailyEstimateSymbol)
@@ -222,11 +190,13 @@ function displayItinerary(day) {
     .append(dailyEstimateLabel)
     .append(dailyEstimateBox);
 
+  // Custom item button
   var customItemButton = $("<button>")
     .addClass("add-to-itinerary")
     .attr("data-open", "customAddModal")
     .html("<i class='fas fa-plus'></i>Add custom activity");
 
+  // Append the itinerary table and items
   itineraryTable
     .append(tableTitlesEl)
     .append(sortableEl)
@@ -236,142 +206,108 @@ function displayItinerary(day) {
     .append(arrowsEl)
     .append(itineraryTable);
 
-    if ($(".list-items").length) {
-      dailyEstimateEl.removeClass("hidden");
-    }
-
+  // If displaying first day, disable previous arrow; if last day, diable next arrow
   if (firstDay == day) {
     prevArrow.prop("disabled", true);
   } else if (lastDay == day) {
     nextArrow.prop("disabled", true);
   }
-  dragDropEnable(day);
-  listItems();
-  autoCalculate();
+  dragDropEnable(day); // Enable drag/drop
+  listItems(); // List itinerary items
+  autoCalculate(); // Calculate daily costs
 }
-displayItinerary(firstDay);
+displayItinerary(selectedDate); // Run on page load
 
-// Button functions
+// Previous/Next day button functions
+// Previous
 $(itineraryContentEl).on("click", "#prev", function() {
   var date;
+  // If tomorrow
   if (selectedDate == moment(currentSearch.startDate).add(1, "days").format("MMMM D, YYYY")) {
-    dayForward--;
-    date = firstDay;
-  } else if (selectedDate > firstDay) {
-    dayForward--;
-    date = moment(currentSearch.startDate).add(dayForward, "days").format("MMMM D, YYYY");
+    dayForward--; // Remove from day forward
+    date = firstDay; // Go to today
+  } else if (selectedDate > firstDay) { // If any day after tomorrow
+    dayForward--; // Remove from day forward
+    date = moment(currentSearch.startDate).add(dayForward, "days").format("MMMM D, YYYY"); // Go to one day behind
   }
-  if (lastDay == selectedDate) {
-    itineraryContentEl.find("#prev").prop("disabled", false);
-  }
-  console.log(date, dayForward);
-  displayItinerary(date);
+  displayItinerary(date); // Display itinerary
 });
+// Next
 $(itineraryContentEl).on("click", "#next", function() {
   var date;
-  if (selectedDate == firstDay || selectedDate > firstDay) {
-    dayForward++;
-    date = moment(currentSearch.startDate).add(dayForward, "days").format("MMMM D, YYYY");
+  if (selectedDate >= firstDay) {
+    dayForward++; // Add to day forward
+    date = moment(currentSearch.startDate).add(dayForward, "days").format("MMMM D, YYYY"); // Go to one day ahead
   }
-  if (firstDay == selectedDate) {
-    itineraryContentEl.find("#next").prop("disabled", false);
-  }
-  console.log(date, dayForward);
-  displayItinerary(date);
+  displayItinerary(date); // Display itinerary
 });
 
-//console.log(moment(currentSearch.startDate).format("MMMM D, YYYY"));
 
-
-//var dummydata = [{place:"place name"},{place:"place name 2"},{place:"place name 3"}];
+// LIST ITINERARY ITEMS
 function listItems() {
+  // Clear previous content
   $(".initial").html("");
   $(".list-items").html("");
+  // For each element saved in the itinerary
   for (var i = 0; i < savedItinerary.length; i++) {
-    //var dataName = savedPlaces[i].place;
+    // Full itinerary item: time, name, cost, website, remove button
     var fullSortable = $("<div>")
       .addClass("grid-x");
-    var timeP = $("<p>");
-    var costP = $("<p>");
-    var costSymbol = $("<span>");
-    if (settingsInfo.displayCosts == "default") {
+    var timeP = $("<p>"); // P for time text
+    var costP = $("<p>"); // P for cost text
+    var costSymbol = $("<span>"); // Cost symbol
+    if (settingsInfo.displayCosts == "default") { // If user wants to view costs in default currency
       costSymbol.text(currencyInfo.defaultSymbol);
       $(".estimate-box span").text(currencyInfo.defaultSymbol);
       $("#custom-cost-symbol").text(currencyInfo.defaultSymbol);
-    } else if (settingsInfo.displayCosts == "destination") {
+    } else if (settingsInfo.displayCosts == "destination") { // If user wants to view costs in destination currency
       costSymbol.text(currencyInfo.destinationSymbol);
       $(".estimate-box span").text(currencyInfo.destinationSymbol);
       $("#custom-cost-symbol").text(currencyInfo.destinationSymbol);
     }
-    var timeDiv = $("<div>")
+    var timeDiv = $("<div>") // Time div
       .addClass("cell small-6 large-2 time")
       .append(timeP);
-    var costDiv = $("<div>")
+    var costDiv = $("<div>") // Cost div
       .addClass("cell small-6 large-2 grid-x cost")
       .append(costSymbol)
       .append(costP);
-    var sortdiv = $("<div>").addClass("cell auto saved-place");
-
+    var sortdiv = $("<div>") // Place title div
+      .addClass("cell auto saved-place")
+      .text(savedItinerary[i].item.place);
+    // Website button
     var websiteButton = $("<a>")
       .addClass("web-button")
       .html("<i class='fas fa-link'></i>")
-      .attr("target", "_blank");
-
+      .attr("target", "_blank")
+      .attr("href", savedItinerary[i].item.web);
+    // Delete button
     var deleteButton = $("<button>")
       .addClass("delete-place")
-      .html("<i class=\"fas fa-times\"></i>");
+      .html("<i class=\"fas fa-times\"></i>")
+      .attr("onClick", "removeItem('" + savedItinerary[i].item.place + "')");
 
-    console.log(savedPlaces);
-    console.log(savedItinerary);
-
-    //for (var j = 0; j < savedItinerary.length; j++) {
-      //console.log("savedItinerary[j].date", savedItinerary[j].date);
-      //console.log("selected date", selectedDate);
-      if (savedItinerary[i].date == null) {
-        /*for (var k = 0; k < savedItinerary[j].items.length; k++) {
-          if (savedItinerary[a].items[n].place == savedPlaces[i].place){
-            sortdiv.text(savedItinerary[a].items[n].place);
-            websiteButton.attr("href", savedItinerary[a].items[n].web);
-            deleteButton.attr("onClick", "removeItem('" + savedItinerary[a].items[n].place + "')");
-            fullSortable.addClass("hide-time-cost initial-place");
-            $(".initial").append(fullSortable);
-            console.log(savedItinerary[a].items[n]);
-          }
-        }*/
-        console.log("savedItinerary[i].item.place", savedItinerary[i].item.place);
-        sortdiv.text(savedItinerary[i].item.place);
-        websiteButton.attr("href", savedItinerary[i].item.web);
-        deleteButton.attr("onClick", "removeItem('" + savedItinerary[i].item.place + "')");
-        fullSortable.addClass("hide-time-cost initial-place");
-        $(".initial").append(fullSortable);
-      } else if (savedItinerary[i].date == selectedDate) {
-        /*for (var n = 0; n < savedItinerary[a].items.length; n++) {
-          if (savedItinerary[a].items[n].place == savedPlaces[i].place){
-            sortdiv.text(savedItinerary[a].items[n].place);
-            websiteButton.attr("href", savedItinerary[a].items[n].web);
-            deleteButton.attr("onClick", "removeItem('" + savedItinerary[a].items[n].place + "')");
-            fullSortable.addClass("itinerary-place");
-            $(".itinerary-content").find(".list-items").append(fullSortable);
-            console.log(savedItinerary[a].items[n]);
-          }
-        }*/
-        sortdiv.text(savedItinerary[i].item.place);
-        websiteButton.attr("href", savedItinerary[i].item.web);
-        deleteButton.attr("onClick", "removeItem('" + savedItinerary[i].item.place + "')");
-        fullSortable.addClass("itinerary-place");
-        if (savedItinerary[i].item.time) {
-          timeP.text(moment().hour(savedItinerary[i].item.time).minute(0).format("h:mm A"));
-        }
-        if (savedItinerary[i].item.cost) {
-          costP.text(savedItinerary[i].item.cost);
-        }
-        $(".itinerary-content").find(".list-items").append(fullSortable);
-
-        if (!savedItinerary[i].item.web) {
-          websiteButton.addClass("hidden");
-        }
+    // If the itinerary item has no date (is unsorted)
+    if (savedItinerary[i].date == null) {
+      fullSortable.addClass("hide-time-cost initial-place"); // Hide time/cost, sidebar style
+      $(".initial").append(fullSortable); // Append to sidebar
+    }
+    // If the itinerary item has the selected date (other dates don't show until it is selected)
+    else if (savedItinerary[i].date == selectedDate) {
+      fullSortable.addClass("itinerary-place"); // Itinerary style
+      if (savedItinerary[i].item.time) { // If a time is saved, add time text
+        timeP.text(moment().hour(savedItinerary[i].item.time).minute(0).format("h:mm A"));
       }
-    //}
+      if (savedItinerary[i].item.cost) { // If a cost is saved, add cost text
+        costP.text(savedItinerary[i].item.cost);
+      }
+      $(".itinerary-content").find(".list-items").append(fullSortable); // Append to main itinerary
+      // If there is no website, hide the link button
+      if (!savedItinerary[i].item.web) {
+        websiteButton.addClass("hidden");
+      }
+    }
+    // Append!
     sortdiv
       .append(websiteButton)
       .append(deleteButton);
@@ -381,99 +317,91 @@ function listItems() {
       .append(costDiv);
   }
 }
-//listItems();
 
+// ITINERARY CLICK TO EDIT
+// Create hour selection
 function createHourSelect(timeText) {
-  var inputTime = $("<select>")
+  var inputTime = $("<select>") // Select
     .attr("name", "time-select")
     .val(timeText);
-  for (var i = 0; i < 24; i++) {
-    var optionText = moment().hour(i).minute(0).format("h:mm A");
-    var optionTime = $("<option>")
-      .val(i)
+  for (var i = 0; i < 24; i++) { // For every hour in a day
+    var optionText = moment().hour(i).minute(0).format("h:mm A"); // Display hour in 12 hour AM/PM format
+    var optionTime = $("<option>") // Option
+      .val(i) // Log hour as number between 0-23
       .text(optionText);
     if (optionText == timeText) {
-      optionTime.prop("selected", true);
+      optionTime.prop("selected", true); // If there is already a date, select it
     }
-    inputTime.append(optionTime);
+    inputTime.append(optionTime); // Append the hour options to the select
   }
   return inputTime;
 }
+// Create cost input
 function createCostInput(costText) {
-  var inputCost = $("<input>")
+  var inputCost = $("<input>") // Create number input
     .attr("type", "number")
-    .attr("min", 1)
+    .attr("min", 1) // Minimum amount of 1
     .attr("name", "cost-input")
     .addClass("cell auto")
     .val(costText);
   return inputCost;
 }
 
+// When you click on the time box
 $(".itinerary-content").on("click", ".time", function(event) {
   event.stopPropagation();
-  var timeText = $(this).find("p").text();
-  $(this).find("p").replaceWith(createHourSelect(timeText));
-  $("select").trigger("focus");
+  var timeText = $(this).find("p").text(); // Grab current text
+  $(this).find("p").replaceWith(createHourSelect(timeText)); // Replace the p with the select
+  $("select").trigger("focus"); // Focus on the select
 });
-/*$(".itinerary-content .time").on("click", "p", function(event) {
-  var timeText = $(event.target).text();
-  $(event.target).replaceWith(createHourSelect(timeText));
-  $("select").trigger("focus");
-});*/
+// When you click off the time box
 $(".itinerary-content").on("blur", ".time", function(event) {
-  var timeText = moment().hour($(event.target).val()).minute(0).format("h:mm A");
+  var timeText = moment().hour($(event.target).val()).minute(0).format("h:mm A"); // Set hour in 12 hour AM/PM format
   var saveTime = $("<p>")
     .text(timeText);
-  console.log($(this).parent().children(".saved-place").text());
   for (var i = 0; i < savedItinerary.length; i++) {
     if (savedItinerary[i].item.place == $(this).parent().children(".saved-place").text()) {
-      savedItinerary[i].item.time = parseInt($(event.target).val());
+      savedItinerary[i].item.time = parseInt($(event.target).val()); // Add input time to itinerary object
     }
   }
-  saveItinerary();
-  $(event.target).replaceWith(saveTime);
+  saveItinerary(); // Save itinerary info
+  $(event.target).replaceWith(saveTime); // Replace select with p
 });
-
+// When you click on the cost box
 $(".itinerary-content").on("click", ".cost", function(event) {
   event.stopPropagation();
-  var costText = $(this).find("p").text();
-  $(this).find("p").replaceWith(createCostInput(costText));
-  $("input").trigger("focus");
+  var costText = $(this).find("p").text(); // Grab current text
+  $(this).find("p").replaceWith(createCostInput(costText)); // Replace the p with the input
+  $("input").trigger("focus"); // Focus on the input
 });
-/*$(".itinerary-content .cost").on("click", "p", function(event) {
-  var costText = $(event.target).text();
-  $(event.target).replaceWith(createCostInput(costText));
-  $("input").trigger("focus");
-});*/
+// When you click off the cost box
 $(".itinerary-content").on("blur", ".cost", function(event) {
-  var costText = parseFloat($(event.target).val());
+  var costText = parseFloat($(event.target).val()); // Get cost as a decimal number (float)
   var saveCost = $("<p>")
     .text(costText);
-  console.log($(this).parent().children(".saved-place").text());
   for (var i = 0; i < savedItinerary.length; i++) {
     if (savedItinerary[i].item.place == $(this).parent().children(".saved-place").text()) {
-      savedItinerary[i].item.cost = costText;
+      savedItinerary[i].item.cost = costText; // Add input cost to itinerary object
     }
   }
-  saveItinerary();
-  $(event.target).replaceWith(saveCost);
-  autoCalculate();
+  saveItinerary(); // Save itinerary info
+  $(event.target).replaceWith(saveCost); // Replace input with p
+  autoCalculate(); // Automatically calculate daily total cost
 });
 
-
+// DELETE ITEM FROM ITINERARY
 function removeItem(placeName) {
-  var placeIndex = savedPlaces.map(obj => obj.place).indexOf(placeName);
-  savedPlaces.splice(placeIndex, 1);
-  savePlaces();
-  $(".initial").html("");
-  listItems();
+  var placeIndex = savedPlaces.map(obj => obj.place).indexOf(placeName); // Find index of selected place
+  savedPlaces.splice(placeIndex, 1); // Remove from array
+  savePlaces(); // Save places
+  listItems(); // Re-list items now with the removed one gone
 }
 
 // ITINERARY SORTABLE
 function dragDropEnable(selectedDate) {
   var sortOne, sortTwo;
   $(".list-items, .initial").sortable({
-      // enable dragging across lists
+      // Enable dragging across lists
       connectWith: $(".list-items, .initial"),
       scroll: false,
       tolerance: "pointer",
@@ -484,133 +412,77 @@ function dragDropEnable(selectedDate) {
       deactivate: function() {
         $(this).removeClass("dropover");
       },
-      over: function(event, ui) {
+      over: function(event) {
         $(event.target).addClass("dropover-active");
       },
-      out: function(event, ui) {
+      out: function(event) {
         $(event.target).removeClass("dropover-active");
       },
-      
+      // Update function
       update: function(event, ui) {
-        if (!ui.sender) {
-          var currDayTemp = [];
-          var otherDayTemp = [];
+        if (!ui.sender) { // Prevents potentially running multiple times
+          var currDayTemp = []; // Temporary array for current day
+          var otherDayTemp = []; // Temporary array for other days
+
+          // Check if item has a date saved or not
           if ($(ui.item).parent().hasClass("list-items")) {
             var isDay = true;
           } else if ($(ui.item).parent().hasClass("initial")) {
             var isDay = false;
           }
-          //var nullDayTemp = [];
+          
+          // For every item in saved itinerary
           for (var i = 0; i < savedItinerary.length; i++) {
-            if (savedItinerary[i].item.place == $(ui.item).text() && isDay) {
+            // If item is dragged from saved activities to itinerary, add a date
+            if (savedItinerary[i].item.place == $(ui.item).children(".saved-place").text() && isDay) {
               savedItinerary[i].date = selectedDate;
-            } else if (savedItinerary[i].item.place == $(ui.item).text() && !isDay) {
+            }
+            // Else if item is dragged from itinerary to saved activities, remove date
+            else if (savedItinerary[i].item.place == $(ui.item).children(".saved-place").text() && !isDay) {
               savedItinerary[i].date = null;
             }
+            // If item does not have today's date, add it to temporary other day array - for custom order
             if ((savedItinerary[i].date != null && !isDay) || (savedItinerary[i].date != selectedDate && isDay)) {
-              console.log(savedItinerary[i].date);
               otherDayTemp.push(savedItinerary[i]);
             }
           }
-
-          /*if (!isDay) {
-            $(this).children().each(function() {
-              var orderedTitle = $(this).find(".saved-place").text();
-              for (var i = 0; i < savedItinerary.length; i++) {
-                if (orderedTitle == savedItinerary[i].item.place) {
-                  nullDayTemp.push(savedItinerary[i]);
-                }
+          // For each child in itinerary, add to temporary current day array - for saving custom order
+          $(this).children().each(function() {
+            var orderedTitle = $(this).find(".saved-place").text();
+            for (var i = 0; i < savedItinerary.length; i++) {
+              if (orderedTitle == savedItinerary[i].item.place) {
+                currDayTemp.push(savedItinerary[i]);
               }
-            });
-          } else {*/
-            $(this).children().each(function() {
-              console.log($(this).find(".saved-place").text());
-              var orderedTitle = $(this).find(".saved-place").text();
-              for (var i = 0; i < savedItinerary.length; i++) {
-                if (orderedTitle == savedItinerary[i].item.place) {
-                  currDayTemp.push(savedItinerary[i]);
-                }
-              }
-            });
-          //}
-          
-          console.log(otherDayTemp);
-          console.log(currDayTemp);
-
+            }
+          });
+          // Concatenate current day array and other day arrays together 
           var newArrTemp = currDayTemp.concat(otherDayTemp);
 
-          console.log(newArrTemp);
-
-          savedItinerary = newArrTemp;
-          console.log(savedItinerary);
-          saveItinerary();
+          // If an item is moved within the same parent (rearranging order), saved itinerary should be replaced with the temp array
+          if (($(event.target).hasClass("initial") && $(ui.item).parent().hasClass("initial")) || ($(event.target).hasClass("list-items") && $(ui.item).parent().hasClass("list-items"))) {
+            savedItinerary = newArrTemp;
+          } // Else, leave saved itinerary as is
+          saveItinerary(); // Save to local storage
         }
-        /*if (!ui.sender) {
-          //var tempArr = savedPlaces;
-          var tempObj = { items: [] };
-          for (var i = 0; i < savedPlaces.length; i++) {
-            console.log($(this), $(event.target), $(ui.placeholder));
-            if (savedPlaces[i].place == $(ui.item).text() && $(ui.item).parent().hasClass("list-items") && !$(ui.placeholder).hasClass("itinerary-place")) {
-              console.log($(ui.item).text(), "MATCH!!!");
-              console.log(savedItinerary[0].items[i].place);
-              console.log(selectedDate);
-              var newDate = true;
-              for (var a = 0; a < savedItinerary.length; a++) {
-                if (savedItinerary[a].date == selectedDate) {
-                  newDate = false;
-                  savedItinerary[a].items.push(savedPlaces[i]);
-                  break;
-                }
-              }
-              if (newDate) {
-                tempObj.date = selectedDate;
-                tempObj.items.push(savedPlaces[i]);
-                savedItinerary.push(tempObj);
-                tempObj = { items: [] };
-              }
-              savedItinerary[0].items.splice(i, 1);
-              var tempMove = savedPlaces[i];
-              savedPlaces.splice(i, 1);
-              savedPlaces.push(tempMove);
-              console.log(savedItinerary[0].items, i);
-              break;
-            }
-            else if (savedPlaces[i].place == $(ui.item).text() && $(ui.item).parent().hasClass("initial") && !$(ui.placeholder).hasClass("initial-place")) {
-              console.log($(ui.item).text(), "BACK TO ORIGINAL LIST");
-              for (var a = 0; a < savedItinerary.length; a++) {
-                if (savedItinerary[a].date == null) {
-                  savedItinerary[0].items.push(savedPlaces[i]);
-                } else if (savedItinerary[a].date == selectedDate) {
-                  for (var n = 0; n < savedItinerary[a].items.length; n++) {
-                    if (savedItinerary[a].items[n].place == $(ui.item).text()){
-                      savedItinerary[a].items.splice(n, 1);
-                      console.log(savedItinerary[a].items, n);
-                    }
-                  }
-                }
-              }
-              console.log(savedItinerary);
-              break;
-            }
-          }
-          saveItinerary();
-        }*/
       },
       start: function(event, ui) {
-        sortOne = sortTwo = ui.item.parent();
+        sortOne = sortTwo = ui.item.parent(); // Assign parent at start
       },
       stop: function(event, ui) {
+        // Toggle styles for itinerary item depending on where is is dragged
         if ($(ui.item).hasClass("initial-place") && sortOne != sortTwo) {
-          $(ui.item).removeClass("hide-time-cost initial-place")
-            .addClass("itinerary-place");
+          $(ui.item)
+            .removeClass("hide-time-cost initial-place") // If initial, remove initial style
+            .addClass("itinerary-place"); // Add itinerary style
         } else if ($(ui.item).hasClass("itinerary-place") && sortOne != sortTwo) {
-          $(ui.item).removeClass("itinerary-place")
-            .addClass("hide-time-cost initial-place");
+          $(ui.item)
+            .removeClass("itinerary-place") // If itinerary, remove itinerary style
+            .addClass("hide-time-cost initial-place"); // Add initial style
         }
       },
       change: function(event, ui) {
         if (ui.sender) {
-          sortOne = ui.placeholder.parent();
+          sortOne = ui.placeholder.parent(); // Assign parent on change
         }
       }
   });
@@ -619,104 +491,86 @@ function dragDropEnable(selectedDate) {
 
 // EDIT BUDGET
 function showDefaultBudget() {
+  // If there is no budget already saved, display input box
   if (!currentSearch.budget) {
     var inputBudget = $("<input>")
       .attr("type", "number")
       .attr("min", 1)
       .attr("name", "budget");
     $("#current-budget").find("p").replaceWith(inputBudget);
-  } else {
+  } else { // If there is a budget, display the budget
     $("#current-budget").find("p").text(currencyInfo.defaultSymbol + currentSearch.budget);
   }
+  // If current budget is clicked on
   $("#current-budget").on("click", "p", function() {
-      var getNum = $("#current-budget").find("p").text().trim();
-  
-      console.log(getNum);
-  
+      var getNum = $("#current-budget").find("p").text().trim(); // Get the current text
+      // Remove default sumbol to work only with the number
       var currentBudgetNum = getNum.replace(currencyInfo.defaultSymbol, "");
   
-      console.log(currentBudgetNum);
-  
-      var inputBudget = $("<input>")
+      var inputBudget = $("<input>") // Create input
         .attr("type", "number")
         .attr("name", "budget")
         .attr("min", 1)
         .val(currentBudgetNum);
   
-      $("#current-budget").find("p").replaceWith(inputBudget);
-      inputBudget.trigger("focus");
+      $("#current-budget").find("p").replaceWith(inputBudget); // Replace budget p with input
+      inputBudget.trigger("focus"); // Focus on input
   });
-  
+  // If current budget is clicked off
   $("#current-budget").on("blur", "input", function() {
-    var textBudgetNum = $("#current-budget").find("input").val().trim();
+    var textBudgetNum = $("#current-budget").find("input").val().trim(); // Get input value
   
-    var displayBudget = $("<p>")
+    var displayBudget = $("<p>") // Create p with both symbol and budget number
       .text(currencyInfo.defaultSymbol + textBudgetNum);
     
-    $("#current-budget").find("input").replaceWith(displayBudget);
+    $("#current-budget").find("input").replaceWith(displayBudget); // Replace budget input with p
 
+    // Gets country currency information on change
     getCurrSymbol(settingsInfo.defaultCountry, "default");
     getCurrSymbol(currentSearch.country, "destination");
   
     currentSearch.budget = textBudgetNum;
-    localStorage.setItem("saved-location", JSON.stringify(currentSearch));
+    saveCurrentSearch(); // Save new budget to localStorage
   });
 }
+showDefaultBudget(); // Automatically run on page load
 
+// List of the currencies that don't use decimals
 var zeroDecimal = ["BIF", "CLP", "DJF", "GNF", "ISK", "JPY", "KMF", "KRW", "PYG", "RWF", "UGX", "UYI", "VND", "VUV", "XAF", "XOF", "XPF"];
 
 // Cody's converter code
-function convert(currency1, currency2, value) {
-  //const host = "api.frankfurter.app";
+function convert(currency1, currency2, value , type, placeName) {
   var convertURL = "https://api.exchangerate.host/convert?amount=" + value + "&from=" + currency1 + "&to=" + currency2 + "&places=2";
-  fetch (
-    convertURL
-      //'https://' + host + '/latest?amount=' + value + '&from=' + currency1 + '&to=' + currency2
-  )
+  fetch ( convertURL )
   .then((val) => val.json())
   .then((val) => {
-          //console.log(Object.values(val.rates)[0]);
-          console.log(val);
-          var convertedBudget = val.result;
-          for (var i = 0; i < zeroDecimal.length; i++) {
-            if (currency2 == zeroDecimal[i]) {
-              convertedBudget = Math.round(val.result);
-              break;
-            }
+        var convertedBudget = val.result; // Get conversion
+        for (var i = 0; i < zeroDecimal.length; i++) {
+          if (currency2 == zeroDecimal[i]) { // If currency converted to does not use decimals, round the number
+            convertedBudget = Math.round(val.result);
+            break;
           }
-          $("#local-budget p").text(currencyInfo.destinationSymbol + /*Object.values(val.rates)[0]*/convertedBudget);
+        }
+        // Display converted budget
+        if (type == "budget") {
+          $("#local-budget p").text(currencyInfo.destinationSymbol + convertedBudget);
           var localConversion = $("<span>")
             .addClass("convert-tag")
             .text("(local conversion)");
-          $("#local-budget p").append(localConversion);
-      });
-}
-
-function convertCosts(currency1, currency2, value, placeName) {
-  var convertURL = "https://api.exchangerate.host/convert?amount=" + value + "&from=" + currency1 + "&to=" + currency2 + "&places=2";
-  fetch (convertURL)
-  .then((val) => val.json())
-  .then((val) => {
-          console.log(val.result);
-          var convertedBudget = val.result;
-          for (var i = 0; i < zeroDecimal.length; i++) {
-            if (currency2 == zeroDecimal[i]) {
-              convertedBudget = Math.round(val.result);
-              break;
-            }
-          }
+          $("#local-budget p").append(localConversion); // Display destination conversion below budget
+        }
+        // Display converted costs listed in itinerary
+        else if (type == "cost") {
           for (var i = 0; i < savedItinerary.length; i++) {
-            if (savedItinerary[i].item.place == placeName) {
-              savedItinerary[i].item.cost = convertedBudget;
-              console.log(placeName);
-              console.log("item cost", savedItinerary[i].item.cost);
+            if (savedItinerary[i].item.place == placeName) { // Find item in itinerary
+              savedItinerary[i].item.cost = convertedBudget; // Update cost to new currency
             }
           }
-          console.log(savedItinerary);
-          saveItinerary();
-          listItems();
-          autoCalculate();
-      });
+          saveItinerary(); // Save itinerary
+          listItems(); // Show itinerary list with updates
+          autoCalculate(); // Automatically calculate daily total, but with new currency numbers
+        }
+    });
 }
 
 // GET CURRENCIES
@@ -725,134 +579,130 @@ function getCurrSymbol(countryName, searchType) {
 
   // Run fetch
   fetch(url)
-      .then(function(response) {
-          return response.json();
-      })
-      .then(function(data) {
-          console.log(data);
-          for (var i = 0; i < data.length; i++) {
-            if (countryName == data[i].name && searchType == "default") {
-              currencyInfo.defaultCurrency = data[i].currency.code;
-              currencyInfo.defaultSymbol = data[i].currency.symbol;
-              showDefaultBudget();
-              break;
-            } else if (countryName == data[i].name && searchType == "destination") {
-              currencyInfo.destinationCurrency = data[i].currency.code;
-              currencyInfo.destinationSymbol = data[i].currency.symbol;
-              convert(currencyInfo.defaultCurrency, currencyInfo.destinationCurrency, currentSearch.budget);
-              break;
-            }
-          }
-          listItems();
-      });
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+      // Loop through data
+      for (var i = 0; i < data.length; i++) {
+        if (countryName == data[i].name && searchType == "default") { // For default currency, based on country
+          currencyInfo.defaultCurrency = data[i].currency.code; // Currency code (i.e. USD)
+          currencyInfo.defaultSymbol = data[i].currency.symbol; // Currency symbol (i.e. $)
+          showDefaultBudget(); // Show budget
+          break;
+        } else if (countryName == data[i].name && searchType == "destination") { // For destination currency, based on country
+          currencyInfo.destinationCurrency = data[i].currency.code; // Currency code (i.e. GBP)
+          currencyInfo.destinationSymbol = data[i].currency.symbol; // Currency symbol (i.e. £)
+          convert(currencyInfo.defaultCurrency, currencyInfo.destinationCurrency, currentSearch.budget, "budget"); // Convert the default currency to destination
+          break;
+        }
+      }
+      listItems(); // List items
+    });
 }
-getCurrSymbol(settingsInfo.defaultCountry, "default");
-getCurrSymbol(currentSearch.country, "destination");
-console.log(currentSearch.country);
+getCurrSymbol(settingsInfo.defaultCountry, "default"); // On load, get default currency
+getCurrSymbol(currentSearch.country, "destination"); // On load, get destination currency
 
 
 // AUTO-CALCULATE COSTS FOR THE DAY
 function autoCalculate() {
-  var dailyTotal = 0;
-  $(".cost p").each(function() {
-    console.log(parseFloat($(this).text()));
-    var itemCost = parseFloat($(this).text());
+  var dailyTotal = 0; // Default total is 0
+  $(".cost p").each(function() { // For each cost in itinerary for the day
+    var itemCost = parseFloat($(this).text()); // Get float (decimal) number
     if (isNaN(itemCost)) {
-      itemCost = 0;
+      itemCost = 0; // If there is no numerical value, cost is 0
     }
-    dailyTotal += itemCost;
+    dailyTotal += itemCost; // Add costs together
   });
-  console.log(dailyTotal);
-  $(".estimate-box p").text(dailyTotal);
+  $(".estimate-box p").text(dailyTotal); // Display total
 }
 
 
 // EDIT DATE RANGE
 if (!currentSearch.startDate) {
-  var startDateInput = $("<input>")
+  // If there is no date already saved, display input boxes
+  var startDateInput = $("<input>") // Input for start date
     .addClass("cell small-12 large-auto")
     .attr("type", "text")
     .attr("name", "start")
     .attr("id", "start-date-input");
-  var endDateInput = $("<input>")
+  var endDateInput = $("<input>") // Input for end date
     .addClass("cell small-12 large-auto")
     .attr("type", "text")
     .attr("name", "end")
     .attr("id", "end-date-input");
   $("#time-frame").find("#start-date-span").replaceWith(startDateInput);
   $("#time-frame").find("#end-date-span").replaceWith(endDateInput);
-} else {
+} else { // If there is a date saved, display date (without showing year)
   $("#time-frame").find("#start-date-span").text(currentSearch.startDate.split(",")[0]);
   $("#time-frame").find("#end-date-span").text(currentSearch.endDate.split(",")[0]);
 }
 
+// If you click on the start date, you can edit it
 $("#time-frame").on("click", "#start-date-span", function() {
-    var getStartDate = $("#time-frame").find("#start-date-span").text().trim();
-
-    var dateInput = $("<input>")
+    var getStartDate = $("#time-frame").find("#start-date-span").text().trim(); // Get date text
+    var dateInput = $("<input>") // Make input box and make date text current value
       .addClass("cell small-12 large-auto")
       .attr("type", "text")
       .attr("name", "start")
       .attr("id", "start-date-input")
       .val(getStartDate);
-
-    $("#time-frame").find("#start-date-span").replaceWith(dateInput);
-    dateInput.trigger("focus");
+    $("#time-frame").find("#start-date-span").replaceWith(dateInput); // Replace span with input
+    dateInput.trigger("focus"); // Focus on input
 });
+// If you click on the end date, you can edit it
 $("#time-frame").on("click", "#end-date-span", function() {
-    var getEndDate = $("#time-frame").find("#end-date-span").text().trim();
-
-    var dateInput = $("<input>")
+    var getEndDate = $("#time-frame").find("#end-date-span").text().trim(); // Get date text
+    var dateInput = $("<input>") // Make input box and make date text current value
       .addClass("cell small-12 large-auto")
       .attr("type", "text")
       .attr("name", "end")
       .attr("id", "end-date-input")
       .val(getEndDate);
-
-    $("#time-frame").find("#end-date-span").replaceWith(dateInput);
-    dateInput.trigger("focus");
+    $("#time-frame").find("#end-date-span").replaceWith(dateInput); // Replace span with input
+    dateInput.trigger("focus"); // Focus on input
 });
 
-// p, input, div ALL MESSED UP, need to fix!!!
-
+// When start date input value is changed
 $("#time-frame").on("change", "#start-date-input", function() {
-  console.log($("#time-frame").find("#start-date-input").val());
-  var startDateText = $("#time-frame").find("#start-date-input").val().trim();
-
-  var displayStartDate = $("<span>")
+  var startDateText = $("#time-frame").find("#start-date-input").val().trim(); // Get date value
+  var displayStartDate = $("<span>") // Make span with input ate as current text
     .addClass("cell small-12 large-shrink date-to")
     .attr("id", "start-date-span")
     .text(startDateText.split(",")[0]);
-
-  $("#time-frame").find("#start-date-input").replaceWith(displayStartDate);
-
-  currentSearch.startDate = startDateText;
-  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
-
-  firstDay = moment(currentSearch.startDate).format("MMMM D");
-  displayItinerary(firstDay);
+  $("#time-frame").find("#start-date-input").replaceWith(displayStartDate); // Replace input with span
+  currentSearch.startDate = startDateText; // Edit start date in localStorage
+  saveCurrentSearch();
+  // Date format
+  firstDay = moment(currentSearch.startDate).format("MMMM D, YYYY");
+  if (moment().isAfter(currentSearch.startDate)) {
+    displayItinerary(moment().format("MMMM D, YYYY"));
+  } else {
+    displayItinerary(firstDay);
+  }
 });
+// When end date input value is changed
 $("#time-frame").on("change", "#end-date-input", function() {
-  console.log($("#time-frame").find("#end-date-input").val());
-  var endDateText = $("#time-frame").find("#end-date-input").val().trim();
-
-  var displayEndDate = $("<span>")
+  var endDateText = $("#time-frame").find("#end-date-input").val().trim(); // Get date value
+  var displayEndDate = $("<span>") // Make span with input ate as current text
     .addClass("cell small-12 large-shrink date-to")
     .attr("id", "end-date-span")
     .text(endDateText.split(",")[0]);
-
-  $("#time-frame").find("#end-date-input").replaceWith(displayEndDate);
-
-  currentSearch.endDate = endDateText;
-  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
-
-  lastDay = moment(currentSearch.endDate).format("MMMM D");
-  displayItinerary(firstDay);
+  $("#time-frame").find("#end-date-input").replaceWith(displayEndDate); // Replace input with span
+  currentSearch.endDate = endDateText; // Edit start date in localStorage
+  saveCurrentSearch();
+  // Date format
+  lastDay = moment(currentSearch.endDate).format("MMMM D, YYYY");
+  if (moment().isAfter(currentSearch.startDate)) {
+    displayItinerary(moment().format("MMMM D, YYYY"));
+  } else {
+    displayItinerary(firstDay);
+  }
 });
-
+// DATEPICKER
 $("#time-frame").on("focus", "input", function() {
   var dateFormat = "mm/dd/yy",
-  from = $("#time-frame").find("#end-date-input").datepicker({
+  from = $("#time-frame").find("#end-date-input").datepicker({ // Datepicker for end date
     defaultDate: "+1w",
     changeMonth: true,
     changeYear: true,
@@ -860,10 +710,10 @@ $("#time-frame").on("focus", "input", function() {
     minDate: 0,
     dateFormat: "MM d, yy"
   })
-  .on("change", function() {
+  .on("change", function() { // jQuery UI documentation said to add this
     to.datepicker("option", "minDate", getDate(this));
   }),
-  to = $("#time-frame").find("#start-date-input").datepicker({
+  to = $("#time-frame").find("#start-date-input").datepicker({ // Date picker for start date
     defaultDate: "+1w",
     changeMonth: true,
     changeYear: true,
@@ -871,11 +721,10 @@ $("#time-frame").on("focus", "input", function() {
     minDate: 0,
     dateFormat: "MM d, yy"
   })
-  .on("change", function() {
+  .on("change", function() { // jQuery UI documentation said to add this
     from.datepicker("option", "maxDate", getDate(this));
   });
-
-  function getDate(element) {
+  function getDate(element) { // jQuery UI documentation said to add this
     var date;
     try {
       date = $.datepicker.parseDate(dateFormat, element.value);
@@ -886,22 +735,19 @@ $("#time-frame").on("focus", "input", function() {
   }
 });
 
+
 // ADD CUSTOM ACTIVITY
-for (var i = 0; i < 24; i++) {
+for (var i = 0; i < 24; i++) { // Create options for each hour in a day
   var optionText = moment().hour(i).minute(0).format("h:mm A");
   var optionTime = $("<option>")
   .val(i)
   .text(optionText);
-  $("select[name='custom-time']").append(optionTime);
+  $("select[name='custom-time']").append(optionTime); // Append to select
 }
-
+// Create custom activity
 function customActivity() {
-  console.log($("select[name='custom-time']").val());
-  console.log($("input[name='custom-activity']").val());
-  console.log($("input[name='custom-cost']").val());
-  console.log(selectedDate);
-
-  if ($("input[name='custom-activity']").val()){
+  if ($("input[name='custom-activity']").val()){ // Run function content only if an activity is written in
+    // Create an object from the information in the form
     var customObject = {
       date: selectedDate,
       item: {
@@ -911,26 +757,23 @@ function customActivity() {
         web: null
       }
     }
-
+    // Close the create custom activity modal
     $("#submit-custom").attr("data-close","");
-
-    console.log(customObject);
-
+    // Push to itinerary and save
     savedItinerary.push(customObject);
-
-    console.log(savedItinerary);
     saveItinerary();
-    listItems();
+    listItems(); // Reload itinerary with custom item added on
   }
 }
 
 
 // SETTINGS
-var settingsContentEl = $(".settings-content");
+var settingsContentEl = $(".settings-content"); // Settings Div
 
-var settingsTitle = $("<h2>")
+var settingsTitle = $("<h2>") // Title for settings modal
   .text("Settings");
 
+ // Get a list of all countries and add them as options to select
 var countryList = $("<select>")
   .attr("name", "default-country");
 function listCountries() {
@@ -948,26 +791,28 @@ function listCountries() {
                 .attr("value", countryName)
                 .text(countryName);
               if (countryName == settingsInfo.defaultCountry) {
-                console.log(countryName);
-                option.prop("selected", true);
+                option.prop("selected", true); // Select default country if one is saved
               }
               countryList.append(option);
           }
       });
 }
-listCountries();
+listCountries(); // Automatically get countries
 
+// When select is clicked, save selection as dafault country
 countryList.on("click", function() {
   var selectedCountry = countryList.val();
   settingsInfo.defaultCountry = selectedCountry;
   saveSettings();
 });
 
+// Default country selection
 var settingsContentDefault = $("<div>")
   .addClass("setting-item")
   .html("<h3>Set your default country</h3>")
   .append(countryList);
 
+// Radio select for display currency for costs (default vs destination)
 var settingsContentDisplayCost = $("<div>")
   .addClass("setting-item")
   .html("<h3>Display costs as...</h3>\
@@ -980,72 +825,51 @@ var settingsContentDisplayCost = $("<div>")
     <label for='destination'>Destination Country</label>\
   </div>");
 
+// Button for clearing everything to make a new itinerary
 var settingsContentClearItems = $("<div>")
   .addClass("setting-item")
   .html("<h3>Reset itinerary</h3>\
     <button class='clear-items'>Clear saved activities?</button>");
 
+// Append to settings modal
 settingsContentEl
   .append(settingsTitle)
   .append(settingsContentDefault)
   .append(settingsContentDisplayCost)
   .append(settingsContentClearItems);
 
+// For each radio selection
 $("input[name='search-display']").each( function() {
   if ($(this).attr("id") == settingsInfo.displayCosts) {
-    $(this).prop("checked", true).prop("disabled", true);
+    $(this).prop("checked", true).prop("disabled", true); // The checked selection is disabled
   }
 });
-
+// When display currency radio is clicked on
 settingsContentDisplayCost.on("click", "input[name='search-display']", function(event) {
-  console.log($(event.target).attr("id"));
   $("input[name='search-display']").prop("disabled", false);
-  $(event.target).prop("checked", true).prop("disabled", true);
-  settingsInfo.displayCosts = $(event.target).attr("id");
+  $(event.target).prop("checked", true).prop("disabled", true); // The newly checked selection is disabled
+  settingsInfo.displayCosts = $(event.target).attr("id"); // Save to local storage as "default" or "destination"
   saveSettings();
-  console.log(settingsInfo.displayCosts);
-  if (settingsInfo.displayCosts == "default") {
+  if (settingsInfo.displayCosts == "default") { // If "default"
     var curr1 = currencyInfo.destinationCurrency;
     var curr2 = currencyInfo.defaultCurrency;
-  } else {
+  } else { // If "destination"
     var curr1 = currencyInfo.defaultCurrency;
     var curr2 = currencyInfo.destinationCurrency;
   }
-  $(".cost p").each(function() {
-    console.log(".COST P EACH", $(this).text());
-    console.log(curr1, curr2, $(this).text());
+  $(".cost p").each(function() { // For each cost in itinerary, convert
     var placeName = $(this).parent().parent().children(".saved-place").text();
-    convertCosts(curr1, curr2, $(this).text(), placeName);
-    //console.log($(this).parent().parent().children(".saved-place").text());
+    convert(curr1, curr2, $(this).text(), "cost", placeName);
   });
 });
 
+// DELETE BUTTON
 settingsContentClearItems.on("click", ".clear-items", function() {
-  console.log("Delete button pressed");
-  var savedPlaces = [];
-
-  var savedItinerary = [];
-
-  var currencyInfo = {
-    defaultCurrency: null,
-    defaultSymbol: null,
-    destinationCurrency: null,
-    destinationSymbol: null
-  };
-
-  var currentSearch = {
-    activity: null,
-    budget: null,
-    city: null,
-    country: null,
-    endDate: null,
-    startDate: null
-  };
-
-  console.log(savedPlaces, savedItinerary, currencyInfo, currentSearch);
-  savedPlaces();
-  saveSettings();
-  localStorage.setItem("saved-location", JSON.stringify(currentSearch));
-
+  // Removes all localStorage information to start fresh
+  localStorage.removeItem("saved-places");
+  localStorage.removeItem("saved-location");
+  localStorage.removeItem("itinerary-settings");
+  localStorage.removeItem("itinerary-save-info");
+  // Redirects to index
   window.location = "./index.html";
 });

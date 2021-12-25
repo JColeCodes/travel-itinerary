@@ -1,3 +1,4 @@
+// DISPLAY MAP
 var map = new ol.Map({
     target: 'map',
     layers: [
